@@ -13,6 +13,9 @@ const Client = require('ssh2');
 const html = require('./terminal.template.html');
 const css = require('./terminal.css');
 
+const T_COLS = 132;
+const T_ROWS = 33;
+
 @Component({
   selector: 'terminal',
   template: html,
@@ -20,6 +23,7 @@ const css = require('./terminal.css');
 })
 export class TerminalComponent implements AfterViewInit {
   private term: any;
+  private title: string = '';
 
   @ViewChild('sshterminal') terminalEl: ElementRef;
 
@@ -28,7 +32,9 @@ export class TerminalComponent implements AfterViewInit {
   ngAfterViewInit() {
     console.log('terminal ngAfterViewInit');
     this.term = new Terminal({
-      cursorBlink: true
+      cursorBlink: true,
+      cols: T_COLS,
+      rows: T_ROWS
     });
     this.term.open(this.terminalEl.nativeElement);
     this.term.fit();
@@ -37,7 +43,8 @@ export class TerminalComponent implements AfterViewInit {
 
     const conn = new Client();
     conn.on('ready', () => {
-      this.term.writeln('Authenticated.');
+//      this.term.writeln('Authenticated.');
+      this.term.clear();
 
 //      conn.exec('uptime', {pty: true}, (err: any, stream: any) => {
       conn.shell({
@@ -63,13 +70,20 @@ export class TerminalComponent implements AfterViewInit {
           this.term.write(s);
         });
 
-//        stream
-//        .write('export TERM=xterm-256color\n');
+        stream
+        .write(`stty cols ${T_COLS} rows ${T_ROWS}; clear\n`);
 
-        this.term.on('data', (d: string) => {
+        this.term
+        .on('data', (d: string) => {
 //          console.log(d);
 //          this.term.write(d);
           stream.write(d);
+        });
+
+        this.term
+        .on('title', (t: string) => {
+          console.log('title:', t);
+          this.title = t;
         });
       });
     })
