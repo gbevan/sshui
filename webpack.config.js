@@ -31,5 +31,15 @@ module.exports = {
       { test: /\.html$/, loader: 'html-loader' }
     ]
   },
+//  node: {
+//    global: true,
+//    child_process: 'empty',
+//    dns: 'empty',
+//    fs: 'empty',
+//    net: ,
+//    process: false,
+//    utils: 'empty'
+//  },
+  target: 'node',
   watch: true
 };

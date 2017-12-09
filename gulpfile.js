@@ -42,7 +42,8 @@ gulp.task('build', (done) => {
       'node_modules/zone.js/dist/**',
       'node_modules/reflect-metadata/**',
       'node_modules/hammerjs/hammer.min.js',
-      'node_modules/@angular/material/prebuilt-themes/**'
+      'node_modules/@angular/material/prebuilt-themes/**',
+      'node_modules/xterm/dist/xterm.css'
     ],
     platforms: ['linux64'],
     version: 'latest',

@@ -10,6 +10,10 @@ import { SshuiMaterialModule }      from './sshui-material.module';
 
 import { AppComponent }             from './app.component';
 import { ToolbarComponent }         from './toolbar/toolbar.component';
+
+import { ActiveSessionsComponent }  from './ssh/active-sessions.component';
+import { TerminalComponent }        from './terminal/terminal.component';
+
 import { SessionsComponent }        from './ssh/sessions.component';
 import { LocalTunnelsComponent }    from './ssh/local-tunnels.component';
 import { RemoteTunnelsComponent }   from './ssh/remote-tunnels.component';
@@ -25,9 +29,12 @@ import { RemoteTunnelsComponent }   from './ssh/remote-tunnels.component';
   ],
   declarations: [
     AppComponent,
+
+    ActiveSessionsComponent,
     LocalTunnelsComponent,
     RemoteTunnelsComponent,
     SessionsComponent,
+    TerminalComponent,
     ToolbarComponent
   ],
   bootstrap: [

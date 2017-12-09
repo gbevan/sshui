@@ -1,5 +1,11 @@
 @import "node_modules/@angular/material/prebuilt-themes/purple-green.css";
+@import "node_modules/xterm/dist/xterm.css";
 
 html {
   background: linear-gradient(to right, darkgrey, linen);
+}
+
+/* override xterm style for positioning */
+.terminal .xterm-rows {
+  position: relative !important;
 }
