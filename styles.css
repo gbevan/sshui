@@ -1,0 +1,5 @@
+@import "node_modules/@angular/material/prebuilt-themes/purple-green.css";
+
+html {
+  background: linear-gradient(to right, darkgrey, linen);
+}

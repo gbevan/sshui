@@ -1,0 +1,19 @@
+{
+  "extends": "tslint:latest",
+  "rules": {
+    "import-spacing": false,
+    "interface-name": false,
+    "max-classes-per-file": false,
+    "member-access": false,
+    "no-var-requires": false,
+    "object-literal-sort-keys": false,
+    "ordered-imports": false,
+    "quotemark": [true, "single"],
+    "space-before-function-paren": [true, {"anonymous": "always", "named": "never", "asyncArrow": "always"}],
+    "trailing-comma": [true, "never"],
+    "variable-name": false,
+    "no-console": false,
+    "one-variable-per-declaration": false,
+    "comment-format": false
+  }
+}

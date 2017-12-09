@@ -1,0 +1,19 @@
+.app-top-toolbar {
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+
+.app-toolbar-filler {
+  flex: 1 1 auto;
+}
+
+.app-toolbar-sep:before {
+  content: '|';
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.app-toolbar-menu-item {
+  font-size: 12pt;
+  text-decoration: underline;
+}
