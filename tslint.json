@@ -14,6 +14,7 @@
     "variable-name": false,
     "no-console": false,
     "one-variable-per-declaration": false,
-    "comment-format": false
+    "comment-format": false,
+    "no-submodule-imports": [true, "lowdb/adapters/FileSync"]
   }
 }

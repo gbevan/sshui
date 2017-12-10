@@ -14,9 +14,14 @@ import { ToolbarComponent }         from './toolbar/toolbar.component';
 import { ActiveSessionsComponent }  from './ssh/active-sessions.component';
 import { TerminalComponent }        from './terminal/terminal.component';
 
+import { SessionAddDialog }         from './ssh/session-add.dialog';
+
 import { SessionsComponent }        from './ssh/sessions.component';
 import { LocalTunnelsComponent }    from './ssh/local-tunnels.component';
 import { RemoteTunnelsComponent }   from './ssh/remote-tunnels.component';
+
+import { LowdbService }             from './services/lowdb.service';
+import { SessionsService }          from './services/sessions.service';
 
 @NgModule({
   imports: [
@@ -33,6 +38,7 @@ import { RemoteTunnelsComponent }   from './ssh/remote-tunnels.component';
     ActiveSessionsComponent,
     LocalTunnelsComponent,
     RemoteTunnelsComponent,
+    SessionAddDialog,
     SessionsComponent,
     TerminalComponent,
     ToolbarComponent
@@ -41,8 +47,11 @@ import { RemoteTunnelsComponent }   from './ssh/remote-tunnels.component';
     AppComponent
   ],
   providers: [
+    LowdbService,
+    SessionsService
   ],
   entryComponents: [
+    SessionAddDialog
   ]
 })
 export class AppModule { }

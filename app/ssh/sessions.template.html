@@ -1,2 +1,79 @@
+<div>
+  <div>
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+    </mat-form-field>
+  </div>
 
-Sessions list goes here...
+  <mat-table #table [dataSource]="tableSource" matSort>
+    <!-- Position Column -->
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.id }}</mat-cell>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.name }}</mat-cell>
+    </ng-container>
+
+    <!-- Host Column -->
+    <ng-container matColumnDef="host">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Host</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.host }}</mat-cell>
+    </ng-container>
+
+    <!-- Port Column -->
+    <ng-container matColumnDef="port">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Port</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.port }}</mat-cell>
+    </ng-container>
+
+    <!-- User Column -->
+    <ng-container matColumnDef="user">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>User</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.user }}</mat-cell>
+    </ng-container>
+
+    <!-- Persistent Column -->
+    <ng-container matColumnDef="persistent">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Persistent</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.persistent }}</mat-cell>
+    </ng-container>
+
+    <!-- Edit Button Column -->
+    <ng-container matColumnDef="edit">
+      <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <button mat-raised-button
+                color="accent">Edit</button>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Delete Button Column -->
+    <ng-container matColumnDef="delete">
+      <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <button mat-button
+                color="warn"
+                (click)="delSession(element)">Delete</button>
+      </mat-cell>
+    </ng-container>
+
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+
+  <mat-paginator #paginator
+                 [pageSize]="10"
+                 [pageSizeOptions]="[5, 10, 20]">
+  </mat-paginator>
+
+  <div>
+    <button mat-raised-button
+            color="primary"
+            (click)="addSession()">Add</button>
+  </div>
+</div>
