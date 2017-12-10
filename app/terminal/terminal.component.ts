@@ -25,7 +25,7 @@ export class TerminalComponent implements AfterViewInit {
   private term: any;
   private title: string = '';
 
-  @ViewChild('sshterminal') terminalEl: ElementRef;
+  @ViewChild('sshterminal') private terminalEl: ElementRef;
 
   constructor() { }
 
@@ -86,14 +86,12 @@ export class TerminalComponent implements AfterViewInit {
           this.title = t;
         });
       });
-    })
-    .connect({
-      host: '127.0.0.1',
-      port: 22,
-      username: 'bev',
-      privateKey: require('fs').readFileSync('/home/bev/.ssh/id_rsa')
+//    })
+//    .connect({
+//      host: '127.0.0.1',
+//      port: 22,
+//      username: '...',
+//      privateKey: require('fs').readFileSync('/home/.../.ssh/id_rsa')
     });
-
-
   }
 }

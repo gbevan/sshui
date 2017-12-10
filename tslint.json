@@ -15,6 +15,10 @@
     "no-console": false,
     "one-variable-per-declaration": false,
     "comment-format": false,
-    "no-submodule-imports": [true, "lowdb/adapters/FileSync"]
+    "no-submodule-imports": [
+      true,
+      "lowdb/adapters/FileSync",
+      "xterm/dist/addons/fit/fit"
+    ]
   }
 }
