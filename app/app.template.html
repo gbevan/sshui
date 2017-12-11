@@ -4,6 +4,7 @@
   <mat-tab label="Manage">
 
     <mat-accordion>
+
       <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title>
@@ -45,6 +46,21 @@
 
         <remote-tunnels></remote-tunnels>
       </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Credentials:
+          </mat-panel-title>
+
+          <mat-panel-description class="desc-align">
+            Manage your Credentials Encrypted in the Vault
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <credentials></credentials>
+      </mat-expansion-panel>
+
     </mat-accordion>
 
   </mat-tab>

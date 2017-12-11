@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Add a new SSH session:</h2>
+<h2 mat-dialog-title>{{ session.id ? 'Edit' : 'Add a new' }} SSH session:</h2>
 
 <form mat-dialog-content>
 
@@ -9,7 +9,7 @@
            required
            name="name"
            type="text"
-           [(ngModel)]="name">
+           [(ngModel)]="session.name">
   </mat-form-field>
 
   <mat-form-field color="accent"
@@ -19,7 +19,7 @@
            required
            name="host"
            type="text"
-           [(ngModel)]="host">
+           [(ngModel)]="session.host">
   </mat-form-field>
 
   <mat-form-field color="accent"
@@ -29,26 +29,16 @@
            required
            name="port"
            type="number"
-           [(ngModel)]="port">
+           [(ngModel)]="session.port">
   </mat-form-field>
 
   <mat-form-field color="accent"
                   class="field">
-    <input matInput
-           placeholder="User on target system"
-           required
-           name="user"
-           type="text"
-           [(ngModel)]="user">
-  </mat-form-field>
-
-  <mat-form-field color="accent"
-                  class="field">
-    <input matInput
-           placeholder="User password"
-           name="pass"
-           type="password"
-           [(ngModel)]="pass">
+    <mat-select placeholder="Choose Credential"
+                [(value)]="session.cred">
+      <mat-option *ngFor="let c of creds"
+                  [value]="c.id">{{ c.name }}</mat-option>
+    </mat-select>
   </mat-form-field>
 
 <!--
@@ -56,7 +46,7 @@
                   class="field">
 -->
     <mat-checkbox name="persistent"
-                  [(ngModel)]="persistent">Persistent?</mat-checkbox>
+                  [(ngModel)]="session.persistent">Persistent?</mat-checkbox>
 <!--  </mat-form-field>-->
 
   <!-- TODO: option to generate a ssh key pair -->

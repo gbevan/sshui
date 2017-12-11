@@ -42,6 +42,7 @@ export class LowdbService {
 
     this.db
     .defaults({
+      credentials: [],
       sessions: [],
       localTunnels: [],
       remoteTunnels: [],
@@ -56,14 +57,37 @@ export class LowdbService {
 
   encrypt(text: string) {
     const cipher = crypto.createCipher(algo, pw);
-    let crypted = cipher.update(text, 'utf8', 'hex');
-    crypted += cipher.final('hex');
-    return crypted;
+    let crypted = cipher.update(text, 'utf8', 'base64');
+    crypted += cipher.final('base64');
+    return `/SSHUI/1.0/AES256\n${crypted}`;
   }
 
   decrypt(text: string) {
+    // parse the header
+    const m = text.match(/^\/(\w+)\/([0-9.]+)\/(\S+)\n([\s\S]*)/m);
+    if (!m) {
+      throw new Error('Attempt to decrypt an invalid file');
+    }
+
+    const product: string = m[1];
+    if (!product || product !== 'SSHUI') {
+      throw new Error('Invalid product label in vault db header');
+    }
+
+    const version: string = m[2];
+    if (!version || version !== '1.0') {
+      throw new Error('Invalid version in vault db header');
+    }
+
+    const cypher: string = m[3];
+    if (!cypher || cypher !== 'AES256') {
+      throw new Error('Invalid cypher in vault db header');
+    }
+
+    text = m[4];
+
     const decipher = crypto.createDecipher(algo, pw);
-    let dec = decipher.update(text, 'hex', 'utf8');
+    let dec = decipher.update(text, 'base64', 'utf8');
     dec += decipher.final('utf8');
     return dec;
   }

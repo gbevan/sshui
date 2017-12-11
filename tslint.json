@@ -17,6 +17,7 @@
     "comment-format": false,
     "no-submodule-imports": [
       true,
+      "@angular/platform-browser/animations",
       "lowdb/adapters/FileSync",
       "xterm/dist/addons/fit/fit"
     ]

@@ -3,17 +3,17 @@ import { Component,
 import { MatDialogRef,
          MAT_DIALOG_DATA }  from '@angular/material';
 
-import { SessionsService }  from '../services/sessions.service';
+import { CredentialsService }  from '../../services/credentials.service';
 
-const html = require('./session-add.template.html');
-const css = require('./session-add.css');
+const html = require('./credential-add.template.html');
+const css = require('./credential-add.css');
 
 @Component({
-  selector: 'session-add-dialog',
+  selector: 'credential-add-dialog',
   template: html,
   styles: [css]
 })
-export class SessionAddDialog {
+export class CredentialAddDialog {
   private name: string = '';
   private host: string = '';
   private port: number = 22;
@@ -24,20 +24,17 @@ export class SessionAddDialog {
   private _db: any;
 
   constructor(
-    private sessionsService: SessionsService,
-    public dialogRef: MatDialogRef<SessionAddDialog>,
+    private credentialsService: CredentialsService,
+    public dialogRef: MatDialogRef<CredentialAddDialog>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
 
   submit() {
     console.log('in submit()');
-    this.sessionsService.create({
+    this.credentialsService.create({
       name: this.name,
-      host: this.host,
-      port: this.port,
       user: this.user,
-      pass: this.pass,
-      persistent: this.persistent
+      pass: this.pass
     });
 
     this.dialogRef.close();

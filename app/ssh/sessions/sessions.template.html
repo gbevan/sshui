@@ -6,7 +6,8 @@
   </div>
 
   <mat-table #table [dataSource]="tableSource" matSort>
-    <!-- Position Column -->
+
+    <!-- Id Column -->
     <ng-container matColumnDef="id">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
       <mat-cell *matCellDef="let element">{{ element.id }}</mat-cell>
@@ -30,10 +31,10 @@
       <mat-cell *matCellDef="let element">{{ element.port }}</mat-cell>
     </ng-container>
 
-    <!-- User Column -->
-    <ng-container matColumnDef="user">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>User</mat-header-cell>
-      <mat-cell *matCellDef="let element">{{ element.user }}</mat-cell>
+    <!-- Cred Column -->
+    <ng-container matColumnDef="cred">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Cred</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.cred }}</mat-cell>
     </ng-container>
 
     <!-- Persistent Column -->
@@ -47,7 +48,8 @@
       <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
       <mat-cell *matCellDef="let element">
         <button mat-raised-button
-                color="accent">Edit</button>
+                color="accent"
+                (click)="editSession(element)">Edit</button>
       </mat-cell>
     </ng-container>
 

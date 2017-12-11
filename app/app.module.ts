@@ -14,13 +14,20 @@ import { ToolbarComponent }         from './toolbar/toolbar.component';
 import { ActiveSessionsComponent }  from './ssh/active-sessions.component';
 import { TerminalComponent }        from './terminal/terminal.component';
 
-import { SessionAddDialog }         from './ssh/session-add.dialog';
+import { CredentialAddDialog }      from './ssh/credentials/credential-add.dialog';
+import { CredentialsComponent }     from './ssh/credentials/credentials.component';
 
-import { SessionsComponent }        from './ssh/sessions.component';
-import { LocalTunnelsComponent }    from './ssh/local-tunnels.component';
-import { RemoteTunnelsComponent }   from './ssh/remote-tunnels.component';
+import { SessionAddDialog }         from './ssh/sessions/session-add.dialog';
+import { SessionsComponent }        from './ssh/sessions/sessions.component';
+
+import { LocalTunnelsComponent }    from './ssh/tunnels/local-tunnels.component';
+import { RemoteTunnelsComponent }   from './ssh/tunnels/remote-tunnels.component';
 
 import { LowdbService }             from './services/lowdb.service';
+import { CredentialsService }       from './services/credentials.service';
+import { LocalTunnelsService }      from './services/local-tunnels.service';
+import { RemoteTunnelsService }     from './services/remote-tunnels.service';
+import { PreferencesService }       from './services/preferences.service';
 import { SessionsService }          from './services/sessions.service';
 
 @NgModule({
@@ -38,8 +45,13 @@ import { SessionsService }          from './services/sessions.service';
     ActiveSessionsComponent,
     LocalTunnelsComponent,
     RemoteTunnelsComponent,
+
+    CredentialAddDialog,
+    CredentialsComponent,
+
     SessionAddDialog,
     SessionsComponent,
+
     TerminalComponent,
     ToolbarComponent
   ],
@@ -48,9 +60,14 @@ import { SessionsService }          from './services/sessions.service';
   ],
   providers: [
     LowdbService,
+    CredentialsService,
+    LocalTunnelsService,
+    RemoteTunnelsService,
+    PreferencesService,
     SessionsService
   ],
   entryComponents: [
+    CredentialAddDialog,
     SessionAddDialog
   ]
 })

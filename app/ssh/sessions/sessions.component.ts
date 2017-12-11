@@ -3,8 +3,8 @@ import { Component,
 import { MatTableDataSource,
          MatDialog }          from '@angular/material';
 
-import { Connect }            from './connect.class';
-import { SessionsService }    from '../services/sessions.service';
+//import { Connect }            from './connect.class';
+import { SessionsService }    from '../../services/sessions.service';
 import { SessionAddDialog }   from './session-add.dialog';
 
 const html = require('./sessions.template.html');
@@ -17,13 +17,13 @@ const css = require('./sessions.css');
 })
 export class SessionsComponent implements OnInit {
 //  private sessions: Connect[] = [];
-  private tableSource: MatTableDataSource<Connect>;
+  private tableSource: MatTableDataSource<any>;
   private displayedColumns: string[] = [
 //    'id',
     'name',
     'host',
     'port',
-    'user',
+    'cred',
     'persistent',
     'edit',
     'delete'
@@ -51,13 +51,27 @@ export class SessionsComponent implements OnInit {
   refresh() {
     const sessions: any = this.sessionsService.find();
     console.log('sessions:', sessions);
-    this.tableSource = new MatTableDataSource<Connect>(sessions);
+    this.tableSource = new MatTableDataSource<any>(sessions);
   }
 
   addSession() {
     console.log('addSession clicked');
     this.dialog.open(SessionAddDialog, {
 
+    })
+    .afterClosed()
+    .subscribe((res) => {
+      console.log('dialog result:', res);
+      this.refresh();
+    });
+  }
+
+  editSession(session: any) {
+    console.log('editSession clicked');
+    this.dialog.open(SessionAddDialog, {
+      data: {
+        session
+      }
     })
     .afterClosed()
     .subscribe((res) => {
