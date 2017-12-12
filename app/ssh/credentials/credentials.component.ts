@@ -22,6 +22,8 @@ export class CredentialsComponent implements OnInit {
     'name',
     'user',
     'pass',
+    'privKey',
+
     'edit',
     'delete'
   ];
@@ -45,6 +47,20 @@ export class CredentialsComponent implements OnInit {
     console.log('addCredential clicked');
     this.dialog.open(CredentialAddDialog, {
 
+    })
+    .afterClosed()
+    .subscribe((res) => {
+      console.log('dialog result:', res);
+      this.refresh();
+    });
+  }
+
+  editCredential(credential: any) {
+    console.log('editCredential clicked');
+    this.dialog.open(CredentialAddDialog, {
+      data: {
+        credential
+      }
     })
     .afterClosed()
     .subscribe((res) => {

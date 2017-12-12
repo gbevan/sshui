@@ -34,7 +34,7 @@ export class SessionAddDialog implements OnInit {
     public dialogRef: MatDialogRef<SessionAddDialog>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    if (data.session) {
+    if (data && data.session) {
       this.session = data.session;
     }
   }
