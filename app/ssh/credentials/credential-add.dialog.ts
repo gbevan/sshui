@@ -28,7 +28,8 @@ export class CredentialAddDialog {
 
   private keySize = 4096;
   private keySizeOptions = [
-    {value: 2048, label: '2048: quickest'},
+    {value: 1024, label: '1024: quickest'},
+    {value: 2048, label: '2048: quicker, stronger'},
     {value: 4096, label: '4096: recommended'},
     {value: 8192, label: '8192: stronger'},
     {value: 16384, label: '16384: strongest, can take a while...'}
@@ -41,6 +42,7 @@ export class CredentialAddDialog {
     public dialogRef: MatDialogRef<CredentialAddDialog>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
+    console.log('credential-add in constructor');
     if (data && data.credential) {
       this.credential = data.credential;
     }
@@ -65,6 +67,12 @@ export class CredentialAddDialog {
 
   copyPubKeyToClipboard(pubKey: string) {
     console.log('TODO: copyPubKeyToClipboard');
+  }
+
+  deleteKeypair() {
+    console.log('deleteKeypair()');
+    this.credential.privKey = '';
+    this.credential.pubKey = '';
   }
 
   submit() {

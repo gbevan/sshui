@@ -21,6 +21,7 @@ export class LocalTunnelsService {
 
   public get(id: string) {
     return this._db
+    .read()
     .get(this._name)
     .getById(id)
     .value();
@@ -28,6 +29,7 @@ export class LocalTunnelsService {
 
   public find(params?: any) {
     return this._db
+    .read()
     .get(this._name)
     .filter(params)
     .value();
