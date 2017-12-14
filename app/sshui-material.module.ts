@@ -13,6 +13,7 @@ import { MatButtonModule,
          MatSelectModule,
          MatSliderModule,
          MatSortModule,
+         MatProgressSpinnerModule,
          MatTableModule,
          MatTabsModule,
          MatToolbarModule } from '@angular/material';
@@ -32,6 +33,7 @@ const LIST = [
   MatSelectModule,
   MatSliderModule,
   MatSortModule,
+  MatProgressSpinnerModule,
   MatTableModule,
   MatTabsModule,
   MatToolbarModule

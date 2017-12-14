@@ -29,11 +29,12 @@ export class CredentialAddDialog {
   private keySize = 4096;
   private keySizeOptions = [
     {value: 1024, label: '1024: quickest'},
-    {value: 2048, label: '2048: quicker, stronger'},
+    {value: 2048, label: '2048: quicker'},
     {value: 4096, label: '4096: recommended'},
     {value: 8192, label: '8192: stronger'},
-    {value: 16384, label: '16384: strongest, can take a while...'}
+//    {value: 16384, label: '16384: strongest, can take a while...'}
   ];
+  private generatingKey: boolean = false;
 
   private _db: any;
 
@@ -50,11 +51,18 @@ export class CredentialAddDialog {
 
   generateSshKeyPair() {
     console.log('generateSshKeyPair clicked keySize:', this.keySize);
+    this.credential.privKey = '';
+    this.credential.pubKey = '';
+    this.generatingKey = true;
 
     rsa.generateKeyPair({
       bits: this.keySize,
       workers: 2
     }, (err: Error, keypair: any) => {
+      this.generatingKey = false;
+
+      // TODO: handle error
+
       // keypair.privateKey, keypair.publicKey
       console.log('keypair:', keypair);
 
