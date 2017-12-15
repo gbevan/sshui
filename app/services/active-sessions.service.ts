@@ -27,6 +27,8 @@ export class ActiveSessionsService {
 
   stop(session: any) {
     console.log('stopping session:', session.name);
+    console.log('session conn:', session.conn);
+    session.conn.end();
     delete this.activeSessions[session.name];
     session.active = false;
 

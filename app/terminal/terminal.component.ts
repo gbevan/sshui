@@ -1,7 +1,10 @@
 import { Component,
          AfterViewInit,
          ElementRef,
-         ViewChild }  from '@angular/core';
+         ViewChild,
+         Input }  from '@angular/core';
+
+import { CredentialsService } from '../services/credentials.service';
 
 const Terminal = require('xterm');
 require('xterm/dist/addons/fit/fit');
@@ -22,15 +25,25 @@ const T_ROWS = 33;
   styles: [css]
 })
 export class TerminalComponent implements AfterViewInit {
+  @Input() session: any;
+
   private term: any;
   private title: string = '';
 
+  private creds: any;
+
   @ViewChild('sshterminal') private terminalEl: ElementRef;
 
-  constructor() { }
+  constructor(
+    private credentialsService: CredentialsService
+  ) { }
 
   ngAfterViewInit() {
-    console.log('terminal ngAfterViewInit');
+    console.log('terminal ngAfterViewInit session:', this.session);
+
+    this.creds = this.credentialsService.get(this.session.cred);
+    console.log('creds:', this.creds);
+
     this.term = new Terminal({
       cursorBlink: true,
       cols: T_COLS,
@@ -42,11 +55,16 @@ export class TerminalComponent implements AfterViewInit {
     this.term.writeln('Connecting...');
 
     const conn = new Client();
+
+    conn.on('error', (err: any) => {
+      console.error('connection error err:', err);
+    });
+
     conn.on('ready', () => {
-//      this.term.writeln('Authenticated.');
+      this.session.connected = true;
+      this.session.conn = conn;
       this.term.clear();
 
-//      conn.exec('uptime', {pty: true}, (err: any, stream: any) => {
       conn.shell({
         term: 'xterm-256color'
       }, (err: any, stream: any) => {
@@ -58,15 +76,14 @@ export class TerminalComponent implements AfterViewInit {
         .on('close', (code: number, signal: number) => {
           this.term.writeln('stream closed, code: ' + code + ', signal: ' + signal);
           conn.end();
+          this.session.connected = false;
         })
         .on('data', (d: string) => {
           const s: string = d.toString();
-//          console.log('stdout:', s);
           this.term.write(s);
         })
         .stderr.on('data', (d: Buffer) => {
           const s: string = d.toString();
-//          console.log('stderr:', s);
           this.term.write(s);
         });
 
@@ -75,23 +92,21 @@ export class TerminalComponent implements AfterViewInit {
 
         this.term
         .on('data', (d: string) => {
-//          console.log(d);
-//          this.term.write(d);
           stream.write(d);
         });
 
         this.term
         .on('title', (t: string) => {
-          console.log('title:', t);
           this.title = t;
         });
       });
-//    })
-//    .connect({
-//      host: '127.0.0.1',
-//      port: 22,
-//      username: '...',
-//      privateKey: require('fs').readFileSync('/home/.../.ssh/id_rsa')
+    })
+    .connect({
+      host: this.session.host,
+      port: this.session.port || 22,
+      username: this.creds.user,
+      password: this.creds.pass || '',
+      privateKey: this.creds.privKey || ''
     });
   }
 }

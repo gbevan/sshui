@@ -1,6 +1,7 @@
 
 <mat-tab-group>
-  <mat-tab label="Mock 1">
-    <terminal></terminal>
+  <mat-tab *ngFor="let a of activeList"
+           label="{{ a.name }}">
+    <terminal [session]="a"></terminal>
   </mat-tab>
 </mat-tab-group>
