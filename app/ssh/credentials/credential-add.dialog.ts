@@ -22,11 +22,11 @@ export class CredentialAddDialog {
     name: '',
     user: `${process.env.USER}`,
     pass: '',
+    keySize: 4096,
     privKey: '',
     pubKey: ''
   };
 
-  private keySize = 4096;
   private keySizeOptions = [
     {value: 1024, label: '1024: quickest'},
     {value: 2048, label: '2048: quicker'},
@@ -50,13 +50,13 @@ export class CredentialAddDialog {
   }
 
   generateSshKeyPair() {
-    console.log('generateSshKeyPair clicked keySize:', this.keySize);
+    console.log('generateSshKeyPair clicked keySize:', this.credential.keySize);
     this.credential.privKey = '';
     this.credential.pubKey = '';
     this.generatingKey = true;
 
     rsa.generateKeyPair({
-      bits: this.keySize,
+      bits: this.credential.keySize,
       workers: 2
     }, (err: Error, keypair: any) => {
       this.generatingKey = false;
