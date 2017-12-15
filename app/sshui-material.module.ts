@@ -6,6 +6,7 @@ import { MatButtonModule,
          MatExpansionModule,
          MatGridListModule,
          MatIconModule,
+         MatIconRegistry,
          MatInputModule,
          MatMenuModule,
          MatPaginatorModule,
@@ -43,7 +44,14 @@ const LIST = [
   imports: LIST,
   declarations: [
   ],
+  providers: [
+    MatIconRegistry
+  ],
   exports: LIST
 })
 
 export class SshuiMaterialModule { }
+
+export {
+  MatIconRegistry
+};

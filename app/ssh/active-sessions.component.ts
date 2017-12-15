@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component,
+         OnInit } from '@angular/core';
+
+import { ActiveSessionsService } from '../services/active-sessions.service';
 
 const html = require('./active-sessions.template.html');
 const css = require('./active-sessions.css');
@@ -8,6 +11,17 @@ const css = require('./active-sessions.css');
   template: html,
   styles: [css]
 })
-export class ActiveSessionsComponent {
+export class ActiveSessionsComponent implements OnInit {
+  private activeSessions: any;
 
+  constructor(
+    private activeSessionsService: ActiveSessionsService
+  ) {}
+
+  ngOnInit() {
+    this.activeSessionsService.subscribe((value: any) => {
+      console.log('active-sessions subscriber called value:', value);
+      this.activeSessions = value;
+    });
+  }
 }

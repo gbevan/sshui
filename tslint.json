@@ -19,6 +19,8 @@
       true,
       "@angular/platform-browser/animations",
       "lowdb/adapters/FileSync",
+      "rxjs/Observable",
+      "rxjs/Observer",
       "xterm/dist/addons/fit/fit"
     ]
   }

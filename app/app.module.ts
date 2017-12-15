@@ -6,7 +6,8 @@ import { FlexLayoutModule }         from '@angular/flex-layout';
 
 import { NgbModule }                from '@ng-bootstrap/ng-bootstrap';
 
-import { SshuiMaterialModule }      from './sshui-material.module';
+import { SshuiMaterialModule,
+         MatIconRegistry }          from './sshui-material.module';
 
 import { AppComponent }             from './app.component';
 import { ToolbarComponent }         from './toolbar/toolbar.component';
@@ -29,6 +30,8 @@ import { LocalTunnelsService }      from './services/local-tunnels.service';
 import { RemoteTunnelsService }     from './services/remote-tunnels.service';
 import { PreferencesService }       from './services/preferences.service';
 import { SessionsService }          from './services/sessions.service';
+
+import { ActiveSessionsService }    from './services/active-sessions.service';
 
 @NgModule({
   imports: [
@@ -59,6 +62,7 @@ import { SessionsService }          from './services/sessions.service';
     AppComponent
   ],
   providers: [
+    ActiveSessionsService,
     LowdbService,
     CredentialsService,
     LocalTunnelsService,
@@ -71,4 +75,10 @@ import { SessionsService }          from './services/sessions.service';
     SessionAddDialog
   ]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(
+    public matIconRegistry: MatIconRegistry
+  ) {
+    matIconRegistry.registerFontClassAlias('fontawesome', 'fa');
+  }
+}

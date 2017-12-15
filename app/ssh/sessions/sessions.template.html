@@ -40,7 +40,27 @@
     <!-- Persistent Column -->
     <ng-container matColumnDef="persistent">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Persistent</mat-header-cell>
-      <mat-cell *matCellDef="let element">{{ element.persistent }}</mat-cell>
+      <mat-cell *matCellDef="let element">
+        <mat-checkbox color="accent"
+                      [(ngModel)]="element.persistent"
+                      [disabled]="true"></mat-checkbox>
+      </mat-cell>
+    </ng-container>
+
+    <!-- connected status icon Column -->
+    <ng-container matColumnDef="connected">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Conn?</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <mat-icon fontSet="fa"
+                  fontIcon="fa-plug"
+                  class="fa-2x connect-icon"
+                  [ngClass]="{
+                             'activated': element.active && ! element.connected,
+                             'connected': element.connected,
+                             'notconnected': !element.connected && !element.active
+                             }"
+                  (click)="toggleState(element)"></mat-icon>
+      </mat-cell>
     </ng-container>
 
     <!-- Edit Button Column -->

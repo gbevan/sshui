@@ -7,6 +7,8 @@ import { MatTableDataSource,
 import { SessionsService }    from '../../services/sessions.service';
 import { SessionAddDialog }   from './session-add.dialog';
 
+import { ActiveSessionsService } from '../../services/active-sessions.service';
+
 const html = require('./sessions.template.html');
 const css = require('./sessions.css');
 
@@ -25,11 +27,13 @@ export class SessionsComponent implements OnInit {
     'port',
     'cred',
     'persistent',
+    'connected',
     'edit',
     'delete'
   ];
 
   constructor(
+    private activeSessionsService: ActiveSessionsService,
     private sessionsService: SessionsService,
     public dialog: MatDialog
   ) {
@@ -86,5 +90,14 @@ export class SessionsComponent implements OnInit {
     .remove(e.id);
 
     this.refresh();
+  }
+
+  toggleState(session: any) {
+    console.log('toggleState() session:', session);
+    if (session.active) {
+      this.activeSessionsService.stop(session);
+    } else {
+      this.activeSessionsService.start(session);
+    }
   }
 }

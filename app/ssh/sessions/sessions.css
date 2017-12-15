@@ -1,1 +1,24 @@
 
+.connect-icon {
+  border-radius: 5px;
+  height: auto;
+  padding: 5px;
+  width: auto;
+}
+
+.connect-icon:hover {
+  background-color: lightgrey;
+  cursor: pointer;
+}
+
+.activated {
+  color: #5162e8;
+}
+
+.connected {
+  color: #69f0ae; /* TODO: get from mat palette */
+}
+
+.notconnected {
+  color: grey;
+}

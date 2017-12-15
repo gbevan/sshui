@@ -43,7 +43,8 @@ gulp.task('build', (done) => {
       'node_modules/reflect-metadata/**',
       'node_modules/hammerjs/hammer.min.js',
       'node_modules/@angular/material/prebuilt-themes/**',
-      'node_modules/xterm/dist/xterm.css'
+      'node_modules/xterm/dist/xterm.css',
+      'node_modules/font-awesome/**'
     ],
     platforms: ['linux64'],
     version: 'latest',
