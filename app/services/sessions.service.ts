@@ -13,6 +13,7 @@ export class SessionsService {
   }
 
   public create(data: any) {
+    delete data.active;
     return this._db
     .get(this._name)
     .insert(data)
@@ -50,6 +51,7 @@ export class SessionsService {
   }
 
   public patch(id: string, data: any, params?: any) {
+    delete data.active;
     if (id) {
       return this._db
       .get(this._name)

@@ -1,5 +1,6 @@
 import { Component,
-         OnInit }             from '@angular/core';
+         OnInit,
+         AfterViewInit }      from '@angular/core';
 import { MatTableDataSource,
          MatDialog }          from '@angular/material';
 
@@ -17,7 +18,7 @@ const css = require('./sessions.css');
   template: html,
   styles: [css]
 })
-export class SessionsComponent implements OnInit {
+export class SessionsComponent implements OnInit, AfterViewInit {
 //  private sessions: Connect[] = [];
   private tableSource: MatTableDataSource<any>;
   private displayedColumns: string[] = [
@@ -31,31 +32,26 @@ export class SessionsComponent implements OnInit {
     'edit',
     'delete'
   ];
+  private sessions: any = [];
 
   constructor(
     private activeSessionsService: ActiveSessionsService,
     private sessionsService: SessionsService,
     public dialog: MatDialog
-  ) {
-//    this.sessions.push(new Connect(
-////      1,
-//      'home',
-//      '127.0.0.1',
-//      22,
-//      'bev'
-//    ));
-//
-//    this.tableSource = new MatTableDataSource<Connect>(this.sessions);
-  }
+  ) { }
 
   ngOnInit() {
     this.refresh();
   }
 
+  ngAfterViewInit() {
+    this.recoverPersistentSessions();
+  }
+
   refresh() {
-    const sessions: any = this.sessionsService.find();
-    console.log('sessions:', sessions);
-    this.tableSource = new MatTableDataSource<any>(sessions);
+    this.sessions = this.sessionsService.find();
+    console.log('sessions:', this.sessions);
+    this.tableSource = new MatTableDataSource<any>(this.sessions);
   }
 
   addSession() {
@@ -100,5 +96,13 @@ export class SessionsComponent implements OnInit {
     } else {
       this.activeSessionsService.start(session);
     }
+  }
+
+  recoverPersistentSessions() {
+    this.sessions.forEach((s: any) => {
+      if (s.persistent) {
+        this.activeSessionsService.start(s);
+      }
+    });
   }
 }
