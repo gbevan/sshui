@@ -8,11 +8,14 @@
   <mat-table #table [dataSource]="tableSource" matSort>
 
     <!-- Id Column -->
+<!--
     <ng-container matColumnDef="id">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
       <mat-cell *matCellDef="let element">{{ element.id }}</mat-cell>
     </ng-container>
+-->
 
+    <!-- TODO: Make name a button to jump to active xterm -->
     <!-- Name Column -->
     <ng-container matColumnDef="name">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
@@ -83,6 +86,7 @@
       </mat-cell>
     </ng-container>
 
+    <!-- TODO: Chart traffic -->
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>

@@ -86,6 +86,7 @@ export class SessionsComponent implements OnInit {
 
   delSession(e: any) {
     console.log('delSession e:', e);
+    // TODO: prompt dialog ok/cancel
     this.sessionsService
     .remove(e.id);
 
