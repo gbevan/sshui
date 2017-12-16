@@ -1,14 +1,14 @@
 import { Component,
-         OnInit,
-         ViewContainerRef }     from '@angular/core';
+         ViewContainerRef } from '@angular/core';
+import { Router }           from '@angular/router';
 import { MatDialog,
          MatDialogRef,
-         MatDialogConfig }       from '@angular/material';
+         MatDialogConfig }  from '@angular/material';
 
 const html = require('./app.template.html');
 const css = require('./app.css');
 
-const debug = require('debug').debug('partout:component:app');
+//const debug = require('debug').debug('partout:component:app');
 
 @Component({
   selector: 'sshui',
@@ -16,20 +16,16 @@ const debug = require('debug').debug('partout:component:app');
   styles: [css]
 })
 export class AppComponent {
+  private section: string = 'manage';
+
   title = 'SSH UI';
 
   config: MatDialogConfig;
 
-  constructor(
-//    private dialog: MatDialog,
-//    private viewContainerRef: ViewContainerRef,
+//  constructor() {}
 
-  ) {
-//    this.config = new MatDialogConfig();
-//    this.config.viewContainerRef = this.viewContainerRef; // for mdDialog
+  show(section: string) {
+    this.section = section;
   }
-
-//  ngOnInit() {
-//  }
 
 }

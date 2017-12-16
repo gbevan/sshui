@@ -7,6 +7,13 @@ html {
 }
 
 /* override xterm style for positioning */
-.terminal .xterm-rows {
-  position: relative !important;
+/*
+.terminal {
+  position: absolute !important;
 }
+*/
+/*
+.xterm-rows {
+  position: initial !important;
+}
+*/

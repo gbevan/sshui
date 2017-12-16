@@ -2,11 +2,22 @@
   <mat-toolbar color="primary" class="app-top-toolbar">
     <mat-toolbar-row>
       <h1>SSH UI</h1>
-<!--
       <span class="app-toolbar-sep"></span>
-      <span class="app-toolbar-menu-item">File</span>
+      <span class="app-toolbar-menu-item">
+        <button mat-button
+                (click)="show('manage')">
+          Manage
+        </button>
+      </span>
       <span class="app-toolbar-sep"></span>
--->
+
+      <span class="app-toolbar-menu-item">
+        <button mat-button
+                (click)="show('sessions')">
+          Sessions
+        </button>
+      </span>
+      <span class="app-toolbar-sep"></span>
 
       <span class="app-toolbar-filler"></span>
 

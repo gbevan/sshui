@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { Observer }   from 'rxjs/Observer';
+import { Observable,
+         Observer }   from '@reactivex/rxjs';
+
+//const console.log = require('console.log').console.log('sshui:service:active-sessions');
 
 @Injectable()
 export class ActiveSessionsService {
@@ -8,11 +10,17 @@ export class ActiveSessionsService {
   private activeSessionsObserver: Observer<any>;
 
   constructor() {
+    console.log('active-sessions constructor');
+
     this.activeSessions = new Observable((observer) => {
+      console.log('active-sessions observer:', observer);
       observer.next({});  // initial state
 
       this.activeSessionsObserver = observer;
+      console.log('active-sessions activeSessionsObserver is set');
     });
+
+    console.log('active-sessions after constructor:', this.activeSessions);
   }
 
   start(session: any) {

@@ -1,0 +1,59 @@
+<mat-accordion>
+
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Sessions:
+      </mat-panel-title>
+
+      <mat-panel-description class="desc-align">
+        Manage your SSH Sessions
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <sessions></sessions>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Local Tunnels:
+      </mat-panel-title>
+
+      <mat-panel-description class="desc-align">
+        Manage your Local SSH Tunnels
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <local-tunnels></local-tunnels>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Remote Tunnels:
+      </mat-panel-title>
+
+      <mat-panel-description class="desc-align">
+        Manage your Remote SSH Tunnels
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <remote-tunnels></remote-tunnels>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Credentials:
+      </mat-panel-title>
+
+      <mat-panel-description class="desc-align">
+        Manage your Credentials Encrypted in the Vault
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <credentials></credentials>
+  </mat-expansion-panel>
+
+</mat-accordion>

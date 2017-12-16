@@ -2,3 +2,12 @@
 /deep/ .mat-tab-label {
   color: black !important;
 }
+
+.show {
+  display: initial;
+}
+
+
+.hide {
+  display: none;
+}

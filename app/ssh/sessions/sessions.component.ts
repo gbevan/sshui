@@ -1,6 +1,7 @@
 import { Component,
          OnInit,
-         AfterViewInit }      from '@angular/core';
+         AfterViewInit,
+         ChangeDetectorRef }  from '@angular/core';
 import { MatTableDataSource,
          MatDialog }          from '@angular/material';
 
@@ -37,6 +38,7 @@ export class SessionsComponent implements OnInit, AfterViewInit {
   constructor(
     private activeSessionsService: ActiveSessionsService,
     private sessionsService: SessionsService,
+    private cdr: ChangeDetectorRef,
     public dialog: MatDialog
   ) { }
 
@@ -46,6 +48,7 @@ export class SessionsComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.recoverPersistentSessions();
+    this.cdr.detectChanges();
   }
 
   refresh() {
@@ -99,6 +102,7 @@ export class SessionsComponent implements OnInit, AfterViewInit {
   }
 
   recoverPersistentSessions() {
+    console.log('recoverPersistentSessions');
     this.sessions.forEach((s: any) => {
       if (s.persistent) {
         this.activeSessionsService.start(s);

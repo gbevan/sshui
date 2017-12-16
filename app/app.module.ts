@@ -4,14 +4,25 @@ import { BrowserAnimationsModule }  from '@angular/platform-browser/animations';
 import { FormsModule }              from '@angular/forms';
 import { FlexLayoutModule }         from '@angular/flex-layout';
 
+//import { RouterModule, Routes }     from '@angular/router';
+
 import { NgbModule }                from '@ng-bootstrap/ng-bootstrap';
 
 import { SshuiMaterialModule,
          MatIconRegistry }          from './sshui-material.module';
-
 import { AppComponent }             from './app.component';
-import { ToolbarComponent }         from './toolbar/toolbar.component';
 
+import { LowdbService }             from './services/lowdb.service';
+import { CredentialsService }       from './services/credentials.service';
+import { LocalTunnelsService }      from './services/local-tunnels.service';
+import { RemoteTunnelsService }     from './services/remote-tunnels.service';
+import { PreferencesService }       from './services/preferences.service';
+import { SessionsService }          from './services/sessions.service';
+
+import { ToolbarComponent }         from './toolbar/toolbar.component';
+import { ManageComponent }          from './manage/manage.component';
+
+import { ActiveSessionsService }    from './services/active-sessions.service';
 import { ActiveSessionsComponent }  from './ssh/active-sessions.component';
 import { TerminalComponent }        from './terminal/terminal.component';
 
@@ -24,19 +35,27 @@ import { SessionsComponent }        from './ssh/sessions/sessions.component';
 import { LocalTunnelsComponent }    from './ssh/tunnels/local-tunnels.component';
 import { RemoteTunnelsComponent }   from './ssh/tunnels/remote-tunnels.component';
 
-import { LowdbService }             from './services/lowdb.service';
-import { CredentialsService }       from './services/credentials.service';
-import { LocalTunnelsService }      from './services/local-tunnels.service';
-import { RemoteTunnelsService }     from './services/remote-tunnels.service';
-import { PreferencesService }       from './services/preferences.service';
-import { SessionsService }          from './services/sessions.service';
-
-import { ActiveSessionsService }    from './services/active-sessions.service';
+//const routes: Routes = [
+//  {
+//    path: 'manage',
+//    component: ManageComponent
+//  },
+//  {
+//    path: 'sessions',
+//    component: ActiveSessionsComponent
+//  },
+//  {
+//    path: '',
+//    redirectTo: '/manage',
+//    pathMatch: 'full'
+//  }
+//];
 
 @NgModule({
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+//    RouterModule.forRoot(routes, { enableTracing: false }),
     SshuiMaterialModule,
     NgbModule.forRoot(),
     FormsModule,
@@ -45,6 +64,7 @@ import { ActiveSessionsService }    from './services/active-sessions.service';
   declarations: [
     AppComponent,
 
+    ManageComponent,
     ActiveSessionsComponent,
     LocalTunnelsComponent,
     RemoteTunnelsComponent,

@@ -2,9 +2,11 @@ import { Component,
          AfterViewInit,
          ElementRef,
          ViewChild,
-         Input }  from '@angular/core';
+         Input,
+         OnDestroy }              from '@angular/core';
 
-import { CredentialsService } from '../services/credentials.service';
+import { CredentialsService }     from '../services/credentials.service';
+import { ActiveSessionsService }  from '../services/active-sessions.service';
 
 const Terminal = require('xterm');
 require('xterm/dist/addons/fit/fit');
@@ -24,7 +26,7 @@ const T_ROWS = 33;
   template: html,
   styles: [css]
 })
-export class TerminalComponent implements AfterViewInit {
+export class TerminalComponent implements AfterViewInit, OnDestroy {
   @Input() session: any;
 
   private term: any;
@@ -35,15 +37,17 @@ export class TerminalComponent implements AfterViewInit {
   @ViewChild('sshterminal') private terminalEl: ElementRef;
 
   constructor(
+    private activeSessionsService: ActiveSessionsService,
     private credentialsService: CredentialsService
   ) { }
 
   ngAfterViewInit() {
-    console.log('terminal ngAfterViewInit session:', this.session);
+    console.log('terminal ngAfterViewInit');
+    setTimeout(this.startTerminal.bind(this), 0);
+  }
 
+  startTerminal() {
     this.creds = this.credentialsService.get(this.session.cred);
-    console.log('creds:', this.creds);
-
     this.term = new Terminal({
       cursorBlink: true,
       cols: T_COLS,
@@ -63,7 +67,6 @@ export class TerminalComponent implements AfterViewInit {
     conn.on('ready', () => {
       this.session.connected = true;
       this.session.conn = conn;
-      this.term.clear();
 
       conn.shell({
         term: 'xterm-256color'
@@ -77,6 +80,14 @@ export class TerminalComponent implements AfterViewInit {
           this.term.writeln('stream closed, code: ' + code + ', signal: ' + signal);
           conn.end();
           this.session.connected = false;
+          this.term.destroy();
+          delete this.term;
+
+          this.activeSessionsService.stop(this.session);
+
+          if (this.session.persistent) {
+            this.activeSessionsService.start(this.session);
+          }
         })
         .on('data', (d: string) => {
           const s: string = d.toString();
@@ -108,5 +119,9 @@ export class TerminalComponent implements AfterViewInit {
       password: this.creds.pass || '',
       privateKey: this.creds.privKey || ''
     });
+  }
+
+  ngOnDestroy() {
+    console.log('terminal on destroy');
   }
 }
