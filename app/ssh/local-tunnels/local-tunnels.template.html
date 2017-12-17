@@ -1,0 +1,123 @@
+<div>
+  <div>
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+    </mat-form-field>
+  </div>
+
+  <mat-table #table [dataSource]="tableSource" matSort>
+
+    <!-- Id Column -->
+<!--
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.id }}</mat-cell>
+    </ng-container>
+-->
+
+    <!-- TODO: Make name a button to jump to active xterm -->
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.name }}</mat-cell>
+    </ng-container>
+
+    <!-- Host Column -->
+    <ng-container matColumnDef="host">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Host</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.host }}</mat-cell>
+    </ng-container>
+
+    <!-- Port Column -->
+    <ng-container matColumnDef="port">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Port</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.port }}</mat-cell>
+    </ng-container>
+
+    <!-- Cred Column -->
+    <ng-container matColumnDef="cred">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Cred</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.cred }}</mat-cell>
+    </ng-container>
+
+    <!-- Persistent Column -->
+    <ng-container matColumnDef="persistent">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Persistent</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <mat-checkbox color="accent"
+                      [(ngModel)]="element.persistent"
+                      [disabled]="true"></mat-checkbox>
+      </mat-cell>
+    </ng-container>
+
+    <!-- connected status icon Column -->
+    <ng-container matColumnDef="connected">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Conn?</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <mat-icon fontSet="fa"
+                  fontIcon="fa-plug"
+                  class="fa-2x connect-icon"
+                  [ngClass]="{
+                             'activated': element.active && !element.connected,
+                             'connected': element.connected,
+                             'notconnected': !element.connected && !element.active
+                             }"
+                  (click)="toggleState(element)"></mat-icon>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Tunnel Local port -->
+    <ng-container matColumnDef="localPort">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Local Port</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.localPort }}</mat-cell>
+    </ng-container>
+
+    <!-- Tunnel remote host -->
+    <ng-container matColumnDef="remoteHost">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Remote Host</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.remoteHost }}</mat-cell>
+    </ng-container>
+
+    <!-- Tunnel remote port -->
+    <ng-container matColumnDef="remotePort">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Remote Port</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.remotePort }}</mat-cell>
+    </ng-container>
+
+    <!-- Edit Button Column -->
+    <ng-container matColumnDef="edit">
+      <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <button mat-raised-button
+                color="accent"
+                (click)="editLocalTunnel(element)">Edit</button>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Delete Button Column -->
+    <ng-container matColumnDef="delete">
+      <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <button mat-button
+                color="warn"
+                (click)="delLocalTunnel(element)">Delete</button>
+      </mat-cell>
+    </ng-container>
+
+    <!-- TODO: Chart traffic -->
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+
+  <mat-paginator #paginator
+                 [pageSize]="10"
+                 [pageSizeOptions]="[5, 10, 20]">
+  </mat-paginator>
+
+  <div>
+    <button mat-raised-button
+            color="primary"
+            (click)="addLocalTunnel()">Add</button>
+  </div>
+</div>

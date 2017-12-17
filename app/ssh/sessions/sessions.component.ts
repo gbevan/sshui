@@ -5,7 +5,6 @@ import { Component,
 import { MatTableDataSource,
          MatDialog }          from '@angular/material';
 
-//import { Connect }            from './connect.class';
 import { SessionsService }    from '../../services/sessions.service';
 import { SessionAddDialog }   from './session-add.dialog';
 

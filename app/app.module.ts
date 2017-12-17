@@ -4,8 +4,6 @@ import { BrowserAnimationsModule }  from '@angular/platform-browser/animations';
 import { FormsModule }              from '@angular/forms';
 import { FlexLayoutModule }         from '@angular/flex-layout';
 
-//import { RouterModule, Routes }     from '@angular/router';
-
 import { NgbModule }                from '@ng-bootstrap/ng-bootstrap';
 
 import { SshuiMaterialModule,
@@ -18,6 +16,8 @@ import { LocalTunnelsService }      from './services/local-tunnels.service';
 import { RemoteTunnelsService }     from './services/remote-tunnels.service';
 import { PreferencesService }       from './services/preferences.service';
 import { SessionsService }          from './services/sessions.service';
+
+import { TunnelService }            from './services/tunnel.service';
 
 import { ToolbarComponent }         from './toolbar/toolbar.component';
 import { ManageComponent }          from './manage/manage.component';
@@ -32,30 +32,16 @@ import { CredentialsComponent }     from './ssh/credentials/credentials.componen
 import { SessionAddDialog }         from './ssh/sessions/session-add.dialog';
 import { SessionsComponent }        from './ssh/sessions/sessions.component';
 
-import { LocalTunnelsComponent }    from './ssh/tunnels/local-tunnels.component';
-import { RemoteTunnelsComponent }   from './ssh/tunnels/remote-tunnels.component';
+//import { ActiveLocalTunnelsService } from './services/active-local-tunnels.service';
+import { LocalTunnelAddDialog }     from './ssh/local-tunnels/local-tunnel-add.dialog';
+import { LocalTunnelsComponent }    from './ssh/local-tunnels/local-tunnels.component';
 
-//const routes: Routes = [
-//  {
-//    path: 'manage',
-//    component: ManageComponent
-//  },
-//  {
-//    path: 'sessions',
-//    component: ActiveSessionsComponent
-//  },
-//  {
-//    path: '',
-//    redirectTo: '/manage',
-//    pathMatch: 'full'
-//  }
-//];
+import { RemoteTunnelsComponent }   from './ssh/remote-tunnels/remote-tunnels.component';
 
 @NgModule({
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-//    RouterModule.forRoot(routes, { enableTracing: false }),
     SshuiMaterialModule,
     NgbModule.forRoot(),
     FormsModule,
@@ -66,7 +52,10 @@ import { RemoteTunnelsComponent }   from './ssh/tunnels/remote-tunnels.component
 
     ManageComponent,
     ActiveSessionsComponent,
+
+    LocalTunnelAddDialog,
     LocalTunnelsComponent,
+
     RemoteTunnelsComponent,
 
     CredentialAddDialog,
@@ -82,16 +71,19 @@ import { RemoteTunnelsComponent }   from './ssh/tunnels/remote-tunnels.component
     AppComponent
   ],
   providers: [
+//    ActiveLocalTunnelsService,
     ActiveSessionsService,
     LowdbService,
     CredentialsService,
     LocalTunnelsService,
     RemoteTunnelsService,
     PreferencesService,
-    SessionsService
+    SessionsService,
+    TunnelService
   ],
   entryComponents: [
     CredentialAddDialog,
+    LocalTunnelAddDialog,
     SessionAddDialog
   ]
 })

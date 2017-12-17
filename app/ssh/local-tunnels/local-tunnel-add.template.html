@@ -1,0 +1,90 @@
+<h2 mat-dialog-title>{{ localTunnel.id ? 'Edit' : 'Add a new' }} Local Tunnel:</h2>
+
+<form mat-dialog-content>
+
+  <mat-form-field color="accent"
+                  class="field">
+    <input matInput
+           placeholder="Enter unique name"
+           required
+           name="name"
+           type="text"
+           [(ngModel)]="localTunnel.name">
+  </mat-form-field>
+
+  <mat-form-field color="accent"
+                  class="field">
+    <input matInput
+           placeholder="Hostname or IP Address"
+           required
+           name="host"
+           type="text"
+           [(ngModel)]="localTunnel.host">
+  </mat-form-field>
+
+  <mat-form-field color="accent"
+                  class="field">
+    <input matInput
+           placeholder="port"
+           required
+           name="port"
+           type="number"
+           [(ngModel)]="localTunnel.port">
+  </mat-form-field>
+
+  <mat-form-field color="accent"
+                  class="field">
+    <mat-select placeholder="Choose Credential"
+                [(value)]="localTunnel.cred">
+      <mat-option *ngFor="let c of creds"
+                  [value]="c.id">{{ c.name }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+    <mat-checkbox name="persistent"
+                  [(ngModel)]="localTunnel.persistent">Persistent Connection?</mat-checkbox>
+
+  <!-- Local port -->
+  <mat-form-field color="accent"
+                  class="field">
+    <input matInput
+           placeholder="Local port"
+           required
+           name="localPort"
+           type="number"
+           [(ngModel)]="localTunnel.localPort">
+  </mat-form-field>
+
+  <!-- Remote host -->
+  <mat-form-field color="accent"
+                  class="field">
+    <input matInput
+           placeholder="Remote host"
+           required
+           name="remoteHost"
+           type="text"
+           [(ngModel)]="localTunnel.remoteHost">
+  </mat-form-field>
+
+  <!-- Remote port -->
+  <mat-form-field color="accent"
+                  class="field">
+    <input matInput
+           placeholder="Remote port"
+           required
+           name="remotePort"
+           type="number"
+           [(ngModel)]="localTunnel.remotePort">
+  </mat-form-field>
+
+</form>
+
+<div mat-dialog-actions>
+  <button mat-raised-button
+          type="submit"
+          (click)="submit($event)">Submit</button>
+  <span class="horiz-filler"></span>
+  <button mat-button
+          mat-dialog-close>Cancel</button>
+</div>
+

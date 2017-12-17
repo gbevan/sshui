@@ -73,6 +73,7 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
       }, (err: any, stream: any) => {
         if (err) {
           this.term.writeln(err.message);
+          return;
         }
 
         stream
