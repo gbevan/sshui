@@ -44,7 +44,6 @@ export class SessionAddDialog implements OnInit {
   }
 
   submit() {
-    console.log('in submit()');
     if (this.session.id) {
       this.sessionsService.patch(this.session.id, this.session);
     } else {

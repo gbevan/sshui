@@ -2,8 +2,7 @@ import { Component,
          AfterViewInit,
          ElementRef,
          ViewChild,
-         Input,
-         OnDestroy }              from '@angular/core';
+         Input }                  from '@angular/core';
 
 import { CredentialsService }     from '../services/credentials.service';
 import { ActiveSessionsService }  from '../services/active-sessions.service';
@@ -26,7 +25,7 @@ const T_ROWS = 33;
   template: html,
   styles: [css]
 })
-export class TerminalComponent implements AfterViewInit, OnDestroy {
+export class TerminalComponent implements AfterViewInit {
   @Input() session: any;
 
   private term: any;
@@ -42,7 +41,6 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
   ) { }
 
   ngAfterViewInit() {
-    console.log('terminal ngAfterViewInit');
     setTimeout(this.startTerminal.bind(this), 0);
   }
 
@@ -122,7 +120,7 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
-    console.log('terminal on destroy');
-  }
+//  ngOnDestroy() {
+//    console.log('terminal on destroy');
+//  }
 }

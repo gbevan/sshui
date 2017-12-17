@@ -24,12 +24,9 @@ export class ActiveSessionsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    console.log('active-sessions component subscribing');
     this.activeSessionsService.subscribe((value: any) => {
-      console.log('active-sessions subscriber called value:', value);
       this.activeSessions = value;
       this.activeList = _.filter(this.activeSessions, (s: any) => s.name);
-      console.log('activeList:', this.activeList);
       this.cdr.detectChanges();
     });
   }

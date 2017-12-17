@@ -39,24 +39,20 @@ export class CredentialsComponent implements OnInit {
 
   refresh() {
     const credentials: any = this.credentialsService.find();
-    console.log('credentials:', credentials);
     this.tableSource = new MatTableDataSource<any>(credentials);
   }
 
   addCredential() {
-    console.log('addCredential clicked');
     this.dialog.open(CredentialAddDialog, {
 
     })
     .afterClosed()
     .subscribe((res) => {
-      console.log('dialog result:', res);
       this.refresh();
     });
   }
 
   editCredential(credential: any) {
-    console.log('editCredential clicked');
     this.dialog.open(CredentialAddDialog, {
       data: {
         credential
@@ -64,13 +60,11 @@ export class CredentialsComponent implements OnInit {
     })
     .afterClosed()
     .subscribe((res) => {
-      console.log('dialog result:', res);
       this.refresh();
     });
   }
 
   delCredential(e: any) {
-    console.log('delCredential e:', e);
     this.credentialsService
     .remove(e.id);
 

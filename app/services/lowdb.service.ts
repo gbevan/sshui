@@ -22,7 +22,6 @@ export class LowdbService {
 
     // Ensure db file exists
     if (!fs.existsSync(this.fileName)) {
-      console.log('Creating new db:', this.fileName);
       fs.writeFileSync(this.fileName, '');
     }
 

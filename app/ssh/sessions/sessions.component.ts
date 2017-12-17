@@ -52,24 +52,20 @@ export class SessionsComponent implements OnInit, AfterViewInit {
 
   refresh() {
     this.sessions = this.sessionsService.find();
-    console.log('sessions:', this.sessions);
     this.tableSource = new MatTableDataSource<any>(this.sessions);
   }
 
   addSession() {
-    console.log('addSession clicked');
     this.dialog.open(SessionAddDialog, {
 
     })
     .afterClosed()
     .subscribe((res) => {
-      console.log('dialog result:', res);
       this.refresh();
     });
   }
 
   editSession(session: any) {
-    console.log('editSession clicked');
     this.dialog.open(SessionAddDialog, {
       data: {
         session
@@ -77,13 +73,11 @@ export class SessionsComponent implements OnInit, AfterViewInit {
     })
     .afterClosed()
     .subscribe((res) => {
-      console.log('dialog result:', res);
       this.refresh();
     });
   }
 
   delSession(e: any) {
-    console.log('delSession e:', e);
     // TODO: prompt dialog ok/cancel
     this.sessionsService
     .remove(e.id);
@@ -92,7 +86,6 @@ export class SessionsComponent implements OnInit, AfterViewInit {
   }
 
   toggleState(session: any) {
-    console.log('toggleState() session:', session);
     if (session.active) {
       this.activeSessionsService.stop(session);
     } else {
@@ -101,7 +94,6 @@ export class SessionsComponent implements OnInit, AfterViewInit {
   }
 
   recoverPersistentSessions() {
-    console.log('recoverPersistentSessions');
     this.sessions.forEach((s: any) => {
       if (s.persistent) {
         this.activeSessionsService.start(s);

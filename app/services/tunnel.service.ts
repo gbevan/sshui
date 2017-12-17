@@ -27,9 +27,9 @@ export class TunnelService {
     .on('ready', () => {
       tunnel.connected = true;
       tunnel.conn = conn;
-      const server = net.createServer((netConn: any) => {
-        console.log('tunnel connected:', tunnel.name);
 
+      // create listener for local port
+      const server = net.createServer((netConn: any) => {
         // start tunnel
         if (type === 'local') {
           conn.forwardOut('', tunnel.localPort, tunnel.remoteHost, tunnel.remotePort, (err: Error, stream: any) => {
@@ -42,11 +42,11 @@ export class TunnelService {
             .pipe(stream)
             .pipe(netConn)
             .on('close', () => {
-              console.log('local tunnel stream closed');
               conn.end();
             });
           });
 
+  // TODO: Remote tunnel support - will need to rework structur re above local port server
   //      } else if (type === 'remote') {
   //        conn.forwardIn(tunnel.remoteHost, tunnel.remotePort, (err: Error, port: number) => {
   //          if (err) {

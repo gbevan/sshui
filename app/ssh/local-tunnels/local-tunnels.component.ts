@@ -55,25 +55,21 @@ export class LocalTunnelsComponent implements OnInit, AfterViewInit {
 
   refresh() {
     this.localTunnels = this.localTunnelsService.find();
-    console.log('localTunnels:', this.localTunnels);
     this.tableSource = new MatTableDataSource<any>(this.localTunnels);
     this.recoverPersistentLocalTunnels();
   }
 
   addLocalTunnel() {
-    console.log('addLocalTunnel clicked');
     this.dialog.open(LocalTunnelAddDialog, {
 
     })
     .afterClosed()
     .subscribe((res) => {
-      console.log('dialog result:', res);
       this.refresh();
     });
   }
 
   editLocalTunnel(localTunnel: any) {
-    console.log('editLocalTunnel clicked');
     this.dialog.open(LocalTunnelAddDialog, {
       data: {
         localTunnel
@@ -81,13 +77,11 @@ export class LocalTunnelsComponent implements OnInit, AfterViewInit {
     })
     .afterClosed()
     .subscribe((res) => {
-      console.log('dialog result:', res);
       this.refresh();
     });
   }
 
   delLocalTunnel(e: any) {
-    console.log('delLocalTunnel e:', e);
     // TODO: prompt dialog ok/cancel
     this.localTunnelsService
     .remove(e.id);
@@ -96,7 +90,6 @@ export class LocalTunnelsComponent implements OnInit, AfterViewInit {
   }
 
   toggleState(localTunnel: any) {
-    console.log('toggleState() localTunnel:', localTunnel);
     if (localTunnel.active) {
       this.tunnelService.stop(localTunnel);
       localTunnel.active = false;
@@ -107,7 +100,6 @@ export class LocalTunnelsComponent implements OnInit, AfterViewInit {
   }
 
   recoverPersistentLocalTunnels() {
-    console.log('recoverPersistentLocalTunnels');
     this.localTunnels.forEach((t: any) => {
       if (t.persistent && !t.active) {
         this.tunnelService.start('local', t);

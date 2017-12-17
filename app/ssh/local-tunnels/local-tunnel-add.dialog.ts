@@ -44,7 +44,6 @@ export class LocalTunnelAddDialog implements OnInit {
   }
 
   submit() {
-    console.log('in submit()');
     if (this.localTunnel.id) {
       this.localTunnelsService.patch(this.localTunnel.id, this.localTunnel);
     } else {
