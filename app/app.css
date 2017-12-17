@@ -11,3 +11,7 @@
 .hide {
   display: none;
 }
+
+.toolbar {
+  margin-bottom: 5px;
+}
