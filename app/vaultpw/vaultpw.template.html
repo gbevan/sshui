@@ -1,0 +1,19 @@
+
+<div class="center-vaultpw">
+  <form>
+    <mat-form-field class="vaultpw"
+                    color="accent">
+      <input matInput
+             placeholder="Enter Vault Passphrase"
+             required
+             name="vaultpw"
+             type="password"
+             autofocus
+             [(ngModel)]="vaultpw">
+    </mat-form-field>
+
+    <button mat-raised-button
+            type="submit"
+            (click)="submit()">Decrypt Vault</button>
+  </form>
+</div>

@@ -1,5 +1,12 @@
-<toolbar (section)="show($event)"></toolbar>
 
-<manage [ngClass]="{'show': section === 'manage', 'hide': section !== 'manage'}"></manage>
+<div *ngIf="vaultPwService.get() === ''">
+  <vaultpw></vaultpw>
+</div>
 
-<active-sessions [ngClass]="{'show': section === 'sessions', 'hide': section !== 'sessions'}"></active-sessions>
+<div *ngIf="vaultPwService.get() !== ''">
+  <toolbar (section)="show($event)"></toolbar>
+
+  <manage [ngClass]="{'show': section === 'manage', 'hide': section !== 'manage'}"></manage>
+
+  <active-sessions [ngClass]="{'show': section === 'sessions', 'hide': section !== 'sessions'}"></active-sessions>
+</div>

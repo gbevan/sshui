@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 
+import { VaultPwService } from '../services/vaultpw.service';
+
 const fs = require('fs');
 const crypto = require('crypto');
-const algo = 'aes-256-ctr';
-const pw = 'test';
+const algo = 'aes-256-gcm';
 
 //////////
 // lowdb
@@ -18,12 +19,17 @@ export class LowdbService {
   private adapter: any;
   private db: any;
 
-  constructor() {
+  constructor(
+    private vaultPwService: VaultPwService
+  ) {
 
     // Ensure db file exists
     if (!fs.existsSync(this.fileName)) {
-      fs.writeFileSync(this.fileName, '');
+      fs.writeFileSync(this.fileName, '', { mode: 0o600 });
     }
+
+    // Ensure file permissions
+    fs.chmodSync(this.fileName, 0o600);
 
     this.adapter = new FileSync(this.fileName, {
       serialize: (data: any) => this.encrypt(JSON.stringify(data)),
@@ -55,15 +61,38 @@ export class LowdbService {
   }
 
   encrypt(text: string) {
-    const cipher = crypto.createCipher(algo, pw);
+    const pwkey = crypto.pbkdf2Sync(
+      this.vaultPwService.get(),
+      'salt',
+      100000,
+      32,
+      'sha512'
+    );
+
+    const ivBuf = Buffer.alloc(100);
+    crypto.randomFillSync(ivBuf);
+    const ivkey = crypto.pbkdf2Sync(ivBuf, 'salt', 100000, 16, 'sha512');
+
+    const cipher = crypto.createCipheriv(algo, pwkey, ivkey);
     let crypted = cipher.update(text, 'utf8', 'base64');
     crypted += cipher.final('base64');
-    return `/SSHUI/1.0/AES256\n${crypted}`;
+
+    const tag = cipher.getAuthTag();
+
+    return `/SSHUI/1.0/AES256GCM/${tag.toString('hex')}/${ivkey.toString('hex')}\n${crypted}`;
   }
 
   decrypt(text: string) {
+    const pwkey = crypto.pbkdf2Sync(
+      this.vaultPwService.get(),
+      'salt',
+      100000,
+      32,
+      'sha512'
+    );
+
     // parse the header
-    const m = text.match(/^\/(\w+)\/([0-9.]+)\/(\S+)\n([\s\S]*)/m);
+    const m = text.match(/^\/(\w+)\/([0-9.]+)\/(\S+)\/(\S+)\/(\S+)\n([\s\S]*)/m);
     if (!m) {
       throw new Error('Attempt to decrypt an invalid file');
     }
@@ -79,13 +108,17 @@ export class LowdbService {
     }
 
     const cypher: string = m[3];
-    if (!cypher || cypher !== 'AES256') {
+    if (!cypher || cypher !== 'AES256GCM') {
       throw new Error('Invalid cypher in vault db header');
     }
 
-    text = m[4];
+    const tag: Buffer = Buffer.from(m[4], 'hex');
+    const iv: Buffer = Buffer.from(m[5], 'hex');
 
-    const decipher = crypto.createDecipher(algo, pw);
+    text = m[6];
+
+    const decipher = crypto.createDecipheriv(algo, pwkey, iv);
+    decipher.setAuthTag(tag);
     let dec = decipher.update(text, 'base64', 'utf8');
     dec += decipher.final('utf8');
     return dec;

@@ -22,7 +22,16 @@
       <span class="app-toolbar-filler"></span>
 
       <span class="app-toolbar-sep"></span>
-      <span class="app-toolbar-menu-item">Help</span>
+      <span class="app-toolbar-menu-item">
+        <button mat-button
+                (click)="lock()">
+          Lock
+        </button>
+      </span>
+
+
+      <span class="app-toolbar-sep"></span>
+<!--      <span class="app-toolbar-menu-item">Help</span>-->
     </mat-toolbar-row>
   </mat-toolbar>
 </div>

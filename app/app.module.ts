@@ -18,6 +18,7 @@ import { PreferencesService }       from './services/preferences.service';
 import { SessionsService }          from './services/sessions.service';
 
 import { TunnelService }            from './services/tunnel.service';
+import { VaultPwService }           from './services/vaultpw.service';
 
 import { ToolbarComponent }         from './toolbar/toolbar.component';
 import { ManageComponent }          from './manage/manage.component';
@@ -31,6 +32,8 @@ import { CredentialsComponent }     from './ssh/credentials/credentials.componen
 
 import { SessionAddDialog }         from './ssh/sessions/session-add.dialog';
 import { SessionsComponent }        from './ssh/sessions/sessions.component';
+
+import { VaultPwComponent }         from './vaultpw/vaultpw.component';
 
 //import { ActiveLocalTunnelsService } from './services/active-local-tunnels.service';
 import { LocalTunnelAddDialog }     from './ssh/local-tunnels/local-tunnel-add.dialog';
@@ -65,7 +68,9 @@ import { RemoteTunnelsComponent }   from './ssh/remote-tunnels/remote-tunnels.co
     SessionsComponent,
 
     TerminalComponent,
-    ToolbarComponent
+    ToolbarComponent,
+
+    VaultPwComponent
   ],
   bootstrap: [
     AppComponent
@@ -79,7 +84,8 @@ import { RemoteTunnelsComponent }   from './ssh/remote-tunnels/remote-tunnels.co
     RemoteTunnelsService,
     PreferencesService,
     SessionsService,
-    TunnelService
+    TunnelService,
+    VaultPwService
   ],
   entryComponents: [
     CredentialAddDialog,
