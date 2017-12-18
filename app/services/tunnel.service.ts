@@ -30,6 +30,7 @@ export class TunnelService {
 
       // create listener for local port
       const server = net.createServer((netConn: any) => {
+
         // start tunnel
         if (type === 'local') {
           conn.forwardOut('', tunnel.localPort, tunnel.remoteHost, tunnel.remotePort, (err: Error, stream: any) => {
@@ -43,6 +44,7 @@ export class TunnelService {
             .pipe(netConn)
             .on('close', () => {
               conn.end();
+              server.close();
             });
           });
 
@@ -75,6 +77,8 @@ export class TunnelService {
       .listen(tunnel.localPort, () => {
         console.log('listening on port', tunnel.localPort);
       });
+
+      tunnel.server = server;
     })
 
     .connect({
@@ -88,5 +92,7 @@ export class TunnelService {
 
   stop(tunnel: any) {
     tunnel.conn.end();
+    tunnel.server.close();
+    tunnel.connected = false;
   }
 }
