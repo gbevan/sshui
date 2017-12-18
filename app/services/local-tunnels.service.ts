@@ -13,6 +13,11 @@ export class LocalTunnelsService {
   }
 
   public create(data: any) {
+    delete data.active;
+    delete data.connected;
+    delete data.conn;
+    delete data.server;
+
     return this._db
     .get(this._name)
     .insert(data)
@@ -50,6 +55,11 @@ export class LocalTunnelsService {
   }
 
   public patch(id: string, data: any, params?: any) {
+    delete data.active;
+    delete data.connected;
+    delete data.conn;
+    delete data.server;
+
     if (id) {
       return this._db
       .get(this._name)

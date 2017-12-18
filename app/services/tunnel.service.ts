@@ -43,8 +43,10 @@ export class TunnelService {
             .pipe(stream)
             .pipe(netConn)
             .on('close', () => {
-              conn.end();
-              server.close();
+              console.log('connection over tunnel closing');
+//              conn.end();
+//              server.close();
+              stream.close();
             });
           });
 
@@ -70,8 +72,18 @@ export class TunnelService {
         }
       })
 
-      .on('close', () => {
-        console.log('net listener closed');
+      .on('error', (err: Error) => {
+        console.error('server err:', err);
+        tunnel.err = err;
+
+        tunnel.conn.end();
+        tunnel.server.close();
+        tunnel.connected = false;
+//        tunnel.active = false;
+      })
+
+      .on('close', (had_error: boolean) => {
+        console.log('net listener closed, had_error:', had_error);
       })
 
       .listen(tunnel.localPort, () => {
