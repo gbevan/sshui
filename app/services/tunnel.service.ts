@@ -22,6 +22,12 @@ export class TunnelService {
     conn
     .on('error', (err: any) => {
       console.error('connection error err:', err);
+      this.stop(tunnel);
+      if (tunnel.active) {
+        setTimeout(() => {
+          this.start(type, tunnel);
+        }, 1000);
+      }
     })
 
     .on('ready', () => {
@@ -43,9 +49,6 @@ export class TunnelService {
             .pipe(stream)
             .pipe(netConn)
             .on('close', () => {
-              console.log('connection over tunnel closing');
-//              conn.end();
-//              server.close();
               stream.close();
             });
           });
@@ -98,7 +101,9 @@ export class TunnelService {
       port: tunnel.port || 22,
       username: creds.user,
       password: creds.pass || '',
-      privateKey: creds.privKey || ''
+      privateKey: creds.privKey || '',
+      keepaliveInterval: 30,
+      keepaliveCountMax: 10
     });
   }
 
