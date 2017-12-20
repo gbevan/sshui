@@ -50,6 +50,7 @@
     "@angular/upgrade": "^5.1.0",
     "@ng-bootstrap/ng-bootstrap": "^1.0.0-beta.7",
     "@reactivex/rxjs": "^5.5.5",
+    "@types/lodash": "^4.14.91",
     "@types/ssh2": "^0.5.35",
     "@types/xterm": "^2.0.3",
     "font-awesome": "^4.7.0",

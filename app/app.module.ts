@@ -17,6 +17,7 @@ import { RemoteTunnelsService }     from './services/remote-tunnels.service';
 import { PreferencesService }       from './services/preferences.service';
 import { SessionsService }          from './services/sessions.service';
 
+import { StatusService }            from './services/status.service';
 import { TunnelService }            from './services/tunnel.service';
 import { VaultPwService }           from './services/vaultpw.service';
 
@@ -84,6 +85,7 @@ import { RemoteTunnelsComponent }   from './ssh/remote-tunnels/remote-tunnels.co
     RemoteTunnelsService,
     PreferencesService,
     SessionsService,
+    StatusService,
     TunnelService,
     VaultPwService
   ],

@@ -3,6 +3,7 @@ import { Observable,
          Observer }                   from '@reactivex/rxjs';
 
 import { CredentialsService }         from '../services/credentials.service';
+import { StatusService }              from '../services/status.service';
 
 const net = require('net');
 const Client = require('ssh2');
@@ -11,7 +12,8 @@ const Client = require('ssh2');
 export class TunnelService {
 
   constructor(
-    private credentialsService: CredentialsService
+    private credentialsService: CredentialsService,
+    private statusService: StatusService
   ) { }
 
   start(type: string, tunnel: any) {
@@ -23,7 +25,7 @@ export class TunnelService {
     .on('error', (err: any) => {
       console.error('connection error err:', err);
       this.stop(tunnel);
-      if (tunnel.active) {
+      if (this.statusService.get(tunnel.id).active) {
         setTimeout(() => {
           this.start(type, tunnel);
         }, 1000);
@@ -31,7 +33,7 @@ export class TunnelService {
     })
 
     .on('ready', () => {
-      tunnel.connected = true;
+      this.statusService.set(tunnel.id, 'connected', true);
       tunnel.conn = conn;
 
       // create listener for local port
@@ -81,7 +83,7 @@ export class TunnelService {
 
         tunnel.conn.end();
         tunnel.server.close();
-        tunnel.connected = false;
+        this.statusService.set(tunnel.id, 'connected', false);
 //        tunnel.active = false;
       })
 
@@ -102,7 +104,7 @@ export class TunnelService {
       username: creds.user,
       password: creds.pass || '',
       privateKey: creds.privKey || '',
-      keepaliveInterval: 30,
+      keepaliveInterval: 30000,
       keepaliveCountMax: 10
     });
   }
@@ -110,6 +112,6 @@ export class TunnelService {
   stop(tunnel: any) {
     tunnel.conn.end();
     tunnel.server.close();
-    tunnel.connected = false;
+    this.statusService.set(tunnel.id, 'connected', false);
   }
 }

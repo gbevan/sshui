@@ -32,6 +32,7 @@ export class LowdbService {
     fs.chmodSync(this.fileName, 0o600);
 
     this.adapter = new FileSync(this.fileName, {
+
       serialize: (data: any) => this.encrypt(JSON.stringify(data)),
 
       deserialize: (data: string) => {
