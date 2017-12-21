@@ -1,43 +1,61 @@
 <h2 mat-dialog-title>Change Vault Password</h2>
 
-<form mat-dialog-content>
+<div class="outer" mat-dialog-content>
+  <form #form="ngForm">
 
-  <mat-form-field color="accent"
-                  class="field">
-    <input matInput
-           placeholder="Enter current vault passphrase"
-           required
-           name="current_pw"
-           type="password"
-           [(ngModel)]="current_pw">
-  </mat-form-field>
+    <mat-form-field color="accent"
+                    class="field">
+      <input matInput
+             placeholder="Enter current vault passphrase"
+             required
+             name="current_pw"
+             type="password"
+             [(ngModel)]="current_pw"
+             #currentPw="ngModel">
+      <mat-error *ngIf="currentPw.control.hasError('required')">You must enter your current vault password</mat-error>
+    </mat-form-field>
 
-  <mat-form-field color="accent"
-                  class="field">
-    <input matInput
-           placeholder="Enter new vault passphrase"
-           required
-           name="new_pw_1"
-           type="password"
-           [(ngModel)]="new_pw_1">
-  </mat-form-field>
+    <mat-form-field color="accent"
+                    class="field">
+      <input matInput
+             placeholder="Enter new vault passphrase"
+             required
+             minlength="6"
+             name="new_pw_1"
+             type="password"
+             [(ngModel)]="new_pw_1"
+             #newPw1="ngModel"
+             (keyup)="validate(newPw2)">
+      <mat-error *ngIf="newPw1.control.hasError('required')">You must enter your new vault password</mat-error>
+      <mat-error *ngIf="newPw1.control.hasError('minlength')">Minimum password length is 6</mat-error>
 
-  <mat-form-field color="accent"
-                  class="field">
-    <input matInput
-           placeholder="Re-enter new vault passphrase"
-           required
-           name="new_pw_2"
-           type="password"
-           [(ngModel)]="new_pw_2">
-  </mat-form-field>
+    </mat-form-field>
 
-</form>
+    <mat-form-field color="accent"
+                    class="field">
+      <input matInput
+             placeholder="Re-enter new vault passphrase"
+             required
+             minlength="6"
+             name="new_pw_2"
+             type="password"
+             [(ngModel)]="new_pw_2"
+             #newPw2="ngModel"
+             (keyup)="validate(newPw2)">
+      <mat-error *ngIf="newPw2.control.hasError('required')">You must enter your new vault password</mat-error>
+      <mat-error *ngIf="newPw2.control.hasError('minlength')">Minimum password length is 6</mat-error>
+      <mat-error *ngIf="newPw2.control.hasError('dontMatch')">The new passwords must match</mat-error>
+    </mat-form-field>
+
+  </form>
+  <div class="errmsg">{{ errmsg }}</div>
+</div>
 
 <div mat-dialog-actions>
   <button mat-raised-button
           type="submit"
-          (click)="submit($event)">Submit</button>
+          [disabled]="form.invalid"
+          (click)="submit($event)">ReEncrypt Vault?</button>
   <span class="horiz-filler"></span>
   <button mat-button
           mat-dialog-close>Cancel</button>

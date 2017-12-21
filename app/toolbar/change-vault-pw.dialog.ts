@@ -1,4 +1,11 @@
-import { Component } from '@angular/core';
+import { Component }      from '@angular/core';
+import { NgModel }        from '@angular/forms';
+
+import { MatDialogRef }   from '@angular/material';
+
+import { VaultPwService } from '../services/vaultpw.service';
+
+import * as _         from 'lodash';
 
 const debug = require('debug').debug('sshui:dialog:change-vault-pw');
 
@@ -15,7 +22,42 @@ export class ChangeVaultPwDialog {
   private new_pw_1: string = '';
   private new_pw_2: string = '';
 
+  private currentPw: any;
+
+  private errmsg: string = '';
+
+  constructor(
+    private vaultPwService: VaultPwService,
+    public dialogRef: MatDialogRef<ChangeVaultPwDialog>
+  ) {}
+
+  validate(newPw2: NgModel) {
+    debug('validate newPw2 errors:', newPw2.errors);
+
+    if (!newPw2.errors) {
+      if (this.new_pw_1 !== this.new_pw_2) {
+        debug('missmatch');
+        newPw2.control.setErrors({
+          dontMatch: true
+        });
+      }
+    }
+
+    return false;
+  }
+
   submit() {
     debug('change-vault-pw submit()');
+    debug('this.current_pw', this.current_pw);
+    debug('this.new_pw_1', this.new_pw_1);
+    debug('this.new_pw_2', this.new_pw_2);
+
+    const err = this.vaultPwService.changePw(this.current_pw, this.new_pw_1);
+    debug('change pw err:', err);
+    if (err) {
+      this.errmsg = err.message;
+    } else {
+      this.dialogRef.close();
+    }
   }
 }

@@ -14,3 +14,7 @@
   display: block;
 }
 
+.errmsg {
+  color: red;
+  text-emphasis: bold;
+}
