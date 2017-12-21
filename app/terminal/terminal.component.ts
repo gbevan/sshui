@@ -11,6 +11,8 @@ const Terminal = require('xterm');
 require('xterm/dist/addons/fit/fit');
 Terminal.loadAddon('fit');
 
+const debug = require('debug').debug('sshui:component:terminal');
+
 //process.binding = () => {};
 const Client = require('ssh2');
 

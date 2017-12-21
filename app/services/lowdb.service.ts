@@ -6,6 +6,8 @@ const fs = require('fs');
 const crypto = require('crypto');
 const algo = 'aes-256-gcm';
 
+const debug = require('debug').debug('sshui:service:lowdb');
+
 //////////
 // lowdb
 const low = require('lowdb');

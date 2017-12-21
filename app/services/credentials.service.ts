@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 
 import { LowdbService } from './lowdb.service';
 
+const debug = require('debug').debug('sshui:service:credentials');
+
 @Injectable()
 export class CredentialsService {
   private _name: string = 'credentials';

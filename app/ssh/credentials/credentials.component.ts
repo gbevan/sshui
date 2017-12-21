@@ -6,6 +6,8 @@ import { MatTableDataSource,
 import { CredentialsService } from '../../services/credentials.service';
 import { CredentialAddDialog }   from './credential-add.dialog';
 
+const debug = require('debug').debug('sshui:component:credentials');
+
 const html = require('./credentials.template.html');
 const css = require('./credentials.css');
 

@@ -7,6 +7,8 @@ import { MatDialogRef,
 import { LocalTunnelsService }  from '../../services/local-tunnels.service';
 import { CredentialsService }  from '../../services/credentials.service';
 
+const debug = require('debug').debug('sshui:dialog:local-tunnel-add');
+
 const html = require('./local-tunnel-add.template.html');
 const css = require('./local-tunnel-add.css');
 

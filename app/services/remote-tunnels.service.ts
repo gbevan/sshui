@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 
 import { LowdbService } from './lowdb.service';
 
+const debug = require('debug').debug('sshui:service:remote-tunnels');
+
 @Injectable()
 export class RemoteTunnelsService {
   private _name: string = 'remoteTunnels';

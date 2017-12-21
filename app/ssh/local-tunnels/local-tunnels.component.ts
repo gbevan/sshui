@@ -13,6 +13,8 @@ import { TunnelService }        from '../../services/tunnel.service';
 import { Status,
          StatusService }        from '../../services/status.service';
 
+const debug = require('debug').debug('sshui:component:local-tunnels');
+
 const html = require('./local-tunnels.template.html');
 const css = require('./local-tunnels.css');
 
@@ -106,30 +108,30 @@ export class LocalTunnelsComponent implements OnInit, AfterViewInit {
       this.statusService.set(localTunnel.id, 'active', true);
     }
 
-    // TODO: find a better way to do this, maybe a once() event for status?
+    // TODO: find a better way to do this, maybe a once() event for status? or Observable from StatusService
     setTimeout(() => {
       this.cdr.detectChanges();
     }, 1000);
   }
 
   recoverPersistentLocalTunnels() {
-    console.log('recoverPersistentLocalTunnels');
+    debug('recoverPersistentLocalTunnels');
     this.localTunnels.forEach((t: any) => {
-      console.log(`b4 status get for ${t.name}`);
+      debug(`b4 status get for ${t.name}`);
       const s = this.statusService.get(t.id);
-      console.log(`after status get for ${t.name} s:${s}`);
+      debug(`after status get for ${t.name} s:${s}`);
       if (s) {
-        console.log(`active:${s.active}`);
+        debug(`active:${s.active}`);
       }
 
       if (t.persistent && (!s || !s.active)) {
-        console.log(`b4 start for t.name`);
+        debug(`b4 start for t.name`);
         this.tunnelService.start('local', t);
-        console.log(`after start for ${t.name}`);
+        debug(`after start for ${t.name}`);
 //        t.active = true;
-        console.log('setting active', t.id);
+        debug('setting active', t.id);
         this.statusService.set(t.id, 'active', true);
-        console.log(`after set for ${t.name}`);
+        debug(`after set for ${t.name}`);
 //        this.cdr.detectChanges();
       }
     });

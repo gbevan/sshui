@@ -10,6 +10,8 @@ import { SessionAddDialog }   from './session-add.dialog';
 
 import { ActiveSessionsService } from '../../services/active-sessions.service';
 
+const debug = require('debug').debug('sshui:component:sessions');
+
 const html = require('./sessions.template.html');
 const css = require('./sessions.css');
 

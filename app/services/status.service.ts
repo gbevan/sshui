@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 
 import * as _ from 'lodash';
 
+const debug = require('debug').debug('sshui:service:status');
+
 export class Status {
   public connected: boolean;
   public active: boolean;
@@ -13,7 +15,7 @@ export class Status {
 
   set(key: string, value: any) {
     this[key] = value;
-    console.log('Status internal:', this);
+    debug('Status internal:', this);
   }
 }
 
@@ -29,7 +31,7 @@ export class StatusService {
   // TODO: do we need to add type: 'local','remote','session' to key?
 
   set(id: string, key: string, value: any) {
-    console.log(`status set ${id} ${key} to ${value}`);
+    debug(`status set ${id} ${key} to ${value}`);
     if (!this.statuses[id]) {
       this.statuses[id] = new Status();
     }
@@ -37,7 +39,7 @@ export class StatusService {
     if (key !== undefined && value !== undefined) {
       this.statuses[id].set(key, value);
     }
-    console.log('statuses:', _.cloneDeep(this.statuses));
+    debug('statuses:', _.cloneDeep(this.statuses));
 //    this.cdr.detectChanges();
     return this.statuses[id];
   }

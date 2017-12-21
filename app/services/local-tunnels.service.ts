@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 
 import { LowdbService } from './lowdb.service';
 
+const debug = require('debug').debug('sshui:service:local-tunnels');
+
 @Injectable()
 export class LocalTunnelsService {
   private _name: string = 'localTunnels';

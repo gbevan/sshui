@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 
 import { LowdbService } from './lowdb.service';
 
+const debug = require('debug').debug('sshui:service:preferences');
+
 @Injectable()
 export class PreferencesService {
   private _name: string = 'preferences';

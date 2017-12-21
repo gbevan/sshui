@@ -5,6 +5,7 @@ import { Component,
 import { ActiveSessionsService }  from '../services/active-sessions.service';
 
 const _ = require('lodash');
+const debug = require('debug').debug('sshui:component:active-sessions');
 
 const html = require('./active-sessions.template.html');
 const css = require('./active-sessions.css');

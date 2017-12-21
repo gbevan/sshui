@@ -23,6 +23,18 @@
 
       <span class="app-toolbar-sep"></span>
       <span class="app-toolbar-menu-item">
+        <mat-menu #vaultMenu="matMenu">
+          <button mat-menu-item
+                  (click)="changeVaultPw()">Change Passphrase</button>
+        </mat-menu>
+
+        <button mat-button [matMenuTriggerFor]="vaultMenu">
+          Vault
+        </button>
+      </span>
+
+      <span class="app-toolbar-sep"></span>
+      <span class="app-toolbar-menu-item">
         <button mat-button
                 (click)="lock()">
           Lock

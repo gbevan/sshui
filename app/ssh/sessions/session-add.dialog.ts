@@ -7,6 +7,8 @@ import { MatDialogRef,
 import { SessionsService }  from '../../services/sessions.service';
 import { CredentialsService }  from '../../services/credentials.service';
 
+const debug = require('debug').debug('sshui:dialog:session-add');
+
 const html = require('./session-add.template.html');
 const css = require('./session-add.css');
 

@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable,
          Observer }   from '@reactivex/rxjs';
 
+const debug = require('debug').debug('sshui:service:active-sessions');
+
 @Injectable()
 export class ActiveSessionsService {
   private activeSessions: Observable<any>;

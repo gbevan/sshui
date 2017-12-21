@@ -9,6 +9,8 @@ const forge = require('node-forge');
 const rsa = forge.pki.rsa;
 const ssh = forge.ssh;
 
+const debug = require('debug').debug('sshui:dialog:credential-add');
+
 const html = require('./credential-add.template.html');
 const css = require('./credential-add.css');
 

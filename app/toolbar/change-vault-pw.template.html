@@ -1,0 +1,44 @@
+<h2 mat-dialog-title>Change Vault Password</h2>
+
+<form mat-dialog-content>
+
+  <mat-form-field color="accent"
+                  class="field">
+    <input matInput
+           placeholder="Enter current vault passphrase"
+           required
+           name="current_pw"
+           type="password"
+           [(ngModel)]="current_pw">
+  </mat-form-field>
+
+  <mat-form-field color="accent"
+                  class="field">
+    <input matInput
+           placeholder="Enter new vault passphrase"
+           required
+           name="new_pw_1"
+           type="password"
+           [(ngModel)]="new_pw_1">
+  </mat-form-field>
+
+  <mat-form-field color="accent"
+                  class="field">
+    <input matInput
+           placeholder="Re-enter new vault passphrase"
+           required
+           name="new_pw_2"
+           type="password"
+           [(ngModel)]="new_pw_2">
+  </mat-form-field>
+
+</form>
+
+<div mat-dialog-actions>
+  <button mat-raised-button
+          type="submit"
+          (click)="submit($event)">Submit</button>
+  <span class="horiz-filler"></span>
+  <button mat-button
+          mat-dialog-close>Cancel</button>
+</div>

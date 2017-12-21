@@ -1,3 +1,7 @@
+// tell debug to treat as browser - enable using: DEBUG="sshui:*" gulp
+(process as any).type = 'renderer';
+const debug = require('debug').debug('sshui:app');
+
 import { Component,
          ViewContainerRef } from '@angular/core';
 //import { Router }           from '@angular/router';
@@ -22,7 +26,9 @@ export class AppComponent {
 
   constructor(
     private vaultPwService: VaultPwService
-  ) {}
+  ) {
+    debug('IN APP');
+  }
 
   show(section: string) {
     this.section = section;

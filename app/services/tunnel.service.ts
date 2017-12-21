@@ -8,6 +8,8 @@ import { StatusService }              from '../services/status.service';
 const net = require('net');
 const Client = require('ssh2');
 
+const debug = require('debug').debug('sshui:service:tunnel');
+
 @Injectable()
 export class TunnelService {
 
@@ -67,7 +69,7 @@ export class TunnelService {
   //          .pipe(stream)
   //          .pipe(conn)
   //          .on('close', () => {
-  //            console.log('local tunnel stream closed');
+  //            debug('local tunnel stream closed');
   //            conn.end();
   //          });
   //        });
@@ -88,11 +90,11 @@ export class TunnelService {
       })
 
       .on('close', (had_error: boolean) => {
-        console.log('net listener closed, had_error:', had_error);
+        debug('net listener closed, had_error:', had_error);
       })
 
       .listen(tunnel.localPort, () => {
-        console.log('listening on port', tunnel.localPort);
+        debug('listening on port', tunnel.localPort);
       });
 
       tunnel.server = server;
