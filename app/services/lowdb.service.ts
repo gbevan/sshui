@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { VaultPwService } from '../services/vaultpw.service';
+//import { VaultPwService } from '../services/vaultpw.service';
 
 import { LowdbVault } from './lowdb-vault.class';
 
@@ -21,17 +21,38 @@ const lodashId = require('lodash-id');
 export class LowdbService {
   private fileName: string = `${process.env.HOME}/.sshui_db.json`;
   private adapter: any;
-  private db: any;
+  private lowdb: LowdbVault;
 
   constructor(
-    private vaultPwService: VaultPwService
+//    private vaultPwService: VaultPwService
   ) {
-    const lowdb = new LowdbVault(vaultPwService);
-    this.db = lowdb.getDb();
+//    this.lowdb = new LowdbVault(vaultPwService);
+    this.lowdb = new LowdbVault();
+//    this.db = lowdb.getDb();
   }
 
   getDb() {
-    return this.db;
+    return this.lowdb.getDb();
+  }
+
+  getLowDb() {
+    return this.lowdb;
+  }
+
+  set(pw: string) {
+    return this.lowdb.set(pw);
+  }
+
+  get() {
+    return this.lowdb.get();
+  }
+
+  getState() {
+    return this.lowdb.getState();
+  }
+
+  changePw(currentPw: string, newPw: string) {
+    return this.lowdb.changePw(currentPw, newPw);
   }
 
 }

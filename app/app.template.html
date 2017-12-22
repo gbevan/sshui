@@ -1,12 +1,18 @@
 
-<div *ngIf="vaultPwService.get() === ''">
-  <vaultpw></vaultpw>
+<div *ngIf="lowdbService.getState() === 'nodb'; else stateElse">
+  <newvaultpw></newvaultpw>
 </div>
 
-<div *ngIf="vaultPwService.get() !== ''">
-  <toolbar (section)="show($event)"></toolbar>
+<ng-template #stateElse>
+  <div *ngIf="lowdbService.get() === ''">
+    <vaultpw></vaultpw>
+  </div>
 
-  <manage [ngClass]="{'show': section === 'manage', 'hide': section !== 'manage'}"></manage>
+  <div *ngIf="lowdbService.get() !== ''">
+    <toolbar (section)="show($event)"></toolbar>
 
-  <active-sessions [ngClass]="{'show': section === 'sessions', 'hide': section !== 'sessions'}"></active-sessions>
-</div>
+    <manage [ngClass]="{'show': section === 'manage', 'hide': section !== 'manage'}"></manage>
+
+    <active-sessions [ngClass]="{'show': section === 'sessions', 'hide': section !== 'sessions'}"></active-sessions>
+  </div>
+</ng-template>

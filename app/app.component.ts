@@ -8,10 +8,17 @@ import { MatDialog,
          MatDialogRef,
          MatDialogConfig }  from '@angular/material';
 
-import { VaultPwService }   from './services/vaultpw.service';
+//import { VaultPwService }   from './services/vaultpw.service';
+import { LowdbService }   from './services/lowdb.service';
 
 const html = require('./app.template.html');
 const css = require('./app.css');
+
+//process.on('uncaughtException', (e) => {
+//  console.error('uncaughtException:', e);
+//  process.stderr.write('uncaughtException:' + e.message);
+//  alert('halt');
+//});
 
 @Component({
   selector: 'sshui',
@@ -24,7 +31,8 @@ export class AppComponent {
   private section: string = 'manage';
 
   constructor(
-    private vaultPwService: VaultPwService
+//    private vaultPwService: VaultPwService
+    private lowdbService: LowdbService
   ) {}
 
   show(section: string) {

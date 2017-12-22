@@ -1,11 +1,14 @@
-
-import { VaultPwService } from '../services/vaultpw.service';
+import { Injector } from '@angular/core';
+//import { VaultPwService } from '../services/vaultpw.service';
 
 // TODO: use LowdbVault class
 
 const fs = require('fs');
 const crypto = require('crypto');
 const algo = 'aes-256-gcm';
+
+//const encode64 = require('node-forge').util.encode64;
+//const decode64 = require('node-forge').util.decode64;
 
 const debug = require('debug').debug('sshui:service:lowdb');
 
@@ -17,14 +20,81 @@ const FileSync = require('lowdb/adapters/FileSync');
 const lodashId = require('lodash-id');
 
 export class LowdbVault {
+  private PW: string = '';
+  private state: string = '';
+
   private fileName: string = `${process.env.HOME}/.sshui_db.json`;
   private adapter: any;
   private db: any;
+//  private vaultPwService: VaultPwService;
 
   constructor(
-    private vaultPwService: VaultPwService
+//    private vaultPwService: VaultPwService
   ) {
+    if (!fs.existsSync(this.fileName)) {
+      this.state = 'nodb';
+    }
+    debug('state:', this.state);
+  }
 
+  getFilename() {
+    return this.fileName;
+  }
+
+  set(pw: string) {
+    this.PW = pw;
+
+    if (!this.db) {
+      try {
+        this.setup();
+      } catch (e) {
+        this.PW = '';
+        return e;
+      }
+      this.state = '';
+    }
+
+    // authenticate with the vault
+    try {
+      this.db.read(); // authenticate
+    } catch (e) {
+      this.PW = '';
+      return e;
+    }
+    return null;
+  }
+
+  get() {
+    return this.PW;
+  }
+
+  getState() {
+    return this.state;
+  }
+
+  changePw(currentPw: string, newPw: string) {
+    const oldPw = this.PW;
+
+    const decErr = this.set(currentPw);
+
+    if (decErr) {
+      // decrypt failed
+      this.set(oldPw);  // recover
+      return decErr;
+    }
+
+    this.PW = newPw;
+    try {
+      this.db.write(); // re-encrypt
+    } catch (e) {
+      console.error(e);
+      this.PW = '';
+      return e;
+    }
+    return null;
+  }
+
+  setup() {
     // Ensure db file exists
     if (!fs.existsSync(this.fileName)) {
       fs.writeFileSync(this.fileName, '', { mode: 0o600 });
@@ -54,7 +124,7 @@ export class LowdbVault {
       sessions: [],
       localTunnels: [],
       remoteTunnels: [],
-      preferences: {}
+      preferences: []
     })
     .write();
   }
@@ -65,7 +135,7 @@ export class LowdbVault {
 
   encrypt(text: string) {
     const pwkey = crypto.pbkdf2Sync(
-      this.vaultPwService.get(),
+      this.PW,
       'salt',
       100000,
       32,
@@ -82,12 +152,12 @@ export class LowdbVault {
 
     const tag = cipher.getAuthTag();
 
-    return `/SSHUI/1.0/AES256GCM/${tag.toString('hex')}/${ivkey.toString('hex')}\n${crypted}`;
+    return `/SSHUI/2.0/AES256GCM/${tag.toString('hex')}/${ivkey.toString('hex')}\n${crypted}`;
   }
 
   decrypt(text: string) {
     const pwkey = crypto.pbkdf2Sync(
-      this.vaultPwService.get(),
+      this.PW,
       'salt',
       100000,
       32,
@@ -106,7 +176,7 @@ export class LowdbVault {
     }
 
     const version: string = m[2];
-    if (!version || version !== '1.0') {
+    if (!version || version !== '2.0') {
       throw new Error('Invalid version in vault db header');
     }
 

@@ -19,7 +19,7 @@ import { SessionsService }          from './services/sessions.service';
 
 import { StatusService }            from './services/status.service';
 import { TunnelService }            from './services/tunnel.service';
-import { VaultPwService }           from './services/vaultpw.service';
+//import { VaultPwService }           from './services/vaultpw.service';
 
 import { ToolbarComponent }         from './toolbar/toolbar.component';
 import { ManageComponent }          from './manage/manage.component';
@@ -35,6 +35,7 @@ import { SessionAddDialog }         from './ssh/sessions/session-add.dialog';
 import { SessionsComponent }        from './ssh/sessions/sessions.component';
 
 import { VaultPwComponent }         from './vaultpw/vaultpw.component';
+import { NewVaultPwComponent }      from './vaultpw/newvaultpw.component';
 
 //import { ActiveLocalTunnelsService } from './services/active-local-tunnels.service';
 import { LocalTunnelAddDialog }     from './ssh/local-tunnels/local-tunnel-add.dialog';
@@ -74,6 +75,7 @@ import { ChangeVaultPwDialog }      from './toolbar/change-vault-pw.dialog';
     ToolbarComponent,
 
     VaultPwComponent,
+    NewVaultPwComponent,
     ChangeVaultPwDialog
   ],
   bootstrap: [
@@ -89,8 +91,8 @@ import { ChangeVaultPwDialog }      from './toolbar/change-vault-pw.dialog';
     PreferencesService,
     SessionsService,
     StatusService,
-    TunnelService,
-    VaultPwService
+    TunnelService
+//    VaultPwService
   ],
   entryComponents: [
     ChangeVaultPwDialog,

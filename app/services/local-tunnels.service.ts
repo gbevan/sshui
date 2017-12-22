@@ -11,7 +11,6 @@ export class LocalTunnelsService {
   constructor(
     private lowdbServce: LowdbService
   ) {
-    this._db = lowdbServce.getDb();
   }
 
   public create(data: any) {
@@ -20,14 +19,16 @@ export class LocalTunnelsService {
     delete data.conn;
     delete data.server;
 
-    return this._db
+    const _db = this.lowdbServce.getDb();
+    return _db
     .get(this._name)
     .insert(data)
     .write();
   }
 
   public get(id: string) {
-    return this._db
+    const _db = this.lowdbServce.getDb();
+    return _db
     .read()
     .get(this._name)
     .getById(id)
@@ -35,7 +36,8 @@ export class LocalTunnelsService {
   }
 
   public find(params?: any) {
-    return this._db
+    const _db = this.lowdbServce.getDb();
+    return _db
     .read()
     .get(this._name)
     .filter(params)
@@ -43,13 +45,14 @@ export class LocalTunnelsService {
   }
 
   public remove(id: string, params?: any) {
+    const _db = this.lowdbServce.getDb();
     if (id) {
-      return this._db
+      return _db
       .get(this._name)
       .removeById(id)
       .write();
     } else {
-      return this._db
+      return _db
       .get(this._name)
       .remove(params)
       .write();
@@ -62,14 +65,15 @@ export class LocalTunnelsService {
     delete data.conn;
     delete data.server;
 
+    const _db = this.lowdbServce.getDb();
     if (id) {
-      return this._db
+      return _db
       .get(this._name)
       .getById(id)
       .assign(data)
       .write();
     } else {
-      return this._db
+      return _db
       .get(this._name)
       .filter(params)
       .assign(data)

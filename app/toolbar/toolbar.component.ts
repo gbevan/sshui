@@ -5,7 +5,7 @@ import { MatDialog }    from '@angular/material';
 
 import { ChangeVaultPwDialog } from './change-vault-pw.dialog';
 
-import { VaultPwService } from '../services/vaultpw.service';
+import { LowdbService } from '../services/lowdb.service';
 
 const debug = require('debug').debug('sshui:component:toolbar');
 
@@ -21,7 +21,7 @@ export class ToolbarComponent {
   @Output() section = new EventEmitter<string>();
 
   constructor(
-    private vaultPwService: VaultPwService,
+    private lowdbServices: LowdbService,
     public dialog: MatDialog
   ) {}
 
@@ -30,7 +30,7 @@ export class ToolbarComponent {
   }
 
   lock() {
-    this.vaultPwService.set('');
+    this.lowdbServices.set('');
   }
 
   changeVaultPw() {

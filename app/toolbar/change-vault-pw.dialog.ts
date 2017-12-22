@@ -3,7 +3,7 @@ import { NgModel }        from '@angular/forms';
 
 import { MatDialogRef }   from '@angular/material';
 
-import { VaultPwService } from '../services/vaultpw.service';
+import { LowdbService } from '../services/lowdb.service';
 
 import * as _         from 'lodash';
 
@@ -27,7 +27,7 @@ export class ChangeVaultPwDialog {
   private errmsg: string = '';
 
   constructor(
-    private vaultPwService: VaultPwService,
+    private lowdbService: LowdbService,
     public dialogRef: MatDialogRef<ChangeVaultPwDialog>
   ) {}
 
@@ -52,7 +52,7 @@ export class ChangeVaultPwDialog {
     debug('this.new_pw_1', this.new_pw_1);
     debug('this.new_pw_2', this.new_pw_2);
 
-    const err = this.vaultPwService.changePw(this.current_pw, this.new_pw_1);
+    const err = this.lowdbService.changePw(this.current_pw, this.new_pw_1);
     debug('change pw err:', err);
     if (err) {
       this.errmsg = err.message;

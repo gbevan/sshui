@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { VaultPwService }   from '../services/vaultpw.service';
+import { LowdbService }   from '../services/lowdb.service';
 
 const debug = require('debug').debug('sshui:component:vaultpw');
 
@@ -17,13 +17,13 @@ export class VaultPwComponent {
   private errmsg: string = '';
 
   constructor(
-    private vaultPwService: VaultPwService
+    private lowdbService: LowdbService
   ) {}
 
   submit() {
     this.errmsg = '';
 
-    const err = this.vaultPwService.set(this.vaultpw);
+    const err = this.lowdbService.set(this.vaultpw);
     this.vaultpw = '';
 
     debug('vault err:', err);

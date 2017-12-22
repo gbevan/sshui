@@ -60,7 +60,6 @@ export class LocalTunnelsComponent implements OnInit, AfterViewInit {
   }
 
   refresh() {
-    process.stdout.write('refresh\n');
     this.localTunnels = this.localTunnelsService.find();
     this.tableSource = new MatTableDataSource<any>(this.localTunnels);
     this.recoverPersistentLocalTunnels();
@@ -100,11 +99,9 @@ export class LocalTunnelsComponent implements OnInit, AfterViewInit {
   toggleState(localTunnel: any) {
     if (this.statusService.get(localTunnel.id).active) {
       this.tunnelService.stop(localTunnel);
-//      localTunnel.active = false;
       this.statusService.set(localTunnel.id, 'active', false);
     } else {
       this.tunnelService.start('local', localTunnel);
-//      localTunnel.active = true;
       this.statusService.set(localTunnel.id, 'active', true);
     }
 
@@ -115,24 +112,15 @@ export class LocalTunnelsComponent implements OnInit, AfterViewInit {
   }
 
   recoverPersistentLocalTunnels() {
-    debug('recoverPersistentLocalTunnels');
     this.localTunnels.forEach((t: any) => {
-      debug(`b4 status get for ${t.name}`);
       const s = this.statusService.get(t.id);
-      debug(`after status get for ${t.name} s:${s}`);
       if (s) {
         debug(`active:${s.active}`);
       }
 
       if (t.persistent && (!s || !s.active)) {
-        debug(`b4 start for t.name`);
         this.tunnelService.start('local', t);
-        debug(`after start for ${t.name}`);
-//        t.active = true;
-        debug('setting active', t.id);
         this.statusService.set(t.id, 'active', true);
-        debug(`after set for ${t.name}`);
-//        this.cdr.detectChanges();
       }
     });
   }

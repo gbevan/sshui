@@ -1,0 +1,44 @@
+
+<div class="center-vaultpw">
+  <h4>Creating a new vaulted database:</h4>
+  <form #form="ngForm">
+    <mat-form-field class="vaultpw"
+                    color="accent">
+      <input matInput
+             placeholder="Enter a New Vault Passphrase"
+             required
+             minlength="6"
+             name="vaultpw"
+             type="password"
+             autofocus
+             [(ngModel)]="vaultpw"
+             #vaultPw="ngModel"
+             (keyup)="validate(vaultPw2)">
+      <mat-error *ngIf="vaultPw.control.hasError('required')">You must enter a new vault passphrase</mat-error>
+      <mat-error *ngIf="vaultPw.control.hasError('minlength')">Minimum length is 6</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="vaultpw"
+                    color="accent">
+      <input matInput
+             placeholder="ReEnter the New Vault Passphrase"
+             required
+             minlength="6"
+             name="vaultpw2"
+             type="password"
+             autofocus
+             [(ngModel)]="vaultpw2"
+             #vaultPw2="ngModel"
+             (keyup)="validate(vaultPw2)">
+      <mat-error *ngIf="vaultPw2.control.hasError('required')">You must enter a new vault passphrase</mat-error>
+      <mat-error *ngIf="vaultPw2.control.hasError('minlength')">Minimum length is 6</mat-error>
+      <mat-error *ngIf="vaultPw2.control.hasError('dontMatch')">The new passwords must match</mat-error>
+    </mat-form-field>
+
+    <button mat-raised-button
+            type="submit"
+            [disabled]="form.invalid"
+            (click)="submit()">Create Vault</button>
+  </form>
+  <div class="errmsg">{{ errmsg }}</div>
+</div>
