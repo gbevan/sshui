@@ -44,6 +44,7 @@ import { LocalTunnelsComponent }    from './ssh/local-tunnels/local-tunnels.comp
 import { RemoteTunnelsComponent }   from './ssh/remote-tunnels/remote-tunnels.component';
 
 import { ChangeVaultPwDialog }      from './toolbar/change-vault-pw.dialog';
+import { SettingsDialog }           from './toolbar/settings.dialog';
 
 @NgModule({
   imports: [
@@ -76,7 +77,8 @@ import { ChangeVaultPwDialog }      from './toolbar/change-vault-pw.dialog';
 
     VaultPwComponent,
     NewVaultPwComponent,
-    ChangeVaultPwDialog
+    ChangeVaultPwDialog,
+    SettingsDialog
   ],
   bootstrap: [
     AppComponent
@@ -98,7 +100,8 @@ import { ChangeVaultPwDialog }      from './toolbar/change-vault-pw.dialog';
     ChangeVaultPwDialog,
     CredentialAddDialog,
     LocalTunnelAddDialog,
-    SessionAddDialog
+    SessionAddDialog,
+    SettingsDialog
   ]
 })
 export class AppModule {

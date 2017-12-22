@@ -7,22 +7,24 @@ const debug = require('debug').debug('sshui:service:preferences');
 @Injectable()
 export class PreferencesService {
   private _name: string = 'preferences';
-  private _db: any;
+//  private _db: any;
   constructor(
-    private lowdbServce: LowdbService
+    private lowdbService: LowdbService
   ) {
-    this._db = lowdbServce.getDb();
+//    _db = this.lowdbService.getDb();
   }
 
   public create(data: any) {
-    return this._db
+    const _db = this.lowdbService.getDb();
+    return _db
     .get(this._name)
     .insert(data)
     .write();
   }
 
   public get(id: string) {
-    return this._db
+    const _db = this.lowdbService.getDb();
+    return _db
     .read()
     .get(this._name)
     .getById(id)
@@ -30,7 +32,8 @@ export class PreferencesService {
   }
 
   public find(params?: any) {
-    return this._db
+    const _db = this.lowdbService.getDb();
+    return _db
     .read()
     .get(this._name)
     .filter(params)
@@ -38,13 +41,14 @@ export class PreferencesService {
   }
 
   public remove(id: string, params?: any) {
+    const _db = this.lowdbService.getDb();
     if (id) {
-      return this._db
+      return _db
       .get(this._name)
       .removeById(id)
       .write();
     } else {
-      return this._db
+      return _db
       .get(this._name)
       .remove(params)
       .write();
@@ -52,14 +56,15 @@ export class PreferencesService {
   }
 
   public patch(id: string, data: any, params?: any) {
+    const _db = this.lowdbService.getDb();
     if (id) {
-      return this._db
+      return _db
       .get(this._name)
       .getById(id)
       .assign(data)
       .write();
     } else {
-      return this._db
+      return _db
       .get(this._name)
       .filter(params)
       .assign(data)

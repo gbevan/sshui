@@ -32,26 +32,17 @@ export class ChangeVaultPwDialog {
   ) {}
 
   validate(newPw2: NgModel) {
-    debug('validate newPw2 errors:', newPw2.errors);
-
     if (!newPw2.errors) {
       if (this.new_pw_1 !== this.new_pw_2) {
-        debug('missmatch');
         newPw2.control.setErrors({
           dontMatch: true
         });
       }
     }
-
     return false;
   }
 
   submit() {
-    debug('change-vault-pw submit()');
-    debug('this.current_pw', this.current_pw);
-    debug('this.new_pw_1', this.new_pw_1);
-    debug('this.new_pw_2', this.new_pw_2);
-
     const err = this.lowdbService.changePw(this.current_pw, this.new_pw_1);
     debug('change pw err:', err);
     if (err) {

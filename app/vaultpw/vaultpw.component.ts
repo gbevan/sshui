@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component }          from '@angular/core';
 
-import { LowdbService }   from '../services/lowdb.service';
+import { LowdbService }       from '../services/lowdb.service';
+import { PreferencesService } from '../services/preferences.service';
 
 const debug = require('debug').debug('sshui:component:vaultpw');
 
@@ -15,10 +16,37 @@ const css = require('./vaultpw.css');
 export class VaultPwComponent {
   private vaultpw: string = '';
   private errmsg: string = '';
+  private lockTimer: any;
 
   constructor(
-    private lowdbService: LowdbService
-  ) {}
+    private lowdbService: LowdbService,
+    private preferencesService: PreferencesService,
+  ) {
+    const win = (window as any).nw.Window.get();
+    win.on('focus', () => {
+      debug('focus');
+
+      clearTimeout(this.lockTimer);
+      this.lockTimer = null;
+
+      this.timerToLock();
+    });
+  }
+
+  timerToLock() {
+    // start timer to lockout
+    const res = this.preferencesService.find({name: 'settings'});
+    debug('res:', res);
+    if (res.length > 0) {
+      const settings = res[0];
+      debug('starting timeout:', settings);
+
+      this.lockTimer = setTimeout(() => {
+        debug('timeout locked');
+        this.lowdbService.set('');
+      }, settings.timeout * 1000 * 60); // mins
+    }
+  }
 
   submit() {
     this.errmsg = '';
@@ -29,6 +57,8 @@ export class VaultPwComponent {
     debug('vault err:', err);
     if (err) {
       this.errmsg = err.message;
+    } else {
+      this.timerToLock();
     }
   }
 }

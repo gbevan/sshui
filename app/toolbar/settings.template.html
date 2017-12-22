@@ -1,0 +1,31 @@
+<h2 mat-dialog-title>Settings</h2>
+
+<div class="outer" mat-dialog-content>
+  <form #form="ngForm">
+
+    <mat-form-field color="accent"
+                    class="field">
+      <input matInput
+             placeholder="Timeout (mins)"
+             required
+             name="timeout"
+             type="number"
+             [(ngModel)]="settings.timeout"
+             #timeOut="ngModel">
+      <mat-error *ngIf="timeOut.control.hasError('required')">Timeout is required</mat-error>
+    </mat-form-field>
+
+
+  </form>
+  <div class="errmsg">{{ errmsg }}</div>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button
+          type="submit"
+          [disabled]="form.invalid"
+          (click)="submit($event)">Save</button>
+  <span class="horiz-filler"></span>
+  <button mat-button
+          mat-dialog-close>Cancel</button>
+</div>

@@ -1,11 +1,12 @@
 import { Component,
          Output,
-         EventEmitter } from '@angular/core';
-import { MatDialog }    from '@angular/material';
+         EventEmitter }         from '@angular/core';
+import { MatDialog }            from '@angular/material';
 
-import { ChangeVaultPwDialog } from './change-vault-pw.dialog';
+import { ChangeVaultPwDialog }  from './change-vault-pw.dialog';
+import { SettingsDialog }       from './settings.dialog';
 
-import { LowdbService } from '../services/lowdb.service';
+import { LowdbService }         from '../services/lowdb.service';
 
 const debug = require('debug').debug('sshui:component:toolbar');
 
@@ -37,6 +38,17 @@ export class ToolbarComponent {
     debug('changeVaultPw clicked');
 
     this.dialog.open(ChangeVaultPwDialog, {
+
+//    })
+//    .afterClosed()
+//    .subscribe((res) => {
+//      this.refresh();
+    });
+  }
+
+  settings() {
+    debug('settings clicked');
+    this.dialog.open(SettingsDialog, {
 
 //    })
 //    .afterClosed()

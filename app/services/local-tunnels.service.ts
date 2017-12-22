@@ -7,7 +7,7 @@ const debug = require('debug').debug('sshui:service:local-tunnels');
 @Injectable()
 export class LocalTunnelsService {
   private _name: string = 'localTunnels';
-  private _db: any;
+//  private _db: any;
   constructor(
     private lowdbServce: LowdbService
   ) {

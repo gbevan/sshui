@@ -124,7 +124,12 @@ export class LowdbVault {
       sessions: [],
       localTunnels: [],
       remoteTunnels: [],
-      preferences: []
+      preferences: [
+        {
+          name: 'settings',
+          timeout: 5
+        }
+      ]
     })
     .write();
   }
