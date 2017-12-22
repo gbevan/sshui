@@ -4,7 +4,6 @@ const debug = require('debug').debug('sshui:app');
 
 import { Component,
          ViewContainerRef } from '@angular/core';
-//import { Router }           from '@angular/router';
 import { MatDialog,
          MatDialogRef,
          MatDialogConfig }  from '@angular/material';
@@ -26,9 +25,7 @@ export class AppComponent {
 
   constructor(
     private vaultPwService: VaultPwService
-  ) {
-    debug('IN APP');
-  }
+  ) {}
 
   show(section: string) {
     this.section = section;
