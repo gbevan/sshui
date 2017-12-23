@@ -34,6 +34,22 @@ export class TunnelService {
       }
     })
 
+    .on('keyboard-interactive', (
+      name: string,
+      instructions: string,
+      lang: string,
+      prompts: any[],
+      finish: (resp: string[]) => void
+    ) => {
+      debug('keyboard-interactive name:', name);
+      debug('keyboard-interactive instructions:', instructions);
+      debug('keyboard-interactive instructions lang:', lang);
+      debug('keyboard-interactive prompts:', prompts);
+
+      const resp = [creds.pass];
+      finish(resp);
+    })
+
     .on('ready', () => {
       this.statusService.set(tunnel.id, 'connected', true);
       this.statusService.set(tunnel.id, 'conn', conn);
@@ -105,7 +121,9 @@ export class TunnelService {
       port: tunnel.port || 22,
       username: creds.user,
       password: creds.pass || '',
-      privateKey: creds.privKey || '',
+      tryKeyboard: true,
+//      privateKey: creds.privKey || '',
+      privateKey: creds.privKey !== '' ? creds.privKey : undefined,
       keepaliveInterval: 30000,
       keepaliveCountMax: 10
     });

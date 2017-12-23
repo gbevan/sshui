@@ -51,6 +51,7 @@ export class TerminalComponent implements AfterViewInit {
   startTerminal() {
     debug('startTerminal cols:', T_COLS, 'rows:', T_ROWS);
     this.creds = this.credentialsService.get(this.session.cred);
+    debug('creds:', this.creds);
     this.term = new Terminal({
       cursorBlink: true,
       cols: T_COLS,
@@ -63,28 +64,45 @@ export class TerminalComponent implements AfterViewInit {
 
     const conn = new Client();
 
-    conn.on('error', (err: any) => {
+    conn
+    .on('error', (err: any) => {
       console.error('connection error err:', err);
       this.statusService.set(this.session.id, 'connected', false);
-    });
+    })
 
-    conn.on('close', (had_err: boolean) => {
+    .on('close', (had_err: boolean) => {
       console.error('connection closed had_err:', had_err);
       this.statusService.set(this.session.id, 'connected', false);
       this.statusService.set(this.session.id, 'active', false);
-    });
+    })
 
-    conn.on('end', () => {
+    .on('end', () => {
       console.error('connection ended');
       this.statusService.set(this.session.id, 'connected', false);
       this.statusService.set(this.session.id, 'active', false);
-    });
+    })
 
-    conn.on('banner', (msg: string, lang: string) => {
+    .on('keyboard-interactive', (
+      name: string,
+      instructions: string,
+      lang: string,
+      prompts: any[],
+      finish: (resp: string[]) => void
+    ) => {
+      debug('keyboard-interactive name:', name);
+      debug('keyboard-interactive instructions:', instructions);
+      debug('keyboard-interactive instructions lang:', lang);
+      debug('keyboard-interactive prompts:', prompts);
+
+      const resp = [this.creds.pass];
+      finish(resp);
+    })
+
+    .on('banner', (msg: string, lang: string) => {
       debug('banner msg:', msg, 'lang:', lang);
-    });
+    })
 
-    conn.on('ready', () => {
+    .on('ready', () => {
       this.statusService.set(this.session.id, 'connected', true);
       this.statusService.set(this.session.id, 'conn', conn);
 
@@ -111,6 +129,7 @@ export class TerminalComponent implements AfterViewInit {
             this.activeSessionsService.stop(this.session);
           }
         })
+
         .on('data', (d: string) => {
           const s: string = d.toString();
           this.term.write(s);
@@ -134,12 +153,16 @@ export class TerminalComponent implements AfterViewInit {
         });
       });
     })
+
     .connect({
       host: this.session.host,
       port: this.session.port || 22,
       username: this.creds.user,
       password: this.creds.pass || '',
-      privateKey: this.creds.privKey || ''
+      tryKeyboard: true,
+      privateKey: this.creds.privKey !== '' ? this.creds.privKey : undefined,
+      keepaliveInterval: 30000,
+      keepaliveCountMax: 10
     });
   }
 

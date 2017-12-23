@@ -1,11 +1,27 @@
 const gulp = require('gulp');
 const NwBuilder = require('nw-builder');
 const spawn = require('child_process').spawn;
+const exec = require('child_process').exec;
 const webpack = require('webpack-stream-fixed');
 const config = require('./webpack.config.js');
+const pkg = require('./package.json');
 const gutil = require('gulp-util');
 const watch = require('gulp-watch');
 const batch = require('gulp-batch');
+
+const nwFiles = [
+  './package.json',
+  './index.html',
+  './styles.css',
+  'lib/**',
+  'dist/**',
+  'node_modules/zone.js/dist/**',
+  'node_modules/reflect-metadata/**',
+  'node_modules/hammerjs/hammer.min.js',
+  'node_modules/@angular/material/prebuilt-themes/**',
+  'node_modules/xterm/dist/xterm.css',
+  'node_modules/font-awesome/**'
+];
 
 let nw;
 let cp;
@@ -30,22 +46,10 @@ gulp.task('webpack', function () {
   }, 3000);
 });
 
-
+// Build dev instance on linux
 gulp.task('build', (done) => {
   nw = new NwBuilder({
-    files: [
-      './package.json',
-      './index.html',
-      './styles.css',
-      'lib/**',
-      'dist/**',
-      'node_modules/zone.js/dist/**',
-      'node_modules/reflect-metadata/**',
-      'node_modules/hammerjs/hammer.min.js',
-      'node_modules/@angular/material/prebuilt-themes/**',
-      'node_modules/xterm/dist/xterm.css',
-      'node_modules/font-awesome/**'
-    ],
+    files: nwFiles,
     platforms: ['linux64'],
     version: 'latest',
     forceDownload: false
@@ -57,6 +61,56 @@ gulp.task('build', (done) => {
   nw.build()
   .then(() => {
     console.log('built!');
+    done();
+  })
+  .catch(function (err) {
+    console.error(err);
+    done(err);
+  });
+});
+
+// Build releases
+gulp.task('buildall', (done) => {
+  nw = new NwBuilder({
+    files: nwFiles,
+    platforms: ['linux64', 'win64', 'osx64'],
+    version: 'latest',
+    forceDownload: false,
+    buildType: 'versioned',
+    buildDir: './release'
+  });
+
+  // Log stuff you want
+  nw.on('log',  console.log);
+
+  nw.build()
+  .then(() => {
+    console.log('built!');
+
+    // zip linux64
+    exec(`cd "release/${pkg.name} - v${pkg.version}/linux64" && zip -r ../${pkg.name}-${pkg.version}-linux64.zip .`, (err, stdout, stderr) => {
+      if (err) {
+        console.error(stderr);
+        return done(err);
+      }
+
+      // zip win64
+      exec(`cd "release/${pkg.name} - v${pkg.version}/win64" && zip -r ../${pkg.name}-${pkg.version}-win64.zip .`, (err, stdout, stderr) => {
+        if (err) {
+          console.error(stderr);
+          return done(err);
+        }
+
+        // zip osx64
+        exec(`cd "release/${pkg.name} - v${pkg.version}/osx64" && zip -r ../${pkg.name}-${pkg.version}-osx64.zip .`, (err, stdout, stderr) => {
+          if (err) {
+            console.error(stderr);
+            return done(err);
+          }
+        });
+      });
+    });
+
     done();
   })
   .catch(function (err) {

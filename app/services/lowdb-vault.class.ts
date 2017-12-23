@@ -1,5 +1,7 @@
 import { Injector } from '@angular/core';
 
+const os = require('os');
+const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
 const algo = 'aes-256-gcm';
@@ -17,7 +19,7 @@ export class LowdbVault {
   private PW: string = '';
   private state: string = '';
 
-  private fileName: string = `${process.env.HOME}/.sshui_db.json`;
+  private fileName: string = path.join(os.homedir(), '/.sshui_db.json');
   private adapter: any;
   private db: any;
 

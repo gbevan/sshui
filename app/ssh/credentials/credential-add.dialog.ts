@@ -22,7 +22,7 @@ const css = require('./credential-add.css');
 export class CredentialAddDialog {
   private credential: any = {
     name: '',
-    user: `${process.env.USER}`,
+    user: `${process.env.USER || ''}`,
     pass: '',
     keySize: 4096,
     privKey: '',
