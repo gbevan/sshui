@@ -41,6 +41,7 @@
     </ng-container>
 
     <!-- Persistent Column -->
+<!-- TODO: Disabled until xterm fix
     <ng-container matColumnDef="persistent">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Persistent</mat-header-cell>
       <mat-cell *matCellDef="let element">
@@ -49,6 +50,7 @@
                       [disabled]="true"></mat-checkbox>
       </mat-cell>
     </ng-container>
+-->
 
     <!-- connected status icon Column -->
     <ng-container matColumnDef="connected">
@@ -58,9 +60,9 @@
                   fontIcon="fa-plug"
                   class="fa-2x connect-icon"
                   [ngClass]="{
-                             'activated': element.active && ! element.connected,
-                             'connected': element.connected,
-                             'notconnected': !element.connected && !element.active
+                             'activated': isActive(element.id),
+                             'connected': isConnected(element.id),
+                             'notconnected': isNotConnected(element.id)
                              }"
                   (click)="toggleState(element)"></mat-icon>
       </mat-cell>

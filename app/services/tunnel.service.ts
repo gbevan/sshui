@@ -36,7 +36,7 @@ export class TunnelService {
 
     .on('ready', () => {
       this.statusService.set(tunnel.id, 'connected', true);
-      tunnel.conn = conn;
+      this.statusService.set(tunnel.id, 'conn', conn);
 
       // create listener for local port
       const server = net.createServer((netConn: any) => {
@@ -83,10 +83,10 @@ export class TunnelService {
         console.error('server err:', err);
         tunnel.err = err;
 
-        tunnel.conn.end();
+        conn.end();
+
         tunnel.server.close();
         this.statusService.set(tunnel.id, 'connected', false);
-//        tunnel.active = false;
       })
 
       .on('close', (had_error: boolean) => {
@@ -97,7 +97,7 @@ export class TunnelService {
         debug('listening on port', tunnel.localPort);
       });
 
-      tunnel.server = server;
+      this.statusService.set(tunnel.id, 'server', server);
     })
 
     .connect({
@@ -112,8 +112,14 @@ export class TunnelService {
   }
 
   stop(tunnel: any) {
-    tunnel.conn.end();
-    tunnel.server.close();
+    const conn = this.statusService.get(tunnel.id).conn;
+    if (conn) {
+      conn.end();
+    }
+    const server = this.statusService.get(tunnel.id).server;
+    if (server) {
+      server.close();
+    }
     this.statusService.set(tunnel.id, 'connected', false);
   }
 }

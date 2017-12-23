@@ -8,7 +8,6 @@ import { MatTableDataSource,
 import { LocalTunnelsService }  from '../../services/local-tunnels.service';
 import { LocalTunnelAddDialog } from './local-tunnel-add.dialog';
 
-//import { ActiveLocalTunnelsService } from '../../services/active-local-tunnels.service';
 import { TunnelService }        from '../../services/tunnel.service';
 import { Status,
          StatusService }        from '../../services/status.service';
@@ -60,9 +59,12 @@ export class LocalTunnelsComponent implements OnInit, AfterViewInit {
   }
 
   refresh() {
+    debug('refresh');
     this.localTunnels = this.localTunnelsService.find();
+    debug('after localTunnels');
     this.tableSource = new MatTableDataSource<any>(this.localTunnels);
     this.recoverPersistentLocalTunnels();
+    debug('after recoverPersistentLocalTunnels');
   }
 
   addLocalTunnel() {
@@ -71,6 +73,7 @@ export class LocalTunnelsComponent implements OnInit, AfterViewInit {
     })
     .afterClosed()
     .subscribe((res) => {
+      debug('addLocalTunnel res:', res);
       this.statusService.set(res.id, null, null);
       this.refresh();
     });
@@ -97,7 +100,8 @@ export class LocalTunnelsComponent implements OnInit, AfterViewInit {
   }
 
   toggleState(localTunnel: any) {
-    if (this.statusService.get(localTunnel.id).active) {
+    const st = this.statusService.get(localTunnel.id);
+    if (st && st.active) {
       this.tunnelService.stop(localTunnel);
       this.statusService.set(localTunnel.id, 'active', false);
     } else {
@@ -123,5 +127,20 @@ export class LocalTunnelsComponent implements OnInit, AfterViewInit {
         this.statusService.set(t.id, 'active', true);
       }
     });
+  }
+
+  isActive(id: string) {
+    const status = this.statusService.get(id);
+    return status && status.active && !status.connected;
+  }
+
+  isConnected(id: string) {
+    const status = this.statusService.get(id);
+    return status && status.connected;
+  }
+
+  isNotConnected(id: string) {
+    const status = this.statusService.get(id);
+    return !status || !status.connected && !status.active;
   }
 }

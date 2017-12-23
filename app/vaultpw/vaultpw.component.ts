@@ -24,8 +24,6 @@ export class VaultPwComponent {
   ) {
     const win = (window as any).nw.Window.get();
     win.on('focus', () => {
-      debug('focus');
-
       clearTimeout(this.lockTimer);
       this.lockTimer = null;
 
@@ -34,12 +32,14 @@ export class VaultPwComponent {
   }
 
   timerToLock() {
+    // check if db has been authenticated
+    if (!this.lowdbService.getDb()) {
+      return;
+    }
     // start timer to lockout
     const res = this.preferencesService.find({name: 'settings'});
-    debug('res:', res);
     if (res.length > 0) {
       const settings = res[0];
-      debug('starting timeout:', settings);
 
       this.lockTimer = setTimeout(() => {
         debug('timeout locked');
@@ -54,7 +54,6 @@ export class VaultPwComponent {
     const err = this.lowdbService.set(this.vaultpw);
     this.vaultpw = '';
 
-    debug('vault err:', err);
     if (err) {
       this.errmsg = err.message;
     } else {

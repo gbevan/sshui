@@ -58,13 +58,9 @@
                   fontIcon="fa-plug"
                   class="fa-2x connect-icon"
                   [ngClass]="{
-                             'activated': statusService.get(element.id).active &&
-                               !statusService.get(element.id).connected,
-
-                             'connected': statusService.get(element.id).connected,
-
-                             'notconnected': !statusService.get(element.id).connected &&
-                               !statusService.get(element.id).active
+                             'activated': isActive(element.id),
+                             'connected': isConnected(element.id),
+                             'notconnected': isNotConnected(element.id)
                              }"
                   (click)="toggleState(element)"></mat-icon>
       </mat-cell>

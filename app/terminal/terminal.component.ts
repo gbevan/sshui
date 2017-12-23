@@ -6,6 +6,7 @@ import { Component,
 
 import { CredentialsService }     from '../services/credentials.service';
 import { ActiveSessionsService }  from '../services/active-sessions.service';
+import { StatusService }          from '../services/status.service';
 
 const Terminal = require('xterm');
 require('xterm/dist/addons/fit/fit');
@@ -39,7 +40,8 @@ export class TerminalComponent implements AfterViewInit {
 
   constructor(
     private activeSessionsService: ActiveSessionsService,
-    private credentialsService: CredentialsService
+    private credentialsService: CredentialsService,
+    private statusService: StatusService
   ) { }
 
   ngAfterViewInit() {
@@ -47,6 +49,7 @@ export class TerminalComponent implements AfterViewInit {
   }
 
   startTerminal() {
+    debug('startTerminal cols:', T_COLS, 'rows:', T_ROWS);
     this.creds = this.credentialsService.get(this.session.cred);
     this.term = new Terminal({
       cursorBlink: true,
@@ -62,11 +65,28 @@ export class TerminalComponent implements AfterViewInit {
 
     conn.on('error', (err: any) => {
       console.error('connection error err:', err);
+      this.statusService.set(this.session.id, 'connected', false);
+    });
+
+    conn.on('close', (had_err: boolean) => {
+      console.error('connection closed had_err:', had_err);
+      this.statusService.set(this.session.id, 'connected', false);
+      this.statusService.set(this.session.id, 'active', false);
+    });
+
+    conn.on('end', () => {
+      console.error('connection ended');
+      this.statusService.set(this.session.id, 'connected', false);
+      this.statusService.set(this.session.id, 'active', false);
+    });
+
+    conn.on('banner', (msg: string, lang: string) => {
+      debug('banner msg:', msg, 'lang:', lang);
     });
 
     conn.on('ready', () => {
-      this.session.connected = true;
-      this.session.conn = conn;
+      this.statusService.set(this.session.id, 'connected', true);
+      this.statusService.set(this.session.id, 'conn', conn);
 
       conn.shell({
         term: 'xterm-256color'
@@ -78,16 +98,17 @@ export class TerminalComponent implements AfterViewInit {
 
         stream
         .on('close', (code: number, signal: number) => {
-          this.term.writeln('stream closed, code: ' + code + ', signal: ' + signal);
+          debug('stream closed, code: ' + code + ', signal: ' + signal);
           conn.end();
           this.session.connected = false;
           this.term.destroy();
           delete this.term;
 
-          this.activeSessionsService.stop(this.session);
-
           if (this.session.persistent) {
-            this.activeSessionsService.start(this.session);
+            debug('should persist');
+            return this.startTerminal();
+          } else {
+            this.activeSessionsService.stop(this.session);
           }
         })
         .on('data', (d: string) => {
@@ -122,7 +143,4 @@ export class TerminalComponent implements AfterViewInit {
     });
   }
 
-//  ngOnDestroy() {
-//    console.log('terminal on destroy');
-//  }
 }

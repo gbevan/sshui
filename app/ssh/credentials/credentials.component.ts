@@ -17,7 +17,6 @@ const css = require('./credentials.css');
   styles: [css]
 })
 export class CredentialsComponent implements OnInit {
-//  private credentials: Connect[] = [];
   private tableSource: MatTableDataSource<any>;
   private displayedColumns: string[] = [
 //    'id',
@@ -40,8 +39,10 @@ export class CredentialsComponent implements OnInit {
   }
 
   refresh() {
+    debug('refresh');
     const credentials: any = this.credentialsService.find();
     this.tableSource = new MatTableDataSource<any>(credentials);
+    debug('after refresh');
   }
 
   addCredential() {

@@ -42,12 +42,9 @@
   </mat-form-field>
 
 <!--
-  <mat-form-field color="accent"
-                  class="field">
+  <mat-checkbox name="persistent"
+                [(ngModel)]="session.persistent">Persistent Connection?</mat-checkbox>
 -->
-    <mat-checkbox name="persistent"
-                  [(ngModel)]="session.persistent">Persistent Connection?</mat-checkbox>
-<!--  </mat-form-field>-->
 
   <!-- TODO: Execute command on session startup -->
   <!-- TODO: default command to screen for persistent session terminal -->

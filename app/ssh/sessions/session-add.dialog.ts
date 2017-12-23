@@ -52,6 +52,6 @@ export class SessionAddDialog implements OnInit {
       this.sessionsService.create(this.session);
     }
 
-    this.dialogRef.close();
+    this.dialogRef.close(this.session);
   }
 }

@@ -52,6 +52,6 @@ export class LocalTunnelAddDialog implements OnInit {
       this.localTunnelsService.create(this.localTunnel);
     }
 
-    this.dialogRef.close();
+    this.dialogRef.close(this.localTunnel);
   }
 }

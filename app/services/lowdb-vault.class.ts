@@ -1,14 +1,8 @@
 import { Injector } from '@angular/core';
-//import { VaultPwService } from '../services/vaultpw.service';
-
-// TODO: use LowdbVault class
 
 const fs = require('fs');
 const crypto = require('crypto');
 const algo = 'aes-256-gcm';
-
-//const encode64 = require('node-forge').util.encode64;
-//const decode64 = require('node-forge').util.decode64;
 
 const debug = require('debug').debug('sshui:service:lowdb');
 
@@ -26,15 +20,11 @@ export class LowdbVault {
   private fileName: string = `${process.env.HOME}/.sshui_db.json`;
   private adapter: any;
   private db: any;
-//  private vaultPwService: VaultPwService;
 
-  constructor(
-//    private vaultPwService: VaultPwService
-  ) {
+  constructor() {
     if (!fs.existsSync(this.fileName)) {
       this.state = 'nodb';
     }
-    debug('state:', this.state);
   }
 
   getFilename() {
@@ -43,6 +33,11 @@ export class LowdbVault {
 
   set(pw: string) {
     this.PW = pw;
+
+    if (pw === '') {
+      this.db = null;
+      return;
+    }
 
     if (!this.db) {
       try {

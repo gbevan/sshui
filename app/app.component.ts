@@ -2,13 +2,17 @@
 (process as any).type = 'renderer';
 const debug = require('debug').debug('sshui:app');
 
+//console.error = (...args: any[]) => {
+//  debug('UncaughtError:', ...args);
+////  process.stderr.write((new Error('stack')).stack);
+//};
+
 import { Component,
          ViewContainerRef } from '@angular/core';
 import { MatDialog,
          MatDialogRef,
          MatDialogConfig }  from '@angular/material';
 
-//import { VaultPwService }   from './services/vaultpw.service';
 import { LowdbService }   from './services/lowdb.service';
 
 const html = require('./app.template.html');
@@ -31,7 +35,6 @@ export class AppComponent {
   private section: string = 'manage';
 
   constructor(
-//    private vaultPwService: VaultPwService
     private lowdbService: LowdbService
   ) {}
 

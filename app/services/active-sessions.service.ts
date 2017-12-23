@@ -1,6 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable }     from '@angular/core';
 import { Observable,
-         Observer }   from '@reactivex/rxjs';
+         Observer }       from '@reactivex/rxjs';
+
+import { Status,
+         StatusService }  from './status.service';
 
 const debug = require('debug').debug('sshui:service:active-sessions');
 
@@ -9,7 +12,9 @@ export class ActiveSessionsService {
   private activeSessions: Observable<any>;
   private activeSessionsObserver: Observer<any>;
 
-  constructor() {
+  constructor(
+    private statusService: StatusService,
+  ) {
     this.activeSessions = new Observable((observer) => {
       observer.next({});  // initial state
 
@@ -27,7 +32,11 @@ export class ActiveSessionsService {
   }
 
   stop(session: any) {
-    session.conn.end();
+    const st: Status = this.statusService.get(session.id);
+    const conn = st.conn;
+    if (st.conn) {
+      st.conn.end();
+    }
     delete this.activeSessions[session.name];
     session.active = false;
 

@@ -1,14 +1,16 @@
 import { Component,
          OnInit,
          AfterViewInit,
-         ChangeDetectorRef }  from '@angular/core';
+         ChangeDetectorRef }      from '@angular/core';
 import { MatTableDataSource,
-         MatDialog }          from '@angular/material';
+         MatDialog }              from '@angular/material';
 
-import { SessionsService }    from '../../services/sessions.service';
-import { SessionAddDialog }   from './session-add.dialog';
+import { SessionsService }        from '../../services/sessions.service';
+import { SessionAddDialog }       from './session-add.dialog';
 
-import { ActiveSessionsService } from '../../services/active-sessions.service';
+import { ActiveSessionsService }  from '../../services/active-sessions.service';
+import { Status,
+         StatusService }          from '../../services/status.service';
 
 const debug = require('debug').debug('sshui:component:sessions');
 
@@ -21,7 +23,6 @@ const css = require('./sessions.css');
   styles: [css]
 })
 export class SessionsComponent implements OnInit, AfterViewInit {
-//  private sessions: Connect[] = [];
   private tableSource: MatTableDataSource<any>;
   private displayedColumns: string[] = [
 //    'id',
@@ -29,14 +30,16 @@ export class SessionsComponent implements OnInit, AfterViewInit {
     'host',
     'port',
     'cred',
-    'persistent',
+//    'persistent',
     'connected',
     'edit',
     'delete'
   ];
   private sessions: any = [];
+  private status: any = {}; // key by id
 
   constructor(
+    private statusService: StatusService,
     private activeSessionsService: ActiveSessionsService,
     private sessionsService: SessionsService,
     private cdr: ChangeDetectorRef,
@@ -48,13 +51,14 @@ export class SessionsComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.recoverPersistentSessions();
     this.cdr.detectChanges();
   }
 
   refresh() {
+    debug('refresh');
     this.sessions = this.sessionsService.find();
     this.tableSource = new MatTableDataSource<any>(this.sessions);
+    this.recoverPersistentSessions();
   }
 
   addSession() {
@@ -63,6 +67,7 @@ export class SessionsComponent implements OnInit, AfterViewInit {
     })
     .afterClosed()
     .subscribe((res) => {
+      this.statusService.set(res.id, null, null);
       this.refresh();
     });
   }
@@ -83,23 +88,54 @@ export class SessionsComponent implements OnInit, AfterViewInit {
     // TODO: prompt dialog ok/cancel
     this.sessionsService
     .remove(e.id);
-
+    this.statusService.delete(e.id);
     this.refresh();
   }
 
   toggleState(session: any) {
     if (session.active) {
       this.activeSessionsService.stop(session);
+      this.statusService.set(session.id, 'active', false);
     } else {
       this.activeSessionsService.start(session);
+      this.statusService.set(session.id, 'active', true);
     }
+
+    // TODO: find a better way to do this, maybe a once() event for status? or Observable from StatusService
+    setTimeout(() => {
+      this.cdr.detectChanges();
+    }, 1000);
   }
 
+  // Currently disabled in template until xterm fix
   recoverPersistentSessions() {
     this.sessions.forEach((s: any) => {
-      if (s.persistent) {
+      const st = this.statusService.get(s.id);
+      if (st) {
+        debug(`active:${st.active}`);
+      }
+
+      if (s.persistent && (!st || !st.active)) {
+        debug('s persistent');
         this.activeSessionsService.start(s);
+        this.statusService.set(s.id, 'active', true);
       }
     });
+    debug('after forEach');
+  }
+
+  isActive(id: string) {
+    const status = this.statusService.get(id);
+    return status && status.active && !status.connected;
+  }
+
+  isConnected(id: string) {
+    const status = this.statusService.get(id);
+    return status && status.connected;
+  }
+
+  isNotConnected(id: string) {
+    const status = this.statusService.get(id);
+    return !status || !status.connected && !status.active;
   }
 }

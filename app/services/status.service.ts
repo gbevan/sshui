@@ -7,6 +7,8 @@ const debug = require('debug').debug('sshui:service:status');
 export class Status {
   public connected: boolean;
   public active: boolean;
+  public conn: any;
+  public server: any;
 
   constructor (connected: boolean = false, active: boolean = false) {
     this.connected = connected;
@@ -15,7 +17,6 @@ export class Status {
 
   set(key: string, value: any) {
     this[key] = value;
-    debug('Status internal:', this);
   }
 }
 
@@ -25,22 +26,16 @@ export class StatusService {
     [key: string]: Status
   } = {};
 
-//  constructor(
-//  ) {}
-
   // TODO: do we need to add type: 'local','remote','session' to key?
 
   set(id: string, key: string, value: any) {
-    debug(`status set ${id} ${key} to ${value}`);
+//    debug(`status set ${id} ${key} to ${value}`);
     if (!this.statuses[id]) {
       this.statuses[id] = new Status();
     }
-//    _.mixin(this.statuses[id], status);
     if (key !== undefined && value !== undefined) {
       this.statuses[id].set(key, value);
     }
-    debug('statuses:', _.cloneDeep(this.statuses));
-//    this.cdr.detectChanges();
     return this.statuses[id];
   }
 
