@@ -85,7 +85,7 @@ gulp.task('buildall', (done) => {
 
   nw.build()
   .then(() => {
-    console.log('built!');
+    console.log('built! - zipping...');
 
     // zip linux64
     exec(`cd "release/${pkg.name} - v${pkg.version}/linux64" && zip -r ../${pkg.name}-${pkg.version}-linux64.zip .`, (err, stdout, stderr) => {
