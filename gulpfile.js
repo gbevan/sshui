@@ -77,7 +77,8 @@ gulp.task('buildall', (done) => {
     version: 'latest',
     forceDownload: false,
     buildType: 'versioned',
-    buildDir: './release'
+    buildDir: './release',
+    flavor: 'normal'
   });
 
   // Log stuff you want
@@ -107,11 +108,11 @@ gulp.task('buildall', (done) => {
             console.error(stderr);
             return done(err);
           }
+          done();
         });
       });
     });
 
-    done();
   })
   .catch(function (err) {
     console.error(err);

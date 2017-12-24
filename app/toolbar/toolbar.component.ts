@@ -12,6 +12,7 @@ const debug = require('debug').debug('sshui:component:toolbar');
 
 const html = require('./toolbar.template.html');
 const css = require('./toolbar.css');
+const pkg = require('../../package.json');
 
 @Component({
   selector: 'toolbar',
@@ -20,11 +21,14 @@ const css = require('./toolbar.css');
 })
 export class ToolbarComponent {
   @Output() section = new EventEmitter<string>();
+  private pkg_version: string = '';
 
   constructor(
     private lowdbServices: LowdbService,
     public dialog: MatDialog
-  ) {}
+  ) {
+    this.pkg_version = pkg.version;
+  }
 
   show(section: string) {
     this.section.emit(section);
