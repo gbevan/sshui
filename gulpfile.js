@@ -30,20 +30,32 @@ let cp;
 gulp.task('webpack', function () {
   // delay to let gulp start up the app
   setTimeout(function () {
+    gulp.src('app/main.ts')
+    .pipe(
+      webpack(config, require('webpack'))
+      .on('error', function (err) {
+        gutil.log('WEBPACK ERROR:', err);
+        this.emit('end');
+      })
+    )
+    .pipe(gulp.dest('dist'));
+  }, 3000);
+});
+
+// Webpack release, one-shot without watching
+gulp.task('webpackrel', function (done) {
+  config.watch = false;
   gulp.src('app/main.ts')
   .pipe(
     webpack(config, require('webpack'))
     .on('error', function (err) {
       gutil.log('WEBPACK ERROR:', err);
-//      if (cp) {
-//        console.log('killing partout');
-//        cp.kill();
-//      }
       this.emit('end');
+      done(err);
     })
   )
-  .pipe(gulp.dest('dist'));
-  }, 3000);
+  .pipe(gulp.dest('dist'))
+  .on('end', done);
 });
 
 // Build dev instance on linux
@@ -70,7 +82,7 @@ gulp.task('build', (done) => {
 });
 
 // Build releases
-gulp.task('buildall', (done) => {
+gulp.task('buildall', ['webpackrel'], (done) => {
   nw = new NwBuilder({
     files: nwFiles,
     platforms: ['linux64', 'win64', 'osx64'],
@@ -119,6 +131,8 @@ gulp.task('buildall', (done) => {
     done(err);
   });
 });
+
+gulp.task('release', ['webpackrel', 'buildall']);
 
 gulp.task('run', ['build'], (done) => {
   cp = spawn('build/sshui/linux64/sshui', {
