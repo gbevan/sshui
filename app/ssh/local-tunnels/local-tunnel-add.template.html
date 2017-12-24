@@ -44,6 +44,16 @@
     <mat-checkbox name="persistent"
                   [(ngModel)]="localTunnel.persistent">Persistent Connection?</mat-checkbox>
 
+   <!-- Local host bind -->
+  <mat-form-field color="accent"
+                  class="field">
+    <input matInput
+           placeholder="Local host (bind)"
+           name="localHost"
+           type="string"
+           [(ngModel)]="localTunnel.localHost">
+  </mat-form-field>
+
   <!-- Local port -->
   <mat-form-field color="accent"
                   class="field">

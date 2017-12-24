@@ -23,7 +23,11 @@ export class LocalTunnelAddDialog implements OnInit {
     host: '',
     port: 22,
     cred: '',
-    persistent: false
+    persistent: false,
+    localHost: '127.0.0.1',
+    localPort: '',
+    remoteHost: '',
+    remotePort: ''
   };
 
   private _db: any;

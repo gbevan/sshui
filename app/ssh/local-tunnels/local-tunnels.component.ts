@@ -32,6 +32,7 @@ export class LocalTunnelsComponent implements OnInit, AfterViewInit {
     'cred',
     'persistent',
     'connected',
+    'localHost',
     'localPort',
     'remoteHost',
     'remotePort',

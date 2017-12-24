@@ -66,6 +66,12 @@
       </mat-cell>
     </ng-container>
 
+    <!-- Tunnel Local host -->
+    <ng-container matColumnDef="localHost">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Local Host</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.localHost }}</mat-cell>
+    </ng-container>
+
     <!-- Tunnel Local port -->
     <ng-container matColumnDef="localPort">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Local Port</mat-header-cell>

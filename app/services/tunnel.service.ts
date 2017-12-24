@@ -59,19 +59,27 @@ export class TunnelService {
 
         // start tunnel
         if (type === 'local') {
-          conn.forwardOut('', tunnel.localPort, tunnel.remoteHost, tunnel.remotePort, (err: Error, stream: any) => {
-            if (err) {
-              tunnel.err = err;
-              return;
-            }
+          debug('tunnel:', tunnel);
+          conn.forwardOut(
+            '',
+            tunnel.localPort,
+            tunnel.remoteHost,
+            tunnel.remotePort,
+            (err: Error, stream: any) => {
 
-            netConn
-            .pipe(stream)
-            .pipe(netConn)
-            .on('close', () => {
-              stream.close();
-            });
-          });
+              if (err) {
+                tunnel.err = err;
+                return;
+              }
+
+              netConn
+              .pipe(stream)
+              .pipe(netConn)
+              .on('close', () => {
+                stream.close();
+              });
+            }
+          );
 
   // TODO: Remote tunnel support - will need to rework structur re above local port server
   //      } else if (type === 'remote') {
@@ -109,7 +117,10 @@ export class TunnelService {
         debug('net listener closed, had_error:', had_error);
       })
 
-      .listen(tunnel.localPort, () => {
+      .listen({
+        host: tunnel.localHost || '127.0.0.1',
+        port: tunnel.localPort
+      }, () => {
         debug('listening on port', tunnel.localPort);
       });
 
