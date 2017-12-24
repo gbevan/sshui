@@ -1,12 +1,16 @@
 import { Component,
-         Inject }           from '@angular/core';
+         ElementRef,
+         Inject,
+         ViewChild }           from '@angular/core';
 import { MatDialogRef,
-         MAT_DIALOG_DATA }  from '@angular/material';
+         MAT_DIALOG_DATA }     from '@angular/material';
 
 import { CredentialsService }  from '../../services/credentials.service';
 
+const fs = require('fs');
 const forge = require('node-forge');
-const rsa = forge.pki.rsa;
+const pki = forge.pki;
+const rsa = pki.rsa;
 const ssh = forge.ssh;
 
 const debug = require('debug').debug('sshui:dialog:credential-add');
@@ -20,6 +24,8 @@ const css = require('./credential-add.css');
   styles: [css]
 })
 export class CredentialAddDialog {
+  @ViewChild('privkeyfile') privkeyfileEl: ElementRef;
+
   private credential: any = {
     name: '',
     user: `${process.env.USER || ''}`,
@@ -37,6 +43,8 @@ export class CredentialAddDialog {
     {value: 16384, label: '16384: strongest, can take a while...'}
   ];
   private generatingKey: boolean = false;
+
+  private privKeyFile = '';
 
   private _db: any;
 
@@ -76,6 +84,35 @@ export class CredentialAddDialog {
   deleteKeypair() {
     this.credential.privKey = '';
     this.credential.pubKey = '';
+  }
+
+  choosePrivKey() {
+    this.privkeyfileEl.nativeElement.click();
+  }
+
+  loadPrivKey(ev: Event) {
+    const fileName: string = (ev.target as any).value;
+
+    this.credential.privKey = fs.readFileSync(fileName).toString();
+    this.credential.pubKey = '';
+
+    // Attempt to extract the public key from the private key (RSA only)
+    try {
+      // convert PEM encoded private key to a forge private key
+      const privKey = pki.privateKeyFromPem(this.credential.privKey);
+
+      // Extract public key from the private key
+      const pubKey = pki.setRsaPublicKey(privKey.n, privKey.e);
+
+      // encode public key for openssh
+      this.credential.pubKey = ssh.publicKeyToOpenSSH(
+        pubKey,
+        `SSHUI_${this.credential.name}`
+      );
+    } catch (e) {
+      debug('extract public key failed:', e);
+      this.credential.pubKey = 'Unable to extract from private key (only RSA keys supported).';
+    }
   }
 
   submit() {

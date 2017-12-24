@@ -1,7 +1,7 @@
 {
   "name": "sshui",
-  "version": "0.1.0",
-  "description": "SSH UI for sessions and tunnels with a vaulted cred store",
+  "version": "0.2.0",
+  "description": "SSH desktop app for sessions and tunnels with a vaulted cred store",
   "main": "index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
