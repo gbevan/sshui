@@ -18,6 +18,11 @@ is completely self-contained.
 This project is still pretty much in Alpha - but please feel free to use it
 and contribute.
 
+## Downloads
+
+Prebuilt packages for linux64, osx64 and win64 are available in
+[Releases](https://github.com/gbevan/sshui/releases).
+
 ## Screenshots
 
 ![Vault Password](docs/img/vaultpw.jpeg)
