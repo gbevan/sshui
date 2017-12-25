@@ -70,13 +70,15 @@ export class LocalTunnelsComponent implements OnInit, AfterViewInit {
 
   addLocalTunnel() {
     this.dialog.open(LocalTunnelAddDialog, {
-
+//      width: '80%'
     })
     .afterClosed()
     .subscribe((res) => {
       debug('addLocalTunnel res:', res);
-      this.statusService.set(res.id, null, null);
-      this.refresh();
+      if (res) {
+        this.statusService.set(res.id, null, null);
+        this.refresh();
+      }
     });
   }
 

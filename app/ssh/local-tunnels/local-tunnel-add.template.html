@@ -1,6 +1,7 @@
 <h2 mat-dialog-title>{{ localTunnel.id ? 'Edit' : 'Add a new' }} Local Tunnel:</h2>
 
-<form mat-dialog-content>
+<form mat-dialog-content
+       #form="ngForm">
 
   <mat-form-field color="accent"
                   class="field">
@@ -12,86 +13,101 @@
            [(ngModel)]="localTunnel.name">
   </mat-form-field>
 
-  <mat-form-field color="accent"
-                  class="field">
-    <input matInput
-           placeholder="Hostname or IP Address"
-           required
-           name="host"
-           type="text"
-           [(ngModel)]="localTunnel.host">
-  </mat-form-field>
+  <div class="flex-container">
+    <mat-form-field color="accent"
+                    class="largeleft">
+      <input matInput
+             placeholder="Hostname or IP Address"
+             required
+             name="host"
+             type="text"
+             [(ngModel)]="localTunnel.host">
+    </mat-form-field>
 
-  <mat-form-field color="accent"
-                  class="field">
-    <input matInput
-           placeholder="port"
-           required
-           name="port"
-           type="number"
-           [(ngModel)]="localTunnel.port">
-  </mat-form-field>
+    <mat-form-field color="accent"
+                    class="smallright">
+      <input matInput
+             placeholder="port"
+             required
+             name="port"
+             type="number"
+             [(ngModel)]="localTunnel.port">
+    </mat-form-field>
+  </div>
 
-  <mat-form-field color="accent"
-                  class="field">
-    <mat-select placeholder="Choose Credential"
-                [(value)]="localTunnel.cred">
-      <mat-option *ngFor="let c of creds"
-                  [value]="c.id">{{ c.name }}</mat-option>
-    </mat-select>
-  </mat-form-field>
+  <div class="flex-container">
+    <mat-form-field color="accent"
+                    class="field"
+                    class="largeleft">
+      <mat-select placeholder="Choose Credential"
+                  [(value)]="localTunnel.cred">
+        <mat-option *ngFor="let c of creds"
+                    [value]="c.id">{{ c.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div class="smallright">
+      <mat-checkbox name="persistent"
+                    [(ngModel)]="localTunnel.persistent">Persistent Connection?</mat-checkbox>
+    </div>
+  </div>
 
-    <mat-checkbox name="persistent"
-                  [(ngModel)]="localTunnel.persistent">Persistent Connection?</mat-checkbox>
+  <div class="flex-container">
+     <!-- Local host bind -->
+    <mat-form-field color="accent"
+                    class="field"
+                    class="largeleft">
+      <input matInput
+             placeholder="Local host (bind)"
+             name="localHost"
+             type="string"
+             [(ngModel)]="localTunnel.localHost">
+    </mat-form-field>
 
-   <!-- Local host bind -->
-  <mat-form-field color="accent"
-                  class="field">
-    <input matInput
-           placeholder="Local host (bind)"
-           name="localHost"
-           type="string"
-           [(ngModel)]="localTunnel.localHost">
-  </mat-form-field>
+    <!-- Local port -->
+    <mat-form-field color="accent"
+                    class="field"
+                    class="smallright">
+      <input matInput
+             placeholder="Local port"
+             required
+             name="localPort"
+             type="number"
+             [(ngModel)]="localTunnel.localPort">
+    </mat-form-field>
+  </div>
 
-  <!-- Local port -->
-  <mat-form-field color="accent"
-                  class="field">
-    <input matInput
-           placeholder="Local port"
-           required
-           name="localPort"
-           type="number"
-           [(ngModel)]="localTunnel.localPort">
-  </mat-form-field>
+  <div class="flex-container">
+    <!-- Remote host -->
+    <mat-form-field color="accent"
+                    class="field"
+                    class="largeleft">
+      <input matInput
+             placeholder="Remote host"
+             required
+             name="remoteHost"
+             type="text"
+             [(ngModel)]="localTunnel.remoteHost">
+    </mat-form-field>
 
-  <!-- Remote host -->
-  <mat-form-field color="accent"
-                  class="field">
-    <input matInput
-           placeholder="Remote host"
-           required
-           name="remoteHost"
-           type="text"
-           [(ngModel)]="localTunnel.remoteHost">
-  </mat-form-field>
-
-  <!-- Remote port -->
-  <mat-form-field color="accent"
-                  class="field">
-    <input matInput
-           placeholder="Remote port"
-           required
-           name="remotePort"
-           type="number"
-           [(ngModel)]="localTunnel.remotePort">
-  </mat-form-field>
+    <!-- Remote port -->
+    <mat-form-field color="accent"
+                    class="field"
+                    class="smallright">
+      <input matInput
+             placeholder="Remote port"
+             required
+             name="remotePort"
+             type="number"
+             [(ngModel)]="localTunnel.remotePort">
+    </mat-form-field>
+  </div>
 
 </form>
 
 <div mat-dialog-actions>
   <button mat-raised-button
           type="submit"
+          [disabled]="form.invalid"
           (click)="submit($event)">Submit</button>
   <span class="horiz-filler"></span>
   <button mat-button

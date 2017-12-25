@@ -1,5 +1,19 @@
+.flex-container {
+  display: flex;
+  flex-direction: row;
+}
+
 .field {
   display: block;
+}
+
+.largeleft {
+  flex-grow: 4;
+  margin-right: 5px;
+}
+
+.smallright {
+  flex-grow: 1;
 }
 
 .horiz-filler {

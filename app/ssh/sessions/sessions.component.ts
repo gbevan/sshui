@@ -67,8 +67,10 @@ export class SessionsComponent implements OnInit, AfterViewInit {
     })
     .afterClosed()
     .subscribe((res) => {
-      this.statusService.set(res.id, null, null);
-      this.refresh();
+      if (res) {
+        this.statusService.set(res.id, null, null);
+        this.refresh();
+      }
     });
   }
 
