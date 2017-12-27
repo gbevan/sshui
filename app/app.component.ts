@@ -13,6 +13,7 @@ import { MatDialog,
          MatDialogRef,
          MatDialogConfig }  from '@angular/material';
 
+import { CliService }   from './services/cli.service';
 import { LowdbService }   from './services/lowdb.service';
 
 const html = require('./app.template.html');
@@ -35,8 +36,10 @@ export class AppComponent {
   private section: string = 'manage';
 
   constructor(
+    private cliService: CliService,
     private lowdbService: LowdbService
-  ) {}
+  ) {
+  }
 
   show(section: string) {
     this.section = section;

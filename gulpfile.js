@@ -39,7 +39,7 @@ gulp.task('webpack', function () {
       })
     )
     .pipe(gulp.dest('dist'));
-  }, 3000);
+  }, 5000);
 });
 
 // Webpack release, one-shot without watching
@@ -156,7 +156,7 @@ gulp.task('watch', function () {
   ], {
     ignoreInitial: false,
     verbose: true,
-    readDelay: 2000 // filter duplicate changed events from Brackets
+    readDelay: 5000 // filter duplicate changed events from Brackets
   }, batch(function (events, done) {
     console.log('watch triggered');
     if (cp) {

@@ -23,11 +23,11 @@ export class NewVaultPwComponent {
   ) {}
 
   validate(vaultPw2: NgModel) {
-    debug('validate vaultPw2 errors:', vaultPw2.errors);
+//    debug('validate vaultPw2 errors:', vaultPw2.errors);
 
     if (!vaultPw2.errors) {
       if (this.vaultpw !== this.vaultpw2) {
-        debug('missmatch');
+//        debug('missmatch');
         vaultPw2.control.setErrors({
           dontMatch: true
         });

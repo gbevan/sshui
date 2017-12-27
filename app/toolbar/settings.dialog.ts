@@ -4,6 +4,7 @@ import { NgModel }            from '@angular/forms';
 
 import { MatDialogRef }       from '@angular/material';
 
+import { CliService }         from '../services/cli.service';
 import { PreferencesService } from '../services/preferences.service';
 
 import * as _                 from 'lodash';
@@ -21,13 +22,17 @@ const css = require('./settings.css');
 export class SettingsDialog implements OnInit {
   private errmsg: string = '';
   private settings: any;
+  private cliOptions: any = {};
 
   constructor(
+    private cliService: CliService,
     private preferencesService: PreferencesService,
     public dialogRef: MatDialogRef<SettingsDialog>
   ) {}
 
   ngOnInit() {
+    this.cliOptions = this.cliService.getOptions();
+
     const res = this.preferencesService.find({name: 'settings'});
     debug('res:', res);
     if (res.length === 0) {

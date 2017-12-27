@@ -1,4 +1,14 @@
+.vault-outer {
+  color: darkgray;
+}
+
+.db {
+  font-family: monospace;
+  margin-left: 10px;
+}
+
 .outer {
+  margin-top: 15px;
   min-width: 800px;
 }
 

@@ -23,7 +23,9 @@ export class LowdbVault {
   private adapter: any;
   private db: any;
 
-  constructor() {
+  constructor(params: any) {
+    debug('params:', params);
+    this.fileName = params.fileName;
     if (!fs.existsSync(this.fileName)) {
       this.state = 'nodb';
     }

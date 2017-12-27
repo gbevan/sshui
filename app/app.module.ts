@@ -10,6 +10,7 @@ import { SshuiMaterialModule,
          MatIconRegistry }          from './sshui-material.module';
 import { AppComponent }             from './app.component';
 
+import { CliService }               from './services/cli.service';
 import { LowdbService }             from './services/lowdb.service';
 import { CredentialsService }       from './services/credentials.service';
 import { LocalTunnelsService }      from './services/local-tunnels.service';
@@ -85,6 +86,7 @@ import { SettingsDialog }           from './toolbar/settings.dialog';
   ],
   providers: [
 //    ActiveLocalTunnelsService,
+    CliService,
     ActiveSessionsService,
     LowdbService,
     CredentialsService,
