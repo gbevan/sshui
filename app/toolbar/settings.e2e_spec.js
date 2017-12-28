@@ -69,7 +69,7 @@ describe('Settings Dialog', () => {
       const settingsDialog = element(by.tagName('settings-dialog'));
       browser.wait(EC.stalenessOf(settingsDialog), 5000);
       expect(settingsDialog.isPresent()).toBe(false);
-      browser.sleep(5000);
+//      browser.sleep(5000);
     });
   });
 });

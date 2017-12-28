@@ -13,8 +13,10 @@ exports.config = {
   chromeOnly: true,
 
   specs: [
+    // the following order is important as some early tests setup the app & preferences etc
     'app/app.e2e_spec.js',
-    'app/*/**/*.e2e_spec.js'
+    'app/toolbar/*.e2e_spec.js',
+    'app/manage/*.e2e_spec.js'
   ],
 
   capabilities: {
