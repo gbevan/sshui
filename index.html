@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <title>SSH UI</title>
     <link rel="stylesheet" href="styles.css">
+    <script>
+      process.stdout.write('******************* before zone\n');
+    </script>
     <script src="node_modules/zone.js/dist/zone.js"></script>
     <script src="node_modules/reflect-metadata/Reflect.js"></script>
     <script src="node_modules/hammerjs/hammer.min.js"></script>
@@ -12,6 +15,10 @@
   <body>
     <sshui>Loading...</sshui>
   </body>
+
+  <script>
+    process.stdout.write('******************* before bundle\n');
+  </script>
 
   <!-- webpack bundle -->
   <script src="dist/bundle.js" type="text/javascript"></script>

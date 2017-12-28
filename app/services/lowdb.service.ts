@@ -16,7 +16,7 @@ const debug = require('debug').debug('sshui:service:lowdb');
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
 
-const lodashId = require('lodash-id');
+//const lodashId = require('lodash-id');
 
 @Injectable()
 export class LowdbService {

@@ -1,5 +1,7 @@
+process.stdout.write('APP COMPONENT\n');
+
 // tell debug to treat as browser - enable using: DEBUG="sshui:*" gulp
-(process as any).type = 'renderer';
+//(process as any).type = 'renderer';
 const debug = require('debug').debug('sshui:app');
 
 //console.error = (...args: any[]) => {
@@ -39,6 +41,7 @@ export class AppComponent {
     private cliService: CliService,
     private lowdbService: LowdbService
   ) {
+    process.stderr.write('********************************* HERE\n');
   }
 
   show(section: string) {

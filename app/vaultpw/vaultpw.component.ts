@@ -38,6 +38,7 @@ export class VaultPwComponent {
     }
     // start timer to lockout
     const res = this.preferencesService.find({name: 'settings'});
+    debug('settings res:', res);
     if (res.length > 0) {
       const settings = res[0];
 

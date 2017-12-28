@@ -25,10 +25,13 @@
       <span class="app-toolbar-menu-item">
         <mat-menu #vaultMenu="matMenu">
           <button mat-menu-item
-                  (click)="changeVaultPw()">Change Passphrase</button>
+                  (click)="changeVaultPw()"
+                  id="changeVaultPasswordButton">Change Passphrase</button>
         </mat-menu>
 
-        <button mat-button [matMenuTriggerFor]="vaultMenu">
+        <button mat-button
+                [matMenuTriggerFor]="vaultMenu"
+                id="vaultMenuButton">
           Vault
         </button>
       </span>
@@ -36,7 +39,8 @@
       <span class="app-toolbar-sep"></span>
       <span class="app-toolbar-menu-item">
         <button mat-button
-                (click)="lock()">
+                (click)="lock()"
+                id="lockButton">
           Lock
         </button>
       </span>
@@ -44,7 +48,8 @@
       <span class="app-toolbar-sep"></span>
       <span class="app-toolbar-menu-item">
         <button mat-button
-                (click)="settings()">
+                (click)="settings()"
+                id="settingsButton">
           <mat-icon fontSet="fa"
                     fontIcon="fa-cog"
                     class="fa-2x settings">

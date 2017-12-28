@@ -84,15 +84,15 @@ export class CliService {
         debug('p_name:', p_name, 'p_val:', p_val);
         if (!optionHash[p_name]) {
           process.stderr.write(`Unrecognised command line parameter: --${p_name}\n`);
-          nwApp.closeAllWindows();
-          return nwApp.quit();
+          //nwApp.closeAllWindows();
+          //return nwApp.quit();
         }
 
         this.options[p_name] = p_val;
       } else {
         process.stderr.write(`Unrecognised command line parameter: ${param}\n`);
-        nwApp.closeAllWindows();
-        return nwApp.quit();
+        //nwApp.closeAllWindows();
+        //return nwApp.quit();
       }
     });
   }

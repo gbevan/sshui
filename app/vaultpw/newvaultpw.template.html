@@ -1,7 +1,8 @@
 
 <div class="center-vaultpw">
   <h4>Creating a new vaulted database:</h4>
-  <form #form="ngForm">
+  <form #form="ngForm"
+        id="newVaultPwForm">
     <mat-form-field class="vaultpw"
                     color="accent">
       <input matInput
@@ -38,7 +39,8 @@
     <button mat-raised-button
             type="submit"
             [disabled]="form.invalid"
-            (click)="submit()">Create Vault</button>
+            (click)="submit()"
+            id="createVaultButton">Create Vault</button>
   </form>
   <div class="errmsg">{{ errmsg }}</div>
 </div>

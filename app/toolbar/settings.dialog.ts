@@ -41,6 +41,7 @@ export class SettingsDialog implements OnInit {
         name: 'settings',
         timeout: 5
       };
+      this.preferencesService.create(this.settings);
     } else {
       this.settings = res[0];
     }
@@ -49,10 +50,14 @@ export class SettingsDialog implements OnInit {
 
   submit() {
     debug('submit settings:', this.settings);
-    if (this.settings.id) {
-      this.preferencesService.patch(this.settings.id, this.settings);
-    } else {
-      this.preferencesService.create(this.settings);
+    try {
+      if (this.settings.id) {
+        this.preferencesService.patch(this.settings.id, this.settings);
+      } else {
+        this.preferencesService.create(this.settings);
+      }
+    } catch (e) {
+      console.error(e);
     }
     this.dialogRef.close();
   }

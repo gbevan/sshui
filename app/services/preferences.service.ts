@@ -15,6 +15,7 @@ export class PreferencesService {
   }
 
   public create(data: any) {
+    debug('create data:', data);
     const _db = this.lowdbService.getDb();
     return _db
     .get(this._name)
@@ -56,6 +57,7 @@ export class PreferencesService {
   }
 
   public patch(id: string, data: any, params?: any) {
+    debug('patch id:', id, 'data:', data);
     const _db = this.lowdbService.getDb();
     if (id) {
       return _db
