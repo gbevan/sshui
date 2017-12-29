@@ -20,7 +20,7 @@ and contribute.
 
 ## Downloads
 
-Prebuilt packages for linux64, osx64 and win64 are available in
+Prebuilt zip packages for linux64, osx64 and win64 are available in
 [Releases](https://github.com/gbevan/sshui/releases).
 
 ## Screenshots
@@ -34,3 +34,44 @@ Prebuilt packages for linux64, osx64 and win64 are available in
 ## LICENSE
 
 [GPL-3.0](https://github.com/gbevan/sshui/blob/master/LICENSE)
+
+## Developer Notes
+
+### Start webpack in watch mode for continuous builds while developing
+
+    $ gulp webpack
+
+### Run the app using nw.js direct from source (no build)
+
+    $ node_modules/nw/nwjs/nw --nwapp=.
+
+TODO: migrate this into gulp
+
+### Run the protractor E2E UI test suite
+
+    $ DEBUG="sshui:*" protractor ./protractor-conf.js
+
+TODO: migrate this into gulp
+
+### Build package with SDK for debugging
+
+    $ gulp build
+
+Creates the build in the (yup you guessed it) `build/` folder
+
+### Run the built development package with debugging and a temp vault
+
+    $ DEBUG="sshui:*" build/sshui/linux64/sshui --db=/tmp/v
+
+the `--db=/tmp/v` tells sshui to use a different vault db file, for testing.
+
+### Run the app in continuous build/webpack with watch modes
+
+    $ gulp
+
+### To build the Release zip files
+
+    $ gulp release
+
+Release packages will be in `'release/sshui - v?.?.?/'`, ready to upload to
+github Releases.
