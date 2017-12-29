@@ -50,8 +50,58 @@ describe('Manage View', () => {
     const credentials = element(by.tagName('credentials'));
     expect(credentials.isPresent()).toBe(true);
     expect(credentials.isDisplayed()).toBe(false);
-
-    browser.sleep(5000);
   });
+
+  it('should show credentials when clicked, other panels should not be shown', () => {
+    const sessions = element(by.tagName('sessions'));
+    const localTunnels = element(by.tagName('local-tunnels'));
+    const credentials = element(by.tagName('credentials'));
+
+    const credentialsPanelHdr = element(by.id('credentialsPanelHdr'));
+    return credentialsPanelHdr.click()
+    .then(() => {
+      browser.wait(EC.visibilityOf(credentials), 5000);
+      browser.wait(EC.invisibilityOf(sessions), 5000);
+
+      expect(sessions.isDisplayed()).toBe(false);
+      expect(localTunnels.isDisplayed()).toBe(false);
+      expect(credentials.isDisplayed()).toBe(true);
+    });
+  });
+
+  it('should show local tunnels when clicked, other panels should not be shown', () => {
+    const sessions = element(by.tagName('sessions'));
+    const localTunnels = element(by.tagName('local-tunnels'));
+    const credentials = element(by.tagName('credentials'));
+
+    const localTunnelsPanelHdr = element(by.id('localTunnelsPanelHdr'));
+    return localTunnelsPanelHdr.click()
+    .then(() => {
+      browser.wait(EC.visibilityOf(localTunnels), 5000);
+      browser.wait(EC.invisibilityOf(credentials), 5000);
+
+      expect(sessions.isDisplayed()).toBe(false);
+      expect(localTunnels.isDisplayed()).toBe(true);
+      expect(credentials.isDisplayed()).toBe(false);
+    });
+  });
+
+  it('should show sessions when clicked, other panels should not be shown', () => {
+    const sessions = element(by.tagName('sessions'));
+    const localTunnels = element(by.tagName('local-tunnels'));
+    const credentials = element(by.tagName('credentials'));
+
+    const sessionsPanelHdr = element(by.id('sessionsPanelHdr'));
+    return sessionsPanelHdr.click()
+    .then(() => {
+      browser.wait(EC.visibilityOf(sessions), 5000);
+      browser.wait(EC.invisibilityOf(localTunnels), 5000);
+
+      expect(sessions.isDisplayed()).toBe(true);
+      expect(localTunnels.isDisplayed()).toBe(false);
+      expect(credentials.isDisplayed()).toBe(false);
+    });
+  });
+
 
 });
