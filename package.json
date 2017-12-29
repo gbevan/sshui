@@ -1,6 +1,6 @@
 {
   "name": "sshui",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "SSH desktop app for sessions and tunnels with a vaulted cred store",
   "main": "index.html",
   "scripts": {
