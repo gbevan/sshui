@@ -47,17 +47,27 @@ Prebuilt zip packages for linux64, osx64 and win64 are available in
 
 TODO: migrate this into gulp
 
+v0.5: this is now achieved by simply running:
+
+    $ gulp run
+
 ### Run the protractor E2E UI test suite
+
+(requires protractor installed globally)
 
     $ DEBUG="sshui:*" protractor ./protractor-conf.js
 
 TODO: migrate this into gulp
 
+v0.5: (make sure webpack has been run, or `gulp` (in watch and webpack mode)):
+
+    $ gulp e2e
+
 ### Build package with SDK for debugging
 
     $ gulp build
 
-Creates the build in the (yup you guessed it) `build/` folder
+Creates the build in the (yep you guessed it) `build/` folder
 
 ### Run the built development package with debugging and a temp vault
 
@@ -65,7 +75,7 @@ Creates the build in the (yup you guessed it) `build/` folder
 
 the `--db=/tmp/v` tells sshui to use a different vault db file, for testing.
 
-### Run the app in continuous build/webpack with watch modes
+### Run the app in continuous source edit/webpack with watch modes
 
     $ gulp
 

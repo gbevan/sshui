@@ -39,7 +39,7 @@ gulp.task('webpack', function () {
       })
     )
     .pipe(gulp.dest('dist'));
-  }, 5000);
+  }, 0);
 });
 
 // Webpack release, one-shot without watching
@@ -134,8 +134,10 @@ gulp.task('buildall', ['webpackrel'], (done) => {
 
 gulp.task('release', ['webpackrel', 'buildall']);
 
-gulp.task('run', ['build'], (done) => {
-  cp = spawn('build/sshui/linux64/sshui', {
+//gulp.task('run', ['build'], (done) => {
+gulp.task('run', (done) => {
+//  cp = spawn('build/sshui/linux64/sshui', {
+  cp = spawn('node_modules/nw/nwjs/nw', ['--nwapp=.'], {
     stdio: 'inherit'
   });
 
@@ -145,7 +147,7 @@ gulp.task('run', ['build'], (done) => {
   done();
 });
 
-gulp.task('chain', ['build', 'run']);
+//gulp.task('chain', ['build', 'run']);
 
 gulp.task('watch', function () {
   watch([
@@ -154,17 +156,54 @@ gulp.task('watch', function () {
     'index.html',
     'styles.css'
   ], {
-    ignoreInitial: false,
+    ignoreInitial: true,
     verbose: true,
     readDelay: 5000 // filter duplicate changed events from Brackets
   }, batch(function (events, done) {
     console.log('watch triggered');
+//    console.log('events:', events);
     if (cp) {
       console.log('killing sshui');
       cp.kill();
     }
-    gulp.start('chain', done);
+//    gulp.start('chain', done);
+    gulp.start('run', done);
   }));
 });
 
 gulp.task('default', ['watch', 'webpack']);
+
+gulp.task('e2e', function () {
+  const p_cp = spawn('DEBUG="sshui:*" protractor ./protractor-conf.js', {
+    shell: true,
+    stdio: ['ignore', 'inherit', 'inherit']
+  });
+  p_cp.on('close', (rc) => {
+    console.log('protractor finished rc:', rc);
+  })
+});
+
+// TODO: fix headless mode to use this...
+gulp.task('_watche2e', function () {
+  watch([
+    'app/**/*.e2e_spec.js',
+    'dist/**',
+    'lib/**',
+    'index.html',
+    'styles.css'
+  ], {
+    ignoreInitial: true,
+    verbose: true,
+    readDelay: 5000 // filter duplicate changed events from Brackets
+  }, batch(function (events, done) {
+    console.log('watche2e triggered');
+//    console.log('events:', events);
+//    if (cp) {
+//      console.log('killing sshui');
+//      cp.kill();
+//    }
+//    gulp.start('chain', done);
+    gulp.start('e2e', done);
+  }));
+});
+gulp.task('watche2e', ['_watche2e', 'webpack']);

@@ -31,6 +31,10 @@ exports.config = {
 //        'log-level=0',
 //        'remote-debugging-port=9222',
 //        'inspect'
+
+// this doesnt work yet:
+//        'headless',
+//        'disable-gpu'
       ]
     },
   },
