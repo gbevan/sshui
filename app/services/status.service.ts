@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
+import { Observable,
+         Observer }   from '@reactivex/rxjs';
 
 import * as _ from 'lodash';
+
+const EventEmitter = require('events');
 
 const debug = require('debug').debug('sshui:service:status');
 
@@ -20,22 +24,37 @@ export class Status {
   }
 }
 
+export class Statuses {
+  [key: string]: Status
+}
+
 @Injectable()
 export class StatusService {
-  private statuses: {
-    [key: string]: Status
-  } = {};
+  private statuses: Statuses = {};
+
+  private emitter: any = EventEmitter;
+  private changed: Observable<Status>;
+
+  constructor() {
+    debug('in constructor');
+    this.emitter = new EventEmitter();
+    this.changed = Observable.fromEvent(this.emitter, 'changed');
+  }
 
   // TODO: do we need to add type: 'local','remote','session' to key?
 
   set(id: string, key: string, value: any) {
-//    debug(`status set ${id} ${key} to ${value}`);
+    debug(`status set ${id} ${key} to ${value}`);
     if (!this.statuses[id]) {
       this.statuses[id] = new Status();
     }
     if (key !== undefined && value !== undefined) {
       this.statuses[id].set(key, value);
     }
+
+    this.emitter.emit('change', this.statuses[id]);
+
+    debug('status id:', id, this.statuses[id]);
     return this.statuses[id];
   }
 
@@ -44,6 +63,12 @@ export class StatusService {
   }
 
   delete(id: string) {
+    debug('delete id:', id);
+    this.emitter.emit('change', id);
     delete this.statuses[id];
+  }
+
+  subscribe(value: (v: Status) => void, error?: any): any {
+    return this.changed.subscribe(value, error);
   }
 }

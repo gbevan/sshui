@@ -1,9 +1,12 @@
 import { Component,
          OnInit,
+         OnDestroy,
          AfterViewInit,
          ChangeDetectorRef }    from '@angular/core';
 import { MatTableDataSource,
          MatDialog }            from '@angular/material';
+
+import { Subscription }         from '@reactivex/rxjs';
 
 import { LocalTunnelsService }  from '../../services/local-tunnels.service';
 import { LocalTunnelAddDialog } from './local-tunnel-add.dialog';
@@ -22,7 +25,7 @@ const css = require('./local-tunnels.css');
   template: html,
   styles: [css]
 })
-export class LocalTunnelsComponent implements OnInit, AfterViewInit {
+export class LocalTunnelsComponent implements OnInit, AfterViewInit, OnDestroy {
   private tableSource: MatTableDataSource<any>;
   private displayedColumns: string[] = [
 //    'id',
@@ -41,6 +44,7 @@ export class LocalTunnelsComponent implements OnInit, AfterViewInit {
   ];
   private localTunnels: any = [];
   private status: any = {}; // key by id
+  private statusSubscription: Subscription;
 
   constructor(
     private statusService: StatusService,
@@ -51,7 +55,18 @@ export class LocalTunnelsComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
+    debug('in ngOnInit');
+    // listen for status events
+    this.statusSubscription = this.statusService.subscribe(() => {
+      debug('status subscribe fired');
+      this.cdr.detectChanges();
+    });
+
     this.refresh();
+  }
+
+  ngOnDestroy() {
+    this.statusSubscription.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -120,12 +135,13 @@ export class LocalTunnelsComponent implements OnInit, AfterViewInit {
 
   recoverPersistentLocalTunnels() {
     this.localTunnels.forEach((t: any) => {
+      debug('t:', t);
       const s = this.statusService.get(t.id);
       if (s) {
         debug(`active:${s.active}`);
       }
 
-      if (t.persistent && (!s || !s.active)) {
+      if (t.persistent && (!s || !s.active || !s.connected)) {
         this.tunnelService.start('local', t);
         this.statusService.set(t.id, 'active', true);
       }

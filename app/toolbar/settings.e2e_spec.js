@@ -19,7 +19,7 @@ describe('Settings Dialog', () => {
       expect(timeoutSetting.isPresent()).toBe(true);
       expect(timeoutSetting.isDisplayed()).toBe(true);
 
-      return browser.wait(EC.textToBePresentInElementValue(timeoutSetting, '5', 1000));
+      return browser.wait(EC.textToBePresentInElementValue(timeoutSetting, '10', 1000));
     })
     .then(() => {
       const timeoutSetting = element(by.name('timeout'));

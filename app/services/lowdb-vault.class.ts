@@ -126,9 +126,10 @@ export class LowdbVault {
       preferences: []
     })
     .get('preferences')
-    .insert({
+    .upsert({
+      id: '1',
       name: 'settings',
-      timeout: 5
+      timeout: 10
     })
     .write();
   }
@@ -194,10 +195,15 @@ export class LowdbVault {
 
     text = m[6];
 
-    const decipher = crypto.createDecipheriv(algo, pwkey, iv);
-    decipher.setAuthTag(tag);
-    let dec = decipher.update(text, 'base64', 'utf8');
-    dec += decipher.final('utf8');
-    return dec;
+    try {
+      const decipher = crypto.createDecipheriv(algo, pwkey, iv);
+      decipher.setAuthTag(tag);
+      let dec = decipher.update(text, 'base64', 'utf8');
+      dec += decipher.final('utf8');
+      return dec;
+    } catch (e) {
+      debug(e);
+      return '{}';
+    }
   }
 }

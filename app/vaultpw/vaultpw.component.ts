@@ -46,6 +46,10 @@ export class VaultPwComponent {
         debug('timeout locked');
         this.lowdbService.set('');
       }, settings.timeout * 1000 * 60); // mins
+
+//      res.forEach((s: any) => {
+//        this.preferencesService.remove(s.id);
+//      });
     }
   }
 
