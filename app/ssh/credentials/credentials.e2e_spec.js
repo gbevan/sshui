@@ -154,6 +154,62 @@ describe('Credentials Management', () => {
       const rows = element.all(by.id('credentialsRow'));
       expect(rows.count()).toBe(1);
     });
+  });
+
+  describe('Edit', () => {
+
+    it('should open the edit credential dialog on clicking a row\'s edit button', () => {
+      const editButton_cred1 = element(by.id('editButton_cred1'));
+      expect(editButton_cred1.isPresent()).toBe(true);
+      expect(editButton_cred1.isDisplayed()).toBe(true);
+      return editButton_cred1.click()
+      .then(() => {
+        const credentialAddDialog = element(by.tagName('credential-add-dialog'));
+        expect(credentialAddDialog.isPresent()).toBe(true);
+        expect(credentialAddDialog.isDisplayed()).toBe(true);
+      });
+    });
+
+    it('should have "Edit" in the title', () => {
+      const title = element(by.css('.mat-dialog-title'));
+      expect(title.isPresent()).toBe(true);
+      expect(title.isDisplayed()).toBe(true);
+      expect(title.getText()).toEqual('Edit Credential:');
+    });
+
+    it('should have fields filled in from previous add', () => {
+      const name = $('#credentialAddForm').element(by.name('name'));
+      expect(name.isPresent()).toBe(true);
+      expect(name.isDisplayed()).toBe(true);
+      browser.wait(EC.textToBePresentInElementValue(name, 'cred1'), 5000);
+
+      const user = $('#credentialAddForm').element(by.name('user'));
+      expect(user.isPresent()).toBe(true);
+      expect(user.isDisplayed()).toBe(true);
+      browser.wait(EC.textToBePresentInElementValue(user, 'user1'), 5000);
+
+      const pass = $('#credentialAddForm').element(by.name('pass'));
+      expect(pass.isPresent()).toBe(true);
+      expect(pass.isDisplayed()).toBe(true);
+      expect(pass.getAttribute('type')).toBe('password')
+      browser.wait(EC.textToBePresentInElementValue(pass, 'pass001'), 5000);
+
+      const pubKey = $('#credentialAddForm').element(by.name('pubKey'));
+      expect(pubKey.isPresent()).toBe(true);
+      expect(pubKey.isDisplayed()).toBe(true);
+      browser.wait(EC.textToBePresentInElementValue(pubKey, 'ssh-rsa'), 5000);
+    });
+
+    it('should close when cancel button clicked', () => {
+      const cancelButton = element(by.id('cancelButton'));
+      return cancelButton.click()
+      .then(() => {
+        const credentialAddDialog = element(by.tagName('credential-add-dialog'));
+        return browser.wait(EC.stalenessOf(credentialAddDialog), 5000);
+//        browser.sleep(5000);
+      });
+    });
 
   });
+
 });
