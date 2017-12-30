@@ -24,6 +24,7 @@ describe('Settings Dialog', () => {
     .then(() => {
       const timeoutSetting = element(by.name('timeout'));
       return timeoutSetting
+      .clear()
       .sendKeys(protractor.Key.BACK_SPACE)
       .sendKeys('100');
     })
