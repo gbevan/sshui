@@ -14,9 +14,20 @@ export class Status {
   public conn: any;
   public server: any;
 
+  public monitorInterval: NodeJS.Timer;
+  public lastBytesRead: number;
+  public lastBytesWritten: number;
+  public intvlBytesRead: number;
+  public intvlBytesWritten: number;
+
   constructor (connected: boolean = false, active: boolean = false) {
     this.connected = connected;
     this.active = active;
+
+    this.lastBytesRead = 0;
+    this.lastBytesWritten = 0;
+//    this.intvlBytesRead = 0;
+//    this.intvlBytesWritten = 0;
   }
 
   set(key: string, value: any) {
@@ -28,6 +39,20 @@ export class Statuses {
   [key: string]: Status
 }
 
+export class CountsEvent {
+  public id: string;
+  public datetime: Date;
+  public bytesRead: number;
+  public bytesWritten: number;
+
+  constructor(id: string, bytesRead: number, bytesWritten: number) {
+    this.id = id;
+    this.bytesRead = bytesRead;
+    this.bytesWritten = bytesWritten;
+    this.datetime = new Date();
+  }
+}
+
 @Injectable()
 export class StatusService {
   private statuses: Statuses = {};
@@ -35,10 +60,16 @@ export class StatusService {
   private emitter: any = EventEmitter;
   private changed: Observable<Status>;
 
+//  private countEmitter: any = EventEmitter;
+  private counts: Observable<CountsEvent>;
+
   constructor() {
     debug('in constructor');
     this.emitter = new EventEmitter();
     this.changed = Observable.fromEvent(this.emitter, 'changed');
+
+//    this.countEmitter = new EventEmitter();
+    this.counts = Observable.fromEvent(this.emitter, 'counts');
   }
 
   // TODO: do we need to add type: 'local','remote','session' to key?
@@ -52,9 +83,9 @@ export class StatusService {
       this.statuses[id].set(key, value);
     }
 
-    this.emitter.emit('change', this.statuses[id]);
+    this.emitter.emit('changed', this.statuses[id]);
 
-    debug('status id:', id, this.statuses[id]);
+//    debug('status id:', id, this.statuses[id]);
     return this.statuses[id];
   }
 
@@ -64,11 +95,33 @@ export class StatusService {
 
   delete(id: string) {
     debug('delete id:', id);
-    this.emitter.emit('change', id);
+    this.emitter.emit('changed', id);
     delete this.statuses[id];
   }
 
-  subscribe(value: (v: Status) => void, error?: any): any {
+  incCounts(id: string, bytesRead: number, bytesWritten: number) {
+//    debug('incCounts bytesRead:', bytesRead, 'bytesWritten:', bytesWritten);
+    const st = this.statuses[id];
+    if (!st) {
+      return;
+    }
+
+    const intvlBytesRead = bytesRead - st.lastBytesRead;
+    const intvlBytesWritten = bytesWritten - st.lastBytesWritten;
+
+    st.lastBytesRead = bytesRead;
+    st.lastBytesWritten = bytesWritten;
+
+    const countsEvent = new CountsEvent(id, intvlBytesRead, intvlBytesWritten);
+//    debug('incCounts emitting event:', countsEvent);
+    this.emitter.emit('counts', countsEvent);
+  }
+
+  subscribeChanged(value: (v: Status) => void, error?: any): any {
     return this.changed.subscribe(value, error);
+  }
+
+  subscribeCounts(value: (v: CountsEvent) => void, error?: any): any {
+    return this.counts.subscribe(value, error);
   }
 }

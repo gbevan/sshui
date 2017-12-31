@@ -1,6 +1,8 @@
 import { Injectable }         from '@angular/core';
 import { Observable,
          Observer }           from '@reactivex/rxjs';
+import { clearInterval,
+         setInterval }        from 'timers';
 
 import { CredentialsService } from '../services/credentials.service';
 import { StatusService,
@@ -13,6 +15,7 @@ const debug = require('debug').debug('sshui:service:tunnel');
 
 @Injectable()
 export class TunnelService {
+//  private monitorInterval: NodeJS.Timer;
 
   constructor(
     private credentialsService: CredentialsService,
@@ -43,8 +46,10 @@ export class TunnelService {
     .on('close', (had_error: boolean) => {
       console.error('ssh conn closed, had_error:', had_error);
 
-      conn.end();
       const st: Status = this.statusService.get(tunnel.id);
+      clearInterval(st.monitorInterval);
+
+      conn.end();
       if (st.server) {
         console.log('closing local port server');
         st.server.close();
@@ -78,11 +83,43 @@ export class TunnelService {
     })
 
     .on('ready', () => {
+      const st: Status = this.statusService.get(tunnel.id); // readonly
       this.statusService.set(tunnel.id, 'connected', true);
       this.statusService.set(tunnel.id, 'conn', conn);
 
+//      debug('conn:', conn);
+
+      this.statusService.set(
+        tunnel.id,
+        'monitorInterval',
+        setInterval(() => {
+          try {
+  //          debug('conn bytes recv:', conn._sock.bytesRead);
+  //          debug('conn bytes wrtn:', conn._sock.bytesWritten);
+            this.statusService.incCounts(
+              tunnel.id,
+              conn._sock.bytesRead,
+              conn._sock.bytesWritten
+            );
+
+//            st.intvlBytesRead = conn._sock.bytesRead - st.lastBytesRead;
+//            st.intvlBytesWritten = conn._sock.bytesWritten - st.lastBytesWritten;
+//
+//            st.lastBytesRead = conn._sock.bytesRead;
+//            st.lastBytesWritten = conn._sock.bytesWritten;
+//
+//            debug('intvl bytes recv:', st.intvlBytesRead);
+//            debug('intvl bytes wrtn:', st.intvlBytesWritten);
+          } catch (e) {
+            debug(e);
+          }
+        }, 1000)
+      );
+
       // create listener for local port
       const server = net.createServer((netConn: any) => {
+
+        debug('netConn:', netConn);
 
         netConn.on('error', (err: Error) => {
           console.error('netConn err:', err);

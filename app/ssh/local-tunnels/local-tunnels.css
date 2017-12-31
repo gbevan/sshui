@@ -22,3 +22,7 @@
 .notconnected {
   color: grey;
 }
+
+.mat-cell {
+  font-size: 10pt;
+}

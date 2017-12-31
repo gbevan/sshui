@@ -6,13 +6,18 @@ import { Component,
 import { MatTableDataSource,
          MatDialog }            from '@angular/material';
 
+//import * as moment              from 'moment';
+
 import { Subscription }         from '@reactivex/rxjs';
+
+import * as _                   from 'lodash';
 
 import { LocalTunnelsService }  from '../../services/local-tunnels.service';
 import { LocalTunnelAddDialog } from './local-tunnel-add.dialog';
 
 import { TunnelService }        from '../../services/tunnel.service';
-import { Status,
+import { CountsEvent,
+         Status,
          StatusService }        from '../../services/status.service';
 
 const debug = require('debug').debug('sshui:component:local-tunnels');
@@ -40,11 +45,24 @@ export class LocalTunnelsComponent implements OnInit, AfterViewInit, OnDestroy {
     'remoteHost',
     'remotePort',
     'edit',
-    'delete'
+    'delete',
+    'traffic'
   ];
   private localTunnels: any = [];
   private status: any = {}; // key by id
   private statusSubscription: Subscription;
+
+  private counts: any = {};  // {"id": {bytesRead: n, bytesWritten: n, ...}}
+  private countsSubscription: Subscription;
+
+  private countsOptions: any = {
+    animation: {
+      duration: 0
+    }
+  };
+  private countsHashDataset: any = {};  // for ng2-charts {"id": [{data: [...], label: 'read|write'}]}
+  private countsMax: number = 30;
+  private countsLabels: string[] = Array(this.countsMax).fill('.');
 
   constructor(
     private statusService: StatusService,
@@ -57,9 +75,64 @@ export class LocalTunnelsComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {
     debug('in ngOnInit');
     // listen for status events
-    this.statusSubscription = this.statusService.subscribe(() => {
-      debug('status subscribe fired');
-      this.cdr.detectChanges();
+    this.statusSubscription = this.statusService.subscribeChanged((v) => {
+//      debug('status subscribe fired:', v);
+      try {
+        this.cdr.detectChanges();
+      } catch (e) {
+        console.error('detectChanges failed err:', e);
+      }
+    });
+
+    this.countsSubscription = this.statusService.subscribeCounts((v: CountsEvent) => {
+//      debug('count subscribe fired:', v);
+//      debug('moment:', v.datetime, moment(v.datetime).fromNow());
+      this.counts[v.id] = v;
+
+//      if (!this.countsHist[v.id]) {
+//        this.countsHist[v.id] = [];
+//      }
+//      this.countsHist[v.id].push(v);
+//      const ch = this.countsHist[v.id];
+//      if (ch.length > this.countsMax) {
+//        ch.shift();
+//      }
+      if (!this.countsHashDataset[v.id]) {
+        this.countsHashDataset[v.id] = [
+          { data: Array(this.countsMax).fill(0), label: 'read' },
+          { data: Array(this.countsMax).fill(0), label: 'write' },
+        ];
+      }
+      const rData = _.clone(this.countsHashDataset[v.id][0].data);
+      const wData = _.clone(this.countsHashDataset[v.id][1].data);
+
+      rData.push(v.bytesRead);
+      if (rData.length > this.countsMax) {
+        rData.shift();
+      }
+      this.countsHashDataset[v.id][0].data = rData;
+
+      wData.push(v.bytesWritten);
+      if (wData.length > this.countsMax) {
+        wData.shift();
+      }
+      this.countsHashDataset[v.id][1].data = wData;
+
+      this.countsLabels = Array(this.countsMax).fill('10');
+      this.countsLabels = this.countsLabels.map((e, i) => {
+        if ((i + 1) % 10 === 0) {
+          return '-';
+        }
+        return '.';
+      });
+//      debug('countsLabels:', this.countsLabels);
+//      debug('countsHashDataset:', this.countsHashDataset[v.id]);
+
+      try {
+        this.cdr.detectChanges();
+      } catch (e) {
+        console.error('detectChanges failed err:', e);
+      }
     });
 
     this.refresh();
@@ -67,6 +140,7 @@ export class LocalTunnelsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     this.statusSubscription.unsubscribe();
+    this.countsSubscription.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -118,7 +192,7 @@ export class LocalTunnelsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   toggleState(localTunnel: any) {
-    const st = this.statusService.get(localTunnel.id);
+    const st = this.statusService.get(localTunnel.id); // readonly
     if (st && st.active) {
       this.tunnelService.stop(localTunnel);
       this.statusService.set(localTunnel.id, 'active', false);
@@ -162,4 +236,9 @@ export class LocalTunnelsComponent implements OnInit, AfterViewInit, OnDestroy {
     const status = this.statusService.get(id);
     return !status || !status.connected && !status.active;
   }
+
+//  bytesRead(id: string) {
+//    const status = this.statusService.get(id);
+//    return status.intvlBytesRead;
+//  }
 }

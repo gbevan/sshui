@@ -20,7 +20,8 @@ const nwFiles = [
   'node_modules/hammerjs/hammer.min.js',
   'node_modules/@angular/material/prebuilt-themes/**',
   'node_modules/xterm/dist/xterm.css',
-  'node_modules/font-awesome/**'
+  'node_modules/font-awesome/**',
+  'node_modules/chart.js/src/chart.js'
 ];
 
 let nw;

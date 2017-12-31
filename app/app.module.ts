@@ -6,6 +6,8 @@ import { FlexLayoutModule }         from '@angular/flex-layout';
 
 import { NgbModule }                from '@ng-bootstrap/ng-bootstrap';
 
+import { ChartsModule }             from 'ng2-charts';
+
 import { SshuiMaterialModule,
          MatIconRegistry }          from './sshui-material.module';
 import { AppComponent }             from './app.component';
@@ -54,7 +56,8 @@ import { SettingsDialog }           from './toolbar/settings.dialog';
     SshuiMaterialModule,
     NgbModule.forRoot(),
     FormsModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    ChartsModule
   ],
   declarations: [
     AppComponent,

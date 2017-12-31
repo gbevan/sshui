@@ -112,6 +112,22 @@
 
     <!-- TODO: Chart traffic -->
 
+    <ng-container matColumnDef="traffic">
+      <mat-header-cell *matHeaderCellDef
+                       mat-sort-header
+                       style="flex: 3;">Traffic (bytes)</mat-header-cell>
+<!--      <mat-cell *matCellDef="let element">{{ counts[element.id] ? counts[element.id].bytesRead : 'n/a' }}</mat-cell>-->
+      <mat-cell *matCellDef="let element"
+                style="flex: 3;">
+        <canvas *ngIf="countsHashDataset[element.id]"
+                baseChart
+                [options]="countsOptions"
+                [labels]="countsLabels"
+                [datasets]="countsHashDataset[element.id]"
+                chartType="bar"></canvas>
+      </mat-cell>
+    </ng-container>
+
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
