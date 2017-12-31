@@ -36,6 +36,8 @@ export class TerminalComponent implements AfterViewInit {
 
   private creds: any;
 
+  private stream: any;
+
   @ViewChild('sshterminal') private terminalEl: ElementRef;
 
   constructor(
@@ -113,6 +115,7 @@ export class TerminalComponent implements AfterViewInit {
           this.term.writeln(err.message);
           return;
         }
+        this.stream = stream;
 
         stream
         .on('close', (code: number, signal: number) => {
@@ -121,6 +124,7 @@ export class TerminalComponent implements AfterViewInit {
           this.session.connected = false;
           this.term.destroy();
           delete this.term;
+          this.stream = null;
 
           if (this.session.persistent) {
             debug('should persist');
@@ -140,7 +144,11 @@ export class TerminalComponent implements AfterViewInit {
         });
 
         stream
-        .write(`stty cols ${T_COLS} rows ${T_ROWS}; clear\n`);
+        .write(`
+stty cols ${T_COLS} rows ${T_ROWS}
+clear
+which screen 2>/dev/null && screen -S SSHUI -D -RR; exit
+`);
 
         this.term
         .on('data', (d: string) => {
@@ -164,6 +172,18 @@ export class TerminalComponent implements AfterViewInit {
       keepaliveInterval: 30000,
       keepaliveCountMax: 10
     });
+  }
+
+  detach() {
+    debug('detach screen');
+    this.stream
+    .write('\x01d');  // CTRL-A + d
+  }
+
+  exit() {
+    debug('exit bash session');
+    this.stream
+    .write('\x04');   // CTRL-D
   }
 
 }
