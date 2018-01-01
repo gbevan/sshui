@@ -53,7 +53,7 @@ export class TerminalComponent implements AfterViewInit {
   startTerminal() {
     debug('startTerminal cols:', T_COLS, 'rows:', T_ROWS);
     this.creds = this.credentialsService.get(this.session.cred);
-    debug('creds:', this.creds);
+//    debug('creds:', this.creds);
     this.term = new Terminal({
       cursorBlink: true,
       cols: T_COLS,

@@ -1,6 +1,7 @@
 import { Injectable }     from '@angular/core';
 import { Observable,
-         Observer }       from '@reactivex/rxjs';
+         Observer,
+         Subscription }   from '@reactivex/rxjs';
 
 import { Status,
          StatusService }  from './status.service';
@@ -45,7 +46,7 @@ export class ActiveSessionsService {
     );
   }
 
-  subscribe(value: any, error?: any) {
-    this.activeSessions.subscribe(value, error);
+  subscribe(value: any, error?: any): Subscription {
+    return this.activeSessions.subscribe(value, error);
   }
 }

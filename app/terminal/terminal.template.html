@@ -1,10 +1,9 @@
 <div class="title">[{{ session.name }}] :: {{ title }}</div>
-<div>
-  [Screen:
+<div class="termtools">
+  Screen:
   <button mat-button
           (click)="detach()">Detach</button>
   <button mat-button
           (click)="exit()">Exit Bash</button>
-  ]
 </div>
 <div #sshterminal id="terminal" class="sshterminal"></div>

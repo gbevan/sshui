@@ -44,4 +44,15 @@ export class AppComponent {
     this.section = section;
   }
 
+  isLocked() {
+    return this.lowdbService.getState() === 'locked';
+  }
+
+  isDbPresent() {
+    return this.lowdbService.getState() !== 'nodb';
+  }
+
+  isAuth() {
+    return this.lowdbService.getDb() ? true : false;
+  }
 }

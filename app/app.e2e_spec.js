@@ -112,14 +112,16 @@ describe('sshui setup', () => {
 
     it('should lock the app when lock is clicked in the toolbar', () => {
       const lockButton = element(by.id('lockButton'));
-      lockButton.click();
+      return lockButton.click()
+      .then(() => {
+        const toolbar = element(by.tagName('toolbar'));
+        expect(toolbar.isPresent()).toBe(true);
+        expect(toolbar.isDisplayed()).toBe(false);
 
-      const toolbar = element(by.tagName('toolbar'));
-      expect(toolbar.isPresent()).toBe(false);
-
-      const vaultpw = element(by.tagName('vaultpw'));
-      expect(vaultpw.isPresent()).toBe(true);
-      expect(vaultpw.isDisplayed()).toBe(true);
+        const vaultpw = element(by.tagName('vaultpw'));
+        expect(vaultpw.isPresent()).toBe(true);
+        expect(vaultpw.isDisplayed()).toBe(true);
+      });
     })
 
     it('should unlock the app when the vault pw is re-entered', () => {
@@ -210,14 +212,16 @@ describe('sshui setup', () => {
 
     it('should lock the app when lock is clicked in the toolbar', () => {
       const lockButton = element(by.id('lockButton'));
-      lockButton.click();
+      return lockButton.click()
+      .then(() => {
+        const toolbar = element(by.tagName('toolbar'));
+        expect(toolbar.isPresent()).toBe(true);
+        expect(toolbar.isDisplayed()).toBe(false);
 
-      const toolbar = element(by.tagName('toolbar'));
-      expect(toolbar.isPresent()).toBe(false);
-
-      const vaultpw = element(by.tagName('vaultpw'));
-      expect(vaultpw.isPresent()).toBe(true);
-      expect(vaultpw.isDisplayed()).toBe(true);
+        const vaultpw = element(by.tagName('vaultpw'));
+        expect(vaultpw.isPresent()).toBe(true);
+        expect(vaultpw.isDisplayed()).toBe(true);
+      });
     })
 
     it('should unlock the app when the new vault pw is re-entered', () => {

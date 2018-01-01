@@ -9,3 +9,7 @@
 /*  width: 100%;*/
 }
 
+.termtools {
+  background-color: darkgray;
+  border-top: 1px black dotted;
+}

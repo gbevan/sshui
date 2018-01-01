@@ -6,7 +6,7 @@ const fs = require('fs');
 const crypto = require('crypto');
 const algo = 'aes-256-gcm';
 
-const debug = require('debug').debug('sshui:service:lowdb');
+const debug = require('debug').debug('sshui:vault:lowdb');
 
 //////////
 // lowdb
@@ -17,7 +17,7 @@ const lodashId = require('lodash-id');
 
 export class LowdbVault {
   private PW: string = '';
-  private state: string = '';
+  private state: string = ''; // nodb, locked
 
   private fileName: string = path.join(os.homedir(), '/.sshui_db.json');
   private adapter: any;
@@ -26,9 +26,7 @@ export class LowdbVault {
   constructor(params: any) {
     debug('params:', params);
     this.fileName = params.fileName;
-    if (!fs.existsSync(this.fileName)) {
-      this.state = 'nodb';
-    }
+    this.state = fs.existsSync(this.fileName) ? 'locked' : 'nodb';
   }
 
   getFilename() {
@@ -40,6 +38,7 @@ export class LowdbVault {
 
     if (pw === '') {
       this.db = null;
+      this.state = 'locked';
       return;
     }
 
@@ -47,7 +46,9 @@ export class LowdbVault {
       try {
         this.setup();
       } catch (e) {
+        debug('lowdb setup failed err:', e);
         this.PW = '';
+        this.state = 'locked';
         return e;
       }
       this.state = '';
@@ -56,15 +57,23 @@ export class LowdbVault {
     // authenticate with the vault
     try {
       this.db.read(); // authenticate
+      this.state = '';
     } catch (e) {
-      this.PW = '';
+      debug('auth failed err:', e);
+//      this.PW = '';
+      this.state = 'locked';
       return e;
     }
+    debug('set state:', this.state);
     return null;
   }
 
   get() {
     return this.PW;
+  }
+
+  lock() {
+    this.state = 'locked';
   }
 
   getState() {
@@ -109,6 +118,10 @@ export class LowdbVault {
       deserialize: (data: string) => {
         if (!data || data === '') {
           return {};
+        }
+        const res = this.decrypt(data);
+        if (res instanceof Error) {
+          throw res;
         }
         return JSON.parse(this.decrypt(data));
       }
@@ -202,8 +215,9 @@ export class LowdbVault {
       dec += decipher.final('utf8');
       return dec;
     } catch (e) {
-      debug(e);
-      return '{}';
+      debug('decrypt error:', e);
+//      return '{}';
+      return new Error(e);
     }
   }
 }

@@ -60,4 +60,8 @@ export class LowdbService {
     return this.lowdb.changePw(currentPw, newPw);
   }
 
+  lock() {
+    return this.lowdb.lock();
+  }
+
 }

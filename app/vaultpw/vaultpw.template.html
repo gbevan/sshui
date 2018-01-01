@@ -3,7 +3,8 @@
   <form #form="ngForm">
     <mat-form-field class="vaultpw"
                     color="accent">
-      <input matInput
+      <input #vaultPw
+             matInput
              placeholder="Enter Vault Passphrase"
              required
              name="vaultpw"

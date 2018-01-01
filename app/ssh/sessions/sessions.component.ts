@@ -109,7 +109,7 @@ export class SessionsComponent implements OnInit, AfterViewInit {
     }, 1000);
   }
 
-  // Currently disabled in template until xterm fix
+  // persistent is currently disabled in template until xterm fix
   recoverPersistentSessions() {
     this.sessions.forEach((s: any) => {
       const st = this.statusService.get(s.id);
@@ -117,8 +117,9 @@ export class SessionsComponent implements OnInit, AfterViewInit {
         debug(`active:${st.active}`);
       }
 
-      if (s.persistent && (!st || !st.active)) {
-        debug('s persistent');
+//      if ((s.persistent && (!st || !st.active || (st.active && !st.connected))) {
+      if (st && st.active && !st.connected) {
+        debug('s active recover');
         this.activeSessionsService.start(s);
         this.statusService.set(s.id, 'active', true);
       }

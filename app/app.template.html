@@ -1,18 +1,20 @@
 
-<div *ngIf="lowdbService.getState() === 'nodb'; else stateElse">
+<div *ngIf="!isDbPresent(); else stateElse">
   <newvaultpw></newvaultpw>
 </div>
 
 <ng-template #stateElse>
-  <div *ngIf="lowdbService.get() === ''">
+  <div *ngIf="(isLocked() || !isAuth())">
     <vaultpw></vaultpw>
   </div>
 
-  <div *ngIf="lowdbService.get() !== ''">
-    <toolbar (section)="show($event)"></toolbar>
+  <div *ngIf="isAuth()">
+    <div [ngClass]="{'hide': isLocked(), 'show': !isLocked()}">
+      <toolbar (section)="show($event)"></toolbar>
 
-    <manage [ngClass]="{'show': section === 'manage', 'hide': section !== 'manage'}"></manage>
+      <manage [ngClass]="{'show': section === 'manage', 'hide': section !== 'manage'}"></manage>
 
-    <active-sessions [ngClass]="{'show': section === 'sessions', 'hide': section !== 'sessions'}"></active-sessions>
+      <active-sessions [ngClass]="{'show': section === 'sessions', 'hide': section !== 'sessions'}"></active-sessions>
+    </div>
   </div>
 </ng-template>

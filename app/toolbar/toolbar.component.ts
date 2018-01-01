@@ -35,7 +35,8 @@ export class ToolbarComponent {
   }
 
   lock() {
-    this.lowdbServices.set('');
+//    this.lowdbServices.set('');
+    this.lowdbServices.lock();
   }
 
   changeVaultPw() {
