@@ -24,7 +24,7 @@ export class TunnelService {
 
   start(type: string, tunnel: any) {
     debug('start type:', type, 'tunnel:', tunnel);
-    debug('start called from:', (new Error('stack').stack));
+//    debug('start called from:', (new Error('stack').stack));
 
     const creds = this.credentialsService.get(tunnel.cred);
     if (!creds) {

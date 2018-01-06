@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable }         from '@angular/core';
 
-import { LowdbService } from './lowdb.service';
+import { LowdbService }       from './lowdb.service';
+import { CredentialsService } from './credentials.service';
 
 const debug = require('debug').debug('sshui:service:sessions');
 
@@ -9,7 +10,8 @@ export class SessionsService {
   private _name: string = 'sessions';
   private _db: any;
   constructor(
-    private lowdbServce: LowdbService
+    private lowdbServce: LowdbService,
+    private credentialsService: CredentialsService
   ) {
     this._db = lowdbServce.getDb();
   }
@@ -34,6 +36,13 @@ export class SessionsService {
     .read()
     .get(this._name)
     .filter(params)
+    .cloneDeep()  // protect object from map changes
+    .map((v: any) => {
+      // Join with cred to get name
+      const cred = this.resolveCred(v.cred);
+      v.credname = cred.name;
+      return v;
+    })
     .value();
   }
 
@@ -65,5 +74,10 @@ export class SessionsService {
       .assign(data)
       .write();
     }
+  }
+
+  private resolveCred(id: string) {
+    return this.credentialsService
+    .get(id);
   }
 }
