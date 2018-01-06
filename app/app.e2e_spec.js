@@ -5,7 +5,7 @@ describe('sshui setup', () => {
   const EC = protractor.ExpectedConditions;
 
   it('should have sshui title on window', function () {
-    expect(browser.getTitle()).toMatch('SSH UI');
+    expect(browser.getTitle()).toMatch('SSHUI');
 //    expect(browser.getTitle()).toMatch('Index of /');
   }, 10000)
 
