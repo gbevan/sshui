@@ -4,7 +4,7 @@
 </div>
 
 <ng-template #stateElse>
-  <div *ngIf="(isLocked() || !isAuth())">
+  <div [ngClass]="{'hide': !(isLocked() || !isAuth()), 'show': (isLocked() || !isAuth())}">
     <vaultpw></vaultpw>
   </div>
 

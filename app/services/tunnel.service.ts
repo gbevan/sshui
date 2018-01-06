@@ -24,6 +24,8 @@ export class TunnelService {
 
   start(type: string, tunnel: any) {
     debug('start type:', type, 'tunnel:', tunnel);
+    debug('start called from:', (new Error('stack').stack));
+
     const creds = this.credentialsService.get(tunnel.cred);
     if (!creds) {
       debug('creds not returned from service, skipping call');
@@ -34,17 +36,19 @@ export class TunnelService {
 
     conn
     .on('error', (err: any) => {
-      console.error('connection error err:', err);
+      debug('connection error err:', err);
       this.stop(tunnel);
-      if (this.statusService.get(tunnel.id).active) {
-        setTimeout(() => {
-          this.start(type, tunnel);
-        }, 1000);
-      }
+
+      // leave for close handler
+//      if (this.statusService.get(tunnel.id).active) {
+//        setTimeout(() => {
+//          this.start(type, tunnel);
+//        }, 1000);
+//      }
     })
 
     .on('close', (had_error: boolean) => {
-      console.error('ssh conn closed, had_error:', had_error);
+      debug('ssh conn closed, had_error:', had_error);
 
       const st: Status = this.statusService.get(tunnel.id);
       clearInterval(st.monitorInterval);
@@ -122,7 +126,7 @@ export class TunnelService {
         debug('netConn:', netConn);
 
         netConn.on('error', (err: Error) => {
-          console.error('netConn err:', err);
+          debug('netConn err:', err);
         });
 
         // start tunnel
@@ -148,7 +152,7 @@ export class TunnelService {
                 stream.close();
               })
               .on('error', (s_err: Error) => {
-                console.error('tunnel stream err:', s_err);
+                debug('tunnel stream err:', s_err);
               });
             }
           );
@@ -177,7 +181,7 @@ export class TunnelService {
 
       //server
       .on('error', (err: Error) => {
-        console.error('server err:', err);
+        debug('server err:', err);
         tunnel.err = err;
 
         conn.end();

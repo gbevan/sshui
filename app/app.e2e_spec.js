@@ -124,6 +124,17 @@ describe('sshui setup', () => {
       });
     })
 
+    it('should not prepopulate the lock screen with a previous value', () => {
+      const vaultpw = element(by.name('vaultpw'));
+//      console.log('vaultpw:', vaultpw);
+      browser.wait(EC.textToBePresentInElementValue(vaultpw, ''), 5000);
+      browser.wait(EC.not(EC.textToBePresentInElementValue(vaultpw, 'test123')), 5000);
+      return vaultpw.getAttribute('value')
+      .then((value) => {
+        expect(value).toBe('');
+      });
+    });
+
     it('should unlock the app when the vault pw is re-entered', () => {
       const vaultpw = element(by.name('vaultpw'));
       return vaultpw.click().sendKeys('test123' + protractor.Key.ENTER)

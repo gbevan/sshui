@@ -2,12 +2,14 @@
 (process as any).type = 'renderer';
 const debug = require('debug').debug('sshui:app');
 
-console.error = (...args: any[]) => {
-  debug('UncaughtError:', ...args);
-//  process.stderr.write((new Error('stack')).stack);
-};
+//console.error = (...args: any[]) => {
+//  debug('UncaughtError:', ...args);
+////  process.stderr.write((new Error('stack')).stack);
+//};
 
-import { Component,
+import { ChangeDetectorRef,
+         Component,
+         OnInit,
          ViewContainerRef } from '@angular/core';
 import { MatDialog,
          MatDialogRef,
@@ -30,15 +32,23 @@ process.on('uncaughtException', (e) => {
   template: html,
   styles: [css]
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'SSH UI';
   config: MatDialogConfig;
   private section: string = 'manage';
 
   constructor(
+    private cdr: ChangeDetectorRef,
     private cliService: CliService,
     private lowdbService: LowdbService
   ) {}
+
+  ngOnInit() {
+    this.lowdbService.subscribeState((state) => {
+      debug('lowdb state changed:', state);
+      this.cdr.detectChanges();
+    });
+  }
 
   show(section: string) {
     this.section = section;

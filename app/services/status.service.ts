@@ -112,8 +112,12 @@ export class StatusService {
     st.lastBytesRead = bytesRead;
     st.lastBytesWritten = bytesWritten;
 
-    const countsEvent = new CountsEvent(id, intvlBytesRead, intvlBytesWritten);
-//    debug('incCounts emitting event:', countsEvent);
+    const countsEvent = new CountsEvent(
+      id,
+      intvlBytesRead > 0 ? intvlBytesRead : 0,  // handle negatives on tunnel restart
+      intvlBytesWritten > 0 ? intvlBytesWritten : 0
+    );
+//    debug('incCounts emitting event:', countsEvent); // noisey
     this.emitter.emit('counts', countsEvent);
   }
 

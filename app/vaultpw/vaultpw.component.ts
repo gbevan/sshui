@@ -20,7 +20,7 @@ const css = require('./vaultpw.css');
   template: html,
   styles: [css]
 })
-export class VaultPwComponent implements OnDestroy, AfterViewInit {
+export class VaultPwComponent implements AfterViewInit {
   @ViewChild('vaultPw') vaultPwInput: any;
   private vaultpw: string = '';
   private errmsg: string = '';
@@ -33,11 +33,11 @@ export class VaultPwComponent implements OnDestroy, AfterViewInit {
   ) {
     const win = (window as any).nw.Window.get();
     win.on('focus', () => {
-      clearTimeout(this.lockTimer);
-      this.lockTimer = null;
-
+//      debug('reset timeout');
       this.timerToLock();
     });
+
+    this.timerToLock();
   }
 
   ngAfterViewInit() {
@@ -46,13 +46,14 @@ export class VaultPwComponent implements OnDestroy, AfterViewInit {
   }
 
   timerToLock() {
+    debug('timerToLock state:', this.lowdbService.getDb() ? this.lowdbService.getState() : false);
     // check if db has been authenticated
-    if (!this.lowdbService.getDb()) {
+    if (!this.lowdbService.getDb() || this.lowdbService.getState() === 'locked') {
       return;
     }
     // start timer to lockout
     const res = this.preferencesService.find({name: 'settings'});
-//    debug('settings res:', res);
+    debug('settings res:', res);
     if (res.length > 0) {
       const settings = res[0];
 
@@ -60,21 +61,11 @@ export class VaultPwComponent implements OnDestroy, AfterViewInit {
         clearTimeout(this.lockTimer);
       }
 
+      debug('setting timout to', settings.timeout);
       this.lockTimer = setTimeout(() => {
         debug('timeout locked');
-//        this.lowdbService.set('');
         this.lowdbService.lock();
       }, settings.timeout * 1000 * 60); // mins
-
-//      res.forEach((s: any) => {
-//        this.preferencesService.remove(s.id);
-//      });
-    }
-  }
-
-  ngOnDestroy() {
-    if (this.lockTimer) {
-      clearTimeout(this.lockTimer);
     }
   }
 

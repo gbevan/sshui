@@ -5,9 +5,9 @@ import { CliService } from './cli.service';
 
 import { LowdbVault } from './lowdb-vault.class';
 
-const fs = require('fs');
-const crypto = require('crypto');
-const algo = 'aes-256-gcm';
+//const fs = require('fs');
+//const crypto = require('crypto');
+//const algo = 'aes-256-gcm';
 
 const debug = require('debug').debug('sshui:service:lowdb');
 
@@ -54,6 +54,10 @@ export class LowdbService {
 
   getState() {
     return this.lowdb.getState();
+  }
+
+  subscribeState(value: (v: string) => void, error?: any): any {
+    return this.lowdb.subscribeState(value, error);
   }
 
   changePw(currentPw: string, newPw: string) {

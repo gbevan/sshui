@@ -41,9 +41,17 @@ Prebuilt zip packages for linux64, osx64 and win64 are available in
 
     $ gulp webpack
 
+to run a single webpack without watching for changes:
+
+    $ gulp webpackrel
+
 ### Run the app using nw.js direct from source (no build)
 
     $ node_modules/nw/nwjs/nw --nwapp=.
+
+with a temp vault and debugging enabled
+
+    $ rm /tmp/v; DEBUG="sshui:*" node_modules/nw/nwjs/nw --nwapp=. --db=/tmp/v
 
 TODO: migrate this into gulp
 
@@ -71,7 +79,7 @@ Creates the build in the (yep you guessed it) `build/` folder
 
 ### Run the built development package with debugging and a temp vault
 
-    $ DEBUG="sshui:*" build/sshui/linux64/sshui --db=/tmp/v
+    $ rm /tmp/v; DEBUG="sshui:*" build/sshui/linux64/sshui --db=/tmp/v
 
 the `--db=/tmp/v` tells sshui to use a different vault db file, for testing.
 

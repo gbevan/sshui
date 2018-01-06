@@ -1,10 +1,15 @@
-import { Injector } from '@angular/core';
+//import { Injector } from '@angular/core';
+import { EventEmitter } from 'events';
+import { Observable,
+         Observer }   from '@reactivex/rxjs';
 
 const os = require('os');
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
 const algo = 'aes-256-gcm';
+
+//const EventEmitter = require('events');
 
 const debug = require('debug').debug('sshui:vault:lowdb');
 
@@ -18,6 +23,8 @@ const lodashId = require('lodash-id');
 export class LowdbVault {
   private PW: string = '';
   private state: string = ''; // nodb, locked
+  private stateEmitter: EventEmitter = new EventEmitter();
+  private stateChanged: Observable<string>;
 
   private fileName: string = path.join(os.homedir(), '/.sshui_db.json');
   private adapter: any;
@@ -26,6 +33,7 @@ export class LowdbVault {
   constructor(params: any) {
     debug('params:', params);
     this.fileName = params.fileName;
+    this.stateChanged = Observable.fromEvent(this.stateEmitter, 'changed');
     this.state = fs.existsSync(this.fileName) ? 'locked' : 'nodb';
   }
 
@@ -38,7 +46,7 @@ export class LowdbVault {
 
     if (pw === '') {
       this.db = null;
-      this.state = 'locked';
+      this.setState('locked');
       return;
     }
 
@@ -48,23 +56,22 @@ export class LowdbVault {
       } catch (e) {
         debug('lowdb setup failed err:', e);
         this.PW = '';
-        this.state = 'locked';
+        this.setState('locked');
         return e;
       }
-      this.state = '';
+      this.setState('');
     }
 
     // authenticate with the vault
     try {
       this.db.read(); // authenticate
-      this.state = '';
+      this.setState('');
     } catch (e) {
       debug('auth failed err:', e);
 //      this.PW = '';
-      this.state = 'locked';
+      this.setState('locked');
       return e;
     }
-    debug('set state:', this.state);
     return null;
   }
 
@@ -73,11 +80,21 @@ export class LowdbVault {
   }
 
   lock() {
-    this.state = 'locked';
+    this.setState('locked');
+  }
+
+  setState(state: string) {
+    debug('setState:', state);
+    this.state = state;
+    this.stateEmitter.emit('changed', state);
   }
 
   getState() {
     return this.state;
+  }
+
+  subscribeState(value: (v: string) => void, error?: any): any {
+    return this.stateChanged.subscribe(value, error);
   }
 
   changePw(currentPw: string, newPw: string) {
@@ -138,13 +155,23 @@ export class LowdbVault {
       remoteTunnels: [],
       preferences: []
     })
-    .get('preferences')
-    .upsert({
-      id: '1',
-      name: 'settings',
-      timeout: 10
-    })
     .write();
+
+    const settings = this.db
+    .get('preferences')
+    .getById(1)
+    .value();
+
+    if (!settings) {
+      this.db
+      .get('preferences')
+      .upsert({
+        id: '1',
+        name: 'settings',
+        timeout: 10
+      })
+      .write();
+    }
   }
 
   getDb() {
