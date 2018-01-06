@@ -22,11 +22,11 @@ describe('Credentials Management', () => {
   describe('Add', () => {
 
     it('button should open the add credential dialog', () => {
-      const credntialsAddButton = element(by.id('credntialsAddButton'));
-      expect(credntialsAddButton.isPresent()).toBe(true);
-      expect(credntialsAddButton.isDisplayed()).toBe(true);
+      const credentialsAddButton = element(by.id('credentialsAddButton'));
+      expect(credentialsAddButton.isPresent()).toBe(true);
+      expect(credentialsAddButton.isDisplayed()).toBe(true);
 
-      return credntialsAddButton.click()
+      return credentialsAddButton.click()
       .then(() => {
         const credentialAddDialog = element(by.tagName('credential-add-dialog'));
         expect(credentialAddDialog.isPresent()).toBe(true);
