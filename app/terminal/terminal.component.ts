@@ -97,6 +97,7 @@ export class TerminalComponent implements AfterViewInit {
       debug('keyboard-interactive prompts:', prompts);
 
       const resp = [this.creds.pass];
+//      debug('resp:', resp);
       finish(resp);
     })
 
@@ -147,7 +148,7 @@ export class TerminalComponent implements AfterViewInit {
         .write(`
 stty cols ${T_COLS} rows ${T_ROWS}
 clear
-which screen 2>/dev/null && screen -S SSHUI -D -RR; exit
+(which screen 2>/dev/null && (screen -S SSHUI -D -RR) || (clear; sh -i)); exit
 `);
 
         this.term
