@@ -171,7 +171,12 @@ clear
       tryKeyboard: true,
       privateKey: this.creds.privKey !== '' ? this.creds.privKey : undefined,
       keepaliveInterval: 30000,
-      keepaliveCountMax: 10
+      keepaliveCountMax: 10,
+      hostHash: 'sha256',
+      hostVerifier: (k: string, cb: () => boolean) => {
+        debug('host hash:', k);
+        return true;
+      }
     });
   }
 
@@ -181,10 +186,40 @@ clear
     .write('\x01d');  // CTRL-A + d
   }
 
-  exit() {
-    debug('exit bash session');
+//  exit() {
+//    debug('exit bash session');
+//    this.stream
+//    .write('\x04');   // CTRL-D
+//  }
+
+  newWin() {
     this.stream
-    .write('\x04');   // CTRL-D
+    .write('\x01c');  // CTRL-A + c
+    this.term.focus();
+  }
+
+  prevWin() {
+    this.stream
+    .write('\x01p');  // CTRL-A + p
+    this.term.focus();
+  }
+
+  nextWin() {
+    this.stream
+    .write('\x01n');  // CTRL-A + n
+    this.term.focus();
+  }
+
+  list() {
+    this.stream
+    .write('\x01"');  // CTRL-A + "
+    this.term.focus();
+  }
+
+  lock() {
+    this.stream
+    .write('\x01x');  // CTRL-A + x
+    this.term.focus();
   }
 
 }
