@@ -1,0 +1,16 @@
+<h2 mat-dialog-title>Add SSH Host Key to Known-Hosts:</h2>
+
+<h4>Fingerprint (sha256) for host: {{ data.host }}</h4>
+<pre>{{ data.host_key }}</pre>
+
+<div mat-dialog-actions>
+  <button mat-raised-button
+            (click)="accept()"
+            id="acceptButton">Accept</button>
+
+  <span class="horiz-filler"></span>
+
+  <button mat-button
+          mat-dialog-close
+          id="rejectButton">Reject</button>
+</div>

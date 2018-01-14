@@ -46,14 +46,14 @@ export class VaultPwComponent implements AfterViewInit {
   }
 
   timerToLock() {
-    debug('timerToLock state:', this.lowdbService.getDb() ? this.lowdbService.getState() : false);
+//    debug('timerToLock state:', this.lowdbService.getDb() ? this.lowdbService.getState() : false);
     // check if db has been authenticated
     if (!this.lowdbService.getDb() || this.lowdbService.getState() === 'locked') {
       return;
     }
     // start timer to lockout
     const res = this.preferencesService.find({name: 'settings'});
-    debug('settings res:', res);
+//    debug('settings res:', res);
     if (res.length > 0) {
       const settings = res[0];
 
@@ -61,9 +61,9 @@ export class VaultPwComponent implements AfterViewInit {
         clearTimeout(this.lockTimer);
       }
 
-      debug('setting timout to', settings.timeout);
+//      debug('setting timout to', settings.timeout);
       this.lockTimer = setTimeout(() => {
-        debug('timeout locked');
+//        debug('timeout locked');
         this.lowdbService.lock();
       }, settings.timeout * 1000 * 60); // mins
     }

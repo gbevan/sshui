@@ -1,16 +1,24 @@
 import { Component,
+         ChangeDetectorRef,
          AfterViewInit,
          ElementRef,
          ViewChild,
          Input }                  from '@angular/core';
 
+import { MatDialog }              from '@angular/material';
+
 import { CredentialsService }     from '../services/credentials.service';
 import { ActiveSessionsService }  from '../services/active-sessions.service';
 import { StatusService }          from '../services/status.service';
+import { KnownHostsService }      from '../services/known-hosts.service';
+
+import { KnownHostsAddDialog }    from '../ssh/known-hosts/known-hosts-add.dialog';
 
 const Terminal = require('xterm');
 require('xterm/dist/addons/fit/fit');
 Terminal.loadAddon('fit');
+
+const crypto = require('crypto');
 
 const debug = require('debug').debug('sshui:component:terminal');
 
@@ -43,7 +51,10 @@ export class TerminalComponent implements AfterViewInit {
   constructor(
     private activeSessionsService: ActiveSessionsService,
     private credentialsService: CredentialsService,
-    private statusService: StatusService
+    private statusService: StatusService,
+    private knownHostsService: KnownHostsService,
+    private cdr: ChangeDetectorRef,
+    public dialog: MatDialog
   ) { }
 
   ngAfterViewInit() {
@@ -172,10 +183,48 @@ clear
       privateKey: this.creds.privKey !== '' ? this.creds.privKey : undefined,
       keepaliveInterval: 30000,
       keepaliveCountMax: 10,
-      hostHash: 'sha256',
-      hostVerifier: (k: string, cb: () => boolean) => {
+      hostHash: 'RSA-SHA512',
+      hostVerifier: (k: string, cb: (ok: boolean) => void) => {
+        debug('host conn:', conn);
         debug('host hash:', k);
-        return true;
+        debug('supported hashes:', crypto.getHashes());
+
+        const hk = this.knownHostsService
+        .find({host: this.session.host});
+        debug('hk:', hk);
+
+        if (hk.length === 0) {
+          debug('host ssh key not found - prompt to accept');
+          this.dialog.open(KnownHostsAddDialog, {
+            data: {
+              host: this.session.host,
+              host_key: k
+            }
+          })
+          .afterClosed()
+          .subscribe((res) => {
+            debug('known-hosts-add res:', res);
+            if (res && res.added) {
+              this.activeSessionsService.start(this.session);
+//              this.startTerminal();
+//              this.cdr.detectChanges();
+            }
+          });
+
+          this.activeSessionsService.stop(this.session);
+          cb(false); // reject connection for now (otherwise there is a timeout on the handshake)
+
+        } else if (hk.length > 1) {
+          throw new Error('host lookup returned more that 1 known_hosts entry');
+
+        } else if (hk[0].host_key !== k) {
+          debug('host keys do not match!!!');
+          this.activeSessionsService.stop(this.session);
+
+        } else {
+          debug('host ssh key found');
+          cb(true);
+        }
       }
     });
   }

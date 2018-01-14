@@ -19,6 +19,7 @@ import { LocalTunnelsService }      from './services/local-tunnels.service';
 import { RemoteTunnelsService }     from './services/remote-tunnels.service';
 import { PreferencesService }       from './services/preferences.service';
 import { SessionsService }          from './services/sessions.service';
+import { KnownHostsService }        from './services/known-hosts.service';
 
 import { StatusService }            from './services/status.service';
 import { TunnelService }            from './services/tunnel.service';
@@ -33,6 +34,9 @@ import { TerminalComponent }        from './terminal/terminal.component';
 
 import { CredentialAddDialog }      from './ssh/credentials/credential-add.dialog';
 import { CredentialsComponent }     from './ssh/credentials/credentials.component';
+
+import { KnownHostsAddDialog }      from './ssh/known-hosts/known-hosts-add.dialog';
+import { KnownHostsComponent }      from './ssh/known-hosts/known-hosts.component';
 
 import { SessionAddDialog }         from './ssh/sessions/session-add.dialog';
 import { SessionsComponent }        from './ssh/sessions/sessions.component';
@@ -73,6 +77,9 @@ import { SettingsDialog }           from './toolbar/settings.dialog';
     CredentialAddDialog,
     CredentialsComponent,
 
+    KnownHostsAddDialog,
+    KnownHostsComponent,
+
     SessionAddDialog,
     SessionsComponent,
 
@@ -93,6 +100,7 @@ import { SettingsDialog }           from './toolbar/settings.dialog';
     ActiveSessionsService,
     LowdbService,
     CredentialsService,
+    KnownHostsService,
     LocalTunnelsService,
     RemoteTunnelsService,
     PreferencesService,
@@ -104,6 +112,7 @@ import { SettingsDialog }           from './toolbar/settings.dialog';
   entryComponents: [
     ChangeVaultPwDialog,
     CredentialAddDialog,
+    KnownHostsAddDialog,
     LocalTunnelAddDialog,
     SessionAddDialog,
     SettingsDialog

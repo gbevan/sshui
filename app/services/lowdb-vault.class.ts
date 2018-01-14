@@ -153,7 +153,8 @@ export class LowdbVault {
       sessions: [],
       localTunnels: [],
       remoteTunnels: [],
-      preferences: []
+      preferences: [],
+      knownHosts: []
     })
     .write();
 
@@ -161,6 +162,7 @@ export class LowdbVault {
     .get('preferences')
     .getById(1)
     .value();
+//    debug('settings:', settings);
 
     if (!settings) {
       this.db

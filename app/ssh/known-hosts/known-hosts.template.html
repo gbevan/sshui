@@ -1,0 +1,52 @@
+<div>
+  <div>
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+    </mat-form-field>
+  </div>
+
+  <mat-table #table
+             [dataSource]="tableSource"
+             matSort
+             id="knownHostsTable">
+
+    <!-- Id Column -->
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.id }}</mat-cell>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="host">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Host</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.host }}</mat-cell>
+    </ng-container>
+
+    <!-- User Column -->
+    <ng-container matColumnDef="host_key">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Host Key Fingerprint</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.host_key }}</mat-cell>
+    </ng-container>
+
+    <!-- Delete Button Column -->
+    <ng-container matColumnDef="delete">
+      <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <button mat-button
+                color="warn"
+                (click)="delKnownHost(element)">Delete</button>
+      </mat-cell>
+    </ng-container>
+
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"
+             id="knownHostsRow"></mat-row>
+  </mat-table>
+
+  <mat-paginator #paginator
+                 [pageSize]="10"
+                 [pageSizeOptions]="[5, 10, 20]">
+  </mat-paginator>
+
+</div>
