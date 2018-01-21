@@ -1,7 +1,13 @@
 <h2 mat-dialog-title>Add SSH Host Key to Known-Hosts:</h2>
 
-<h4>Fingerprint (sha256) for host: {{ data.host }}</h4>
-<pre>{{ data.host_key }}</pre>
+<h4>Fingerprint for host: {{ data.host }}</h4>
+<!--<pre>HEX: {{ data.host_keyObj.hash }}</pre>-->
+<pre>{{ data.host_keyObj.fingerprint }}</pre>
+
+<!--
+<h4>Visual Art of the key:</h4>
+<pre>{{ data.host_keyObj.randomart }}</pre>
+-->
 
 <div mat-dialog-actions>
   <button mat-raised-button

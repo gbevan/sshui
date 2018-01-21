@@ -65,6 +65,7 @@ export class VaultPwComponent implements AfterViewInit {
       this.lockTimer = setTimeout(() => {
 //        debug('timeout locked');
         this.lowdbService.lock();
+        this.vaultPwInput.nativeElement.focus();
       }, settings.timeout * 1000 * 60); // mins
     }
   }
@@ -80,5 +81,9 @@ export class VaultPwComponent implements AfterViewInit {
     } else {
       this.timerToLock();
     }
+  }
+
+  refocus(ev: any) {
+    ev.srcElement.focus();
   }
 }

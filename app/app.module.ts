@@ -53,6 +53,10 @@ import { RemoteTunnelsComponent }   from './ssh/remote-tunnels/remote-tunnels.co
 import { ChangeVaultPwDialog }      from './toolbar/change-vault-pw.dialog';
 import { SettingsDialog }           from './toolbar/settings.dialog';
 
+import { ErrorPopupDialog }         from './error/error-popup.dialog';
+
+import { DefaultPipe }              from './pipes/default.pipe';
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -89,7 +93,10 @@ import { SettingsDialog }           from './toolbar/settings.dialog';
     VaultPwComponent,
     NewVaultPwComponent,
     ChangeVaultPwDialog,
-    SettingsDialog
+    SettingsDialog,
+    ErrorPopupDialog,
+
+    DefaultPipe
   ],
   bootstrap: [
     AppComponent
@@ -115,7 +122,8 @@ import { SettingsDialog }           from './toolbar/settings.dialog';
     KnownHostsAddDialog,
     LocalTunnelAddDialog,
     SessionAddDialog,
-    SettingsDialog
+    SettingsDialog,
+    ErrorPopupDialog
   ]
 })
 export class AppModule {

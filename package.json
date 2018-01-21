@@ -1,6 +1,6 @@
 {
   "name": "sshui",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "SSH desktop app for sessions and tunnels with a vaulted cred store",
   "main": "index.html",
   "scripts": {
@@ -67,7 +67,7 @@
     "node-forge": "^0.7.1",
     "npm": "^5.6.0",
     "semver": "^5.4.1",
-    "ssh2": "^0.5.5",
+    "ssh2": "file:../ssh2",
     "xterm": "^2.9.2",
     "zone.js": "^0.8.18"
   },

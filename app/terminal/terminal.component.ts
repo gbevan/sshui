@@ -13,6 +13,7 @@ import { StatusService }          from '../services/status.service';
 import { KnownHostsService }      from '../services/known-hosts.service';
 
 import { KnownHostsAddDialog }    from '../ssh/known-hosts/known-hosts-add.dialog';
+import { ErrorPopupDialog }       from '../error/error-popup.dialog';
 
 const Terminal = require('xterm');
 require('xterm/dist/addons/fit/fit');
@@ -183,10 +184,23 @@ clear
       privateKey: this.creds.privKey !== '' ? this.creds.privKey : undefined,
       keepaliveInterval: 30000,
       keepaliveCountMax: 10,
-      hostHash: 'RSA-SHA512',
-      hostVerifier: (k: string, cb: (ok: boolean) => void) => {
+      hostHash: 'RSA-SHA256',
+      hostVerifierKeyObj: true,
+
+      /*
+       * kObj contains:
+       *   {
+       *     hash: hash as hex,
+       *     hashBase64: hash as Base64,
+       *     fingerprint: ssh like fingerprint (base64),
+       *     key: raw key,
+       *     keyBase64: key as Base64,
+       *     parsedKey: parsed key as an object (see sshpk)
+       *   }
+       */
+      hostVerifier: (kObj: any, cb: (ok: boolean) => void) => {
         debug('host conn:', conn);
-        debug('host hash:', k);
+        debug('host kObj:', kObj);
         debug('supported hashes:', crypto.getHashes());
 
         const hk = this.knownHostsService
@@ -198,7 +212,7 @@ clear
           this.dialog.open(KnownHostsAddDialog, {
             data: {
               host: this.session.host,
-              host_key: k
+              host_keyObj: kObj
             }
           })
           .afterClosed()
@@ -217,9 +231,17 @@ clear
         } else if (hk.length > 1) {
           throw new Error('host lookup returned more that 1 known_hosts entry');
 
-        } else if (hk[0].host_key !== k) {
+        } else if (hk[0].host_key !== kObj.keyBase64) {
           debug('host keys do not match!!!');
           this.activeSessionsService.stop(this.session);
+
+          this.dialog.open(ErrorPopupDialog, {
+            data: {
+              error: 'ALERT: Host keys do not match!!!'
+            }
+          });
+
+          cb(false);
 
         } else {
           debug('host ssh key found');

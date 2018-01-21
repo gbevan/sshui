@@ -17,6 +17,21 @@ const css = require('./known-hosts-add.css');
 })
 export class KnownHostsAddDialog {
 
+  /*
+   * data contains:
+   *   {
+   *     host: host ip or name,
+   *     host_keyObj: {
+   *       hash: hash as hex,
+   *       hashBase64: hash as Base64,
+   *       fingerprint: ssh like fingerprint (base64),
+   *       key: raw key,
+   *       keyBase64: key as Base64,
+   *       parsedKey: parsed key as an object (see sshpk)
+   *     }
+   *   }
+   */
+
   constructor(
     private knownHostsService: KnownHostsService,
     public dialogRef: MatDialogRef<KnownHostsAddDialog>,
@@ -29,7 +44,7 @@ export class KnownHostsAddDialog {
     this.knownHostsService
     .create({
       host: this.data.host,
-      host_key: this.data.host_key
+      host_key: this.data.host_keyObj.keyBase64
     });
 
     this.dialogRef.close({added: true});
