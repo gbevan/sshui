@@ -50,9 +50,35 @@ describe('Manage View', () => {
     const credentials = element(by.tagName('credentials'));
     expect(credentials.isPresent()).toBe(true);
     expect(credentials.isDisplayed()).toBe(false);
+
+    // Known Hosts - collapsed
+    const knownHosts = element(by.tagName('known-hosts'));
+    expect(knownHosts.isPresent()).toBe(true);
+    expect(knownHosts.isDisplayed()).toBe(false);
+  });
+
+  it('should show known hosts when clicked, other panels should not be shown', () => {
+    const knownHosts = element(by.tagName('known-hosts'));
+    const sessions = element(by.tagName('sessions'));
+    const localTunnels = element(by.tagName('local-tunnels'));
+    const credentials = element(by.tagName('credentials'));
+
+    const knownHostsPanelHdr = element(by.id('knownHostsPanelHdr'));
+    return knownHostsPanelHdr.click()
+    .then(() => {
+      browser.wait(EC.visibilityOf(knownHosts), 5000);
+      browser.wait(EC.invisibilityOf(sessions), 5000);
+      browser.wait(EC.invisibilityOf(credentials), 5000);
+
+      expect(knownHosts.isDisplayed()).toBe(true);
+      expect(sessions.isDisplayed()).toBe(false);
+      expect(localTunnels.isDisplayed()).toBe(false);
+      expect(credentials.isDisplayed()).toBe(false);
+    });
   });
 
   it('should show credentials when clicked, other panels should not be shown', () => {
+    const knownHosts = element(by.tagName('known-hosts'));
     const sessions = element(by.tagName('sessions'));
     const localTunnels = element(by.tagName('local-tunnels'));
     const credentials = element(by.tagName('credentials'));
@@ -60,9 +86,10 @@ describe('Manage View', () => {
     const credentialsPanelHdr = element(by.id('credentialsPanelHdr'));
     return credentialsPanelHdr.click()
     .then(() => {
-      browser.wait(EC.visibilityOf(credentials), 5000);
-      browser.wait(EC.invisibilityOf(sessions), 5000);
+      browser.wait(EC.visibilityOf(knownHosts), 5000);
+      browser.wait(EC.invisibilityOf(knownHosts), 5000);
 
+      expect(knownHosts.isDisplayed()).toBe(false);
       expect(sessions.isDisplayed()).toBe(false);
       expect(localTunnels.isDisplayed()).toBe(false);
       expect(credentials.isDisplayed()).toBe(true);
@@ -70,6 +97,7 @@ describe('Manage View', () => {
   });
 
   it('should show local tunnels when clicked, other panels should not be shown', () => {
+    const knownHosts = element(by.tagName('known-hosts'));
     const sessions = element(by.tagName('sessions'));
     const localTunnels = element(by.tagName('local-tunnels'));
     const credentials = element(by.tagName('credentials'));
@@ -80,6 +108,7 @@ describe('Manage View', () => {
       browser.wait(EC.visibilityOf(localTunnels), 5000);
       browser.wait(EC.invisibilityOf(credentials), 5000);
 
+      expect(knownHosts.isDisplayed()).toBe(false);
       expect(sessions.isDisplayed()).toBe(false);
       expect(localTunnels.isDisplayed()).toBe(true);
       expect(credentials.isDisplayed()).toBe(false);
@@ -87,6 +116,7 @@ describe('Manage View', () => {
   });
 
   it('should show sessions when clicked, other panels should not be shown', () => {
+    const knownHosts = element(by.tagName('known-hosts'));
     const sessions = element(by.tagName('sessions'));
     const localTunnels = element(by.tagName('local-tunnels'));
     const credentials = element(by.tagName('credentials'));
@@ -97,6 +127,7 @@ describe('Manage View', () => {
       browser.wait(EC.visibilityOf(sessions), 5000);
       browser.wait(EC.invisibilityOf(localTunnels), 5000);
 
+      expect(knownHosts.isDisplayed()).toBe(false);
       expect(sessions.isDisplayed()).toBe(true);
       expect(localTunnels.isDisplayed()).toBe(false);
       expect(credentials.isDisplayed()).toBe(false);
