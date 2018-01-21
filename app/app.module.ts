@@ -50,8 +50,11 @@ import { LocalTunnelsComponent }    from './ssh/local-tunnels/local-tunnels.comp
 
 import { RemoteTunnelsComponent }   from './ssh/remote-tunnels/remote-tunnels.component';
 
+import { OpenUrlComponent }         from './open/open-url.component';
+
 import { ChangeVaultPwDialog }      from './toolbar/change-vault-pw.dialog';
 import { SettingsDialog }           from './toolbar/settings.dialog';
+import { AboutDialog }              from './toolbar/about.dialog';
 
 import { ErrorPopupDialog }         from './error/error-popup.dialog';
 
@@ -69,6 +72,7 @@ import { DefaultPipe }              from './pipes/default.pipe';
   ],
   declarations: [
     AppComponent,
+    OpenUrlComponent,
 
     ManageComponent,
     ActiveSessionsComponent,
@@ -95,6 +99,7 @@ import { DefaultPipe }              from './pipes/default.pipe';
     ChangeVaultPwDialog,
     SettingsDialog,
     ErrorPopupDialog,
+    AboutDialog,
 
     DefaultPipe
   ],
@@ -123,7 +128,8 @@ import { DefaultPipe }              from './pipes/default.pipe';
     LocalTunnelAddDialog,
     SessionAddDialog,
     SettingsDialog,
-    ErrorPopupDialog
+    ErrorPopupDialog,
+    AboutDialog
   ]
 })
 export class AppModule {

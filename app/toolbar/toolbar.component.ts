@@ -5,6 +5,7 @@ import { MatDialog }            from '@angular/material';
 
 import { ChangeVaultPwDialog }  from './change-vault-pw.dialog';
 import { SettingsDialog }       from './settings.dialog';
+import { AboutDialog }          from './about.dialog';
 
 import { LowdbService }         from '../services/lowdb.service';
 
@@ -60,5 +61,10 @@ export class ToolbarComponent {
 //    .subscribe((res) => {
 //      this.refresh();
     });
+  }
+
+  about() {
+    debug('about clicked');
+    this.dialog.open(AboutDialog, {});
   }
 }

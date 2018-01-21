@@ -14,3 +14,11 @@
 .toolbar {
   margin-bottom: 5px;
 }
+
+.footer {
+  bottom: 0;
+  display: block;
+  font-size: 9pt;
+  position: fixed;
+  width: 100%;
+}
