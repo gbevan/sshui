@@ -67,7 +67,7 @@
     "node-forge": "^0.7.1",
     "npm": "^5.6.0",
     "semver": "^5.4.1",
-    "ssh2": "file:../ssh2",
+    "ssh2": "github:gbevan/ssh2#D20180120_return_key_randomart",
     "xterm": "^2.9.2",
     "zone.js": "^0.8.18"
   },
