@@ -58,7 +58,9 @@ export class SessionsService {
     .map((v: any) => {
       // Join with cred to get name
       const cred = this.resolveCred(v.cred);
-      v.credname = cred.name;
+      if (cred && cred.name) {
+        v.credname = cred.name;
+      }
       return v;
     })
     .value();
