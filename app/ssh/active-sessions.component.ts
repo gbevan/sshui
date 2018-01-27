@@ -1,5 +1,4 @@
 /*
-
     This file is part of sshui https://github.com/gbevan/sshui.
 
     sshui is free software: you can redistribute it and/or modify
