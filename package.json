@@ -1,6 +1,6 @@
 {
   "name": "sshui",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "description": "SSH desktop app for sessions and tunnels with a vaulted cred store",
   "main": "index.html",
   "scripts": {
@@ -15,6 +15,11 @@
   ],
   "author": "Graham Bevan <graham.bevan@ntlworld.com>",
   "license": "GPL-3.0",
+  "homepage": "https://github.com/gbevan/sshui",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gbevan/sshui.git"
+  },
   "devDependencies": {
     "@angular/cli": "^1.6.0",
     "@angular/compiler-cli": "^5.1.0",
@@ -26,7 +31,7 @@
     "gulp-watch": "^4.3.11",
     "html-loader": "^0.5.1",
     "jasmine-core": "^2.8.0",
-    "nw": "^0.27.3",
+    "nw": "^0.28.0",
     "nw-builder": "^3.5.1",
     "sass-loader": "^6.0.6",
     "to-string-loader": "^1.1.5",
@@ -42,7 +47,7 @@
     "@angular/common": "^5.1.0",
     "@angular/compiler": "^5.1.0",
     "@angular/core": "^5.1.0",
-    "@angular/flex-layout": "^2.0.0-beta.10-4905443",
+    "@angular/flex-layout": "2.0.0-beta.10-4905443",
     "@angular/forms": "^5.1.0",
     "@angular/http": "^5.1.0",
     "@angular/material": "^5.0.0",
