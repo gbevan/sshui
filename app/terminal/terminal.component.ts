@@ -125,6 +125,9 @@ export class TerminalComponent implements AfterViewInit {
   startTerminal() {
     debug('startTerminal cols:', T_COLS, 'rows:', T_ROWS);
     this.creds = this.credentialsService.get(this.session.cred);
+
+    this.session.port = this.session.port || 22;
+
 //    debug('creds:', this.creds);
     this.term = new Terminal(this.term_options);
     this.term.open(this.terminalEl.nativeElement);
@@ -244,7 +247,7 @@ clear
 
     .connect({
       host: this.session.host,
-      port: this.session.port || 22,
+      port: this.session.port,
       username: this.creds.user,
       password: this.creds.pass || '',
       tryKeyboard: true,
@@ -270,27 +273,32 @@ clear
         debug('host kObj:', kObj);
         debug('supported hashes:', crypto.getHashes());
 
+        const knownHostKey = `${this.session.host}:${this.session.port}`;
+
         const hk = this.knownHostsService
-        .find({host: this.session.host});
+        .find({host: knownHostKey});
         debug('hk:', hk);
 
         if (hk.length === 0) {
           debug('host ssh key not found - prompt to accept');
-          this.dialog.open(KnownHostsAddDialog, {
-            data: {
-              host: this.session.host,
-              host_keyObj: kObj
-            }
-          })
-          .afterClosed()
-          .subscribe((res) => {
-            debug('known-hosts-add res:', res);
-            if (res && res.added) {
-              this.activeSessionsService.start(this.session);
-//              this.startTerminal();
-//              this.cdr.detectChanges();
-            }
-          });
+
+          this.ngZone.run(() => {
+            this.dialog.open(KnownHostsAddDialog, {
+              data: {
+                host: knownHostKey,
+                host_keyObj: kObj
+              }
+            })
+            .afterClosed()
+            .subscribe((res) => {
+              debug('known-hosts-add res:', res);
+              if (res && res.added) {
+                this.activeSessionsService.start(this.session);
+  //              this.startTerminal();
+  //              this.cdr.detectChanges();
+              }
+            });
+          }); // ngZone.run
 
           this.activeSessionsService.stop(this.session);
           cb(false); // reject connection for now (otherwise there is a timeout on the handshake)
