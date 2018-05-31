@@ -215,6 +215,7 @@ export class LocalTunnelsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.tunnelService.stop(localTunnel);
       this.statusService.set(localTunnel.id, 'active', false);
     } else {
+      debug('calling tunnelService.start from toggleState()');
       this.tunnelService.start('local', localTunnel);
       this.statusService.set(localTunnel.id, 'active', true);
     }

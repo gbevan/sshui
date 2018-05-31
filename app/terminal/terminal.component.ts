@@ -188,8 +188,10 @@ export class TerminalComponent implements AfterViewInit {
     })
 
     .on('ready', () => {
-      this.statusService.set(this.session.id, 'connected', true);
-      this.statusService.set(this.session.id, 'conn', conn);
+      this.ngZone.run(() => {
+        this.statusService.set(this.session.id, 'connected', true);
+        this.statusService.set(this.session.id, 'conn', conn);
+      });
 
       conn.shell({
         term: 'xterm-256color'
@@ -269,61 +271,18 @@ clear
        *   }
        */
       hostVerifier: (kObj: any, cb: (ok: boolean) => void) => {
-        debug('host conn:', conn);
-        debug('host kObj:', kObj);
-        debug('supported hashes:', crypto.getHashes());
 
         const knownHostKey = `${this.session.host}:${this.session.port}`;
-
-        const hk = this.knownHostsService
-        .find({host: knownHostKey});
-        debug('hk:', hk);
-
-        if (hk.length === 0) {
-          debug('host ssh key not found - prompt to accept');
-
-          this.ngZone.run(() => {
-            this.dialog.open(KnownHostsAddDialog, {
-              data: {
-                host: knownHostKey,
-                host_keyObj: kObj
-              }
-            })
-            .afterClosed()
-            .subscribe((res) => {
-              debug('known-hosts-add res:', res);
-              if (res && res.added) {
-                this.activeSessionsService.start(this.session);
-  //              this.startTerminal();
-  //              this.cdr.detectChanges();
-              }
-            });
-          }); // ngZone.run
-
-          this.activeSessionsService.stop(this.session);
-          cb(false); // reject connection for now (otherwise there is a timeout on the handshake)
-
-        } else if (hk.length > 1) {
-          throw new Error('host lookup returned more that 1 known_hosts entry');
-
-        } else if (hk[0].host_key !== kObj.keyBase64) {
-          debug('host keys do not match!!!');
-          this.activeSessionsService.stop(this.session);
-
-          this.ngZone.run(() => {
-            this.dialog.open(ErrorPopupDialog, {
-              data: {
-                error: 'ALERT: Host keys do not match!!!'
-              }
-            });
-          });
-
-          cb(false);
-
-        } else {
-          debug('host ssh key found');
-          cb(true);
-        }
+        this.knownHostsService.hostVerifier(kObj, knownHostKey, (flag: boolean) => {
+          if (flag) {
+            this.activeSessionsService.start(this.session);
+            this.statusService.set(this.session.id, 'active', true);
+          } else {
+            this.activeSessionsService.stop(this.session);
+            this.statusService.set(this.session.id, 'active', false);
+          }
+          cb(flag);
+        });
       }
     });
   }

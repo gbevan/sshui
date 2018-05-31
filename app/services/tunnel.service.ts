@@ -25,6 +25,7 @@ import { clearInterval,
 import { CredentialsService } from '../services/credentials.service';
 import { StatusService,
          Status }             from '../services/status.service';
+import { KnownHostsService }  from '../services/known-hosts.service';
 
 const net = require('net');
 const Client = require('ssh2');
@@ -37,11 +38,14 @@ export class TunnelService {
 
   constructor(
     private credentialsService: CredentialsService,
-    private statusService: StatusService
+    private statusService: StatusService,
+    private knownHostsService: KnownHostsService,
   ) { }
 
   start(type: string, tunnel: any) {
     debug('start type:', type, 'tunnel:', tunnel);
+    tunnel.port = tunnel.port || 22;
+
 //    debug('start called from:', (new Error('stack').stack));
 
     const creds = this.credentialsService.get(tunnel.cred);
@@ -230,7 +234,33 @@ export class TunnelService {
       tryKeyboard: true,
       privateKey: creds.privKey !== '' ? creds.privKey : undefined,
       keepaliveInterval: 30000,
-      keepaliveCountMax: 10
+      keepaliveCountMax: 10,
+      hostHash: 'RSA-SHA256',
+      hostVerifierKeyObj: true,
+
+      /*
+       * kObj contains:
+       *   {
+       *     hash: hash as hex,
+       *     hashBase64: hash as Base64,
+       *     fingerprint: ssh like fingerprint (base64),
+       *     key: raw key,
+       *     keyBase64: key as Base64,
+       *     parsedKey: parsed key as an object (see sshpk)
+       *   }
+       */
+      hostVerifier: (kObj: any, cb: (ok: boolean) => void) => {
+        const knownHostKey = `${tunnel.host}:${tunnel.port}`;
+        this.knownHostsService.hostVerifier(kObj, knownHostKey, (flag: boolean) => {
+          if (flag) {
+            this.statusService.set(tunnel.id, 'connected', true);
+          } else {
+            this.stop(tunnel);
+            this.statusService.set(tunnel.id, 'active', false);
+          }
+          cb(flag);
+        });
+      }
     });
   }
 

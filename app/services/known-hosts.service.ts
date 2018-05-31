@@ -15,16 +15,20 @@
     You should have received a copy of the GNU General Public License
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-import { Injectable }         from '@angular/core';
+import { Injectable,
+         NgZone }               from '@angular/core';
+import { MatDialog }            from '@angular/material';
 
 import { Observable,
          Observer,
-         Subscription }   from '@reactivex/rxjs';
+         Subscription }         from '@reactivex/rxjs';
 
-import { LowdbService }       from './lowdb.service';
+import { LowdbService }         from './lowdb.service';
+import { KnownHostsAddDialog }  from '../ssh/known-hosts/known-hosts-add.dialog';
+import { ErrorPopupDialog }       from '../error/error-popup.dialog';
 //import { CredentialsService } from './credentials.service';
 
+const crypto = require('crypto');
 const debug = require('debug').debug('sshui:service:known-hosts');
 
 @Injectable()
@@ -36,7 +40,9 @@ export class KnownHostsService {
   private changedObserver: Observer<any>;
 
   constructor(
-    private lowdbServce: LowdbService
+    private lowdbServce: LowdbService,
+    private ngZone: NgZone,
+    public dialog: MatDialog
   ) {
     this._db = lowdbServce.getDb();
 
@@ -122,4 +128,72 @@ export class KnownHostsService {
     return this.changed.subscribe(value, error);
   }
 
+  /*
+   * kObj contains:
+   *   {
+   *     hash: hash as hex,
+   *     hashBase64: hash as Base64,
+   *     fingerprint: ssh like fingerprint (base64),
+   *     key: raw key,
+   *     keyBase64: key as Base64,
+   *     parsedKey: parsed key as an object (see sshpk)
+   *   }
+   */
+  public hostVerifier(kObj: any, knownHostKey: string, cb: (ok: boolean) => void) {
+    debug('host kObj:', kObj);
+    debug('supported hashes:', crypto.getHashes());
+
+    const hk = this.find({host: knownHostKey});
+    debug('hk:', hk);
+
+    if (hk.length === 0) {
+      debug('host ssh key not found - prompt to accept');
+
+      this.ngZone.run(() => {
+        this.dialog.open(KnownHostsAddDialog, {
+          data: {
+            host: knownHostKey,
+            host_keyObj: kObj,
+            knownHostsService: this
+          }
+        })
+        .afterClosed()
+        .subscribe((res: any) => {
+          debug('known-hosts-add res:', res);
+          if (res && res.added) {
+            // this.activeSessionsService.start(this.session);
+  //              this.startTerminal();
+  //              this.cdr.detectChanges();
+            cb(true);
+          } else {
+            cb(false);
+          }
+        });
+      }); // ngZone.run
+
+      // this.activeSessionsService.stop(this.session);
+      // cb(false); // reject connection for now (otherwise there is a timeout on the handshake)
+
+    } else if (hk.length > 1) {
+      throw new Error('host lookup returned more that 1 known_hosts entry');
+
+    } else if (hk[0].host_key !== kObj.keyBase64) {
+      debug('host keys do not match!!!');
+      // this.activeSessionsService.stop(this.session);
+
+      this.ngZone.run(() => {
+        this.dialog.open(ErrorPopupDialog, {
+          data: {
+            error: 'ALERT: Host keys do not match!!!'
+          }
+        });
+      });
+
+      cb(false);
+
+    } else {
+      debug('host ssh key found');
+      cb(true);
+    }
+  }
 }
