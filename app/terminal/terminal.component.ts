@@ -21,6 +21,7 @@ import { Component,
          AfterViewInit,
          ElementRef,
          ViewChild,
+         NgZone,
          Input }                  from '@angular/core';
 
 import { MatDialog }              from '@angular/material';
@@ -33,9 +34,13 @@ import { KnownHostsService }      from '../services/known-hosts.service';
 import { KnownHostsAddDialog }    from '../ssh/known-hosts/known-hosts-add.dialog';
 import { ErrorPopupDialog }       from '../error/error-popup.dialog';
 
-const Terminal = require('xterm');
-require('xterm/dist/addons/fit/fit');
-Terminal.loadAddon('fit');
+// const Terminal = require('xterm');
+// require('xterm/dist/addons/fit/fit');
+// Terminal.loadAddon('fit');
+
+import { Terminal } from 'xterm';
+import { fit } from 'xterm/lib/addons/fit/fit';
+// Terminal.applyAddon('fit');
 
 const crypto = require('crypto');
 
@@ -60,6 +65,7 @@ export class TerminalComponent implements AfterViewInit {
 
   private term: any;
   private title: string = '';
+  private term_options: any;
 
   private creds: any;
 
@@ -73,24 +79,67 @@ export class TerminalComponent implements AfterViewInit {
     private statusService: StatusService,
     private knownHostsService: KnownHostsService,
     private cdr: ChangeDetectorRef,
+    private el: ElementRef,
+    private ngZone: NgZone,
     public dialog: MatDialog
-  ) { }
+  ) {
+    this.term_options = {
+      cursorBlink: true,
+      cols: T_COLS,
+      rows: T_ROWS,
+      letterSpacing: 0,
+      fontSize: 16
+    };
+  }
 
   ngAfterViewInit() {
     setTimeout(this.startTerminal.bind(this), 0);
+  }
+
+  resize() {
+    debug('resize() sshterminal style:', this.terminalEl.nativeElement.style);
+    debug('resize() terminal style:', this.el.nativeElement.style);
+    // this.term.charMeasure.measure(this.term_options);
+    // fit(this.term);
+    this.term.resize(T_COLS, T_ROWS);
+  }
+
+  // Start observing visbility of element. On change, the
+  //   the callback is called with Boolean visibility as
+  //   argument
+  // see https://stackoverflow.com/questions/1462138/js-event-listener-for-when-element-becomes-visible
+  respondToVisibility(element: any, callback: any) {
+    const options = {
+      root: document.documentElement
+    };
+
+    const observer = new IntersectionObserver((entries, o) => {
+      entries.forEach((entry) => {
+        callback(entry.intersectionRatio > 0);
+      });
+    }, options);
+
+    observer.observe(element);
   }
 
   startTerminal() {
     debug('startTerminal cols:', T_COLS, 'rows:', T_ROWS);
     this.creds = this.credentialsService.get(this.session.cred);
 //    debug('creds:', this.creds);
-    this.term = new Terminal({
-      cursorBlink: true,
-      cols: T_COLS,
-      rows: T_ROWS
-    });
+    this.term = new Terminal(this.term_options);
     this.term.open(this.terminalEl.nativeElement);
-    this.term.fit();
+    debug('nativeElement:', this.terminalEl.nativeElement);
+    // this.term.fit();
+    // fit(this.term);
+    // this.term.resize(NaN, NaN);
+    // cant call fit here as the parent element must already be visible
+    // otherwise we get an inf loop in fit()
+    this.respondToVisibility(this.el.nativeElement, (v: boolean) => {
+      debug('respondToVisibility cb v:', v);
+      if (v) {
+        this.resize();
+      }
+    });
 
     this.term.writeln('Connecting...');
 
@@ -253,10 +302,12 @@ clear
           debug('host keys do not match!!!');
           this.activeSessionsService.stop(this.session);
 
-          this.dialog.open(ErrorPopupDialog, {
-            data: {
-              error: 'ALERT: Host keys do not match!!!'
-            }
+          this.ngZone.run(() => {
+            this.dialog.open(ErrorPopupDialog, {
+              data: {
+                error: 'ALERT: Host keys do not match!!!'
+              }
+            });
           });
 
           cb(false);

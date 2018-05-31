@@ -16,10 +16,15 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { Component,
+import { AfterViewChecked,
+         AfterViewInit,
+         Component,
+         OnChanges,
          OnInit,
          OnDestroy,
          ChangeDetectorRef }      from '@angular/core';
+
+import { MatTabChangeEvent }      from '@angular/material/tabs';
 
 import { Subscription }           from '@reactivex/rxjs';
 
@@ -36,10 +41,11 @@ const css = require('./active-sessions.css');
   template: html,
   styles: [css]
 })
-export class ActiveSessionsComponent implements OnInit, OnDestroy {
+export class ActiveSessionsComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
   private activeSessions: any;
   private activeList: any[] = [];
   private as_subscription: Subscription;
+  private tabIdx: number = 0;
 
   constructor(
     private activeSessionsService: ActiveSessionsService,
@@ -53,11 +59,11 @@ export class ActiveSessionsComponent implements OnInit, OnDestroy {
     this.as_subscription = this.activeSessionsService.subscribe((value: any) => {
       this.activeSessions = value;
       this.activeList = _.filter(this.activeSessions, (s: any) => s.name);
-      try {
-        this.cdr.detectChanges();
-      } catch (e) {
-        console.error('detectchanges err:', e);
-      }
+      // try {
+      //   this.cdr.detectChanges();
+      // } catch (e) {
+      //   console.error('detectchanges err:', e);
+      // }
     });
   }
 
@@ -65,5 +71,21 @@ export class ActiveSessionsComponent implements OnInit, OnDestroy {
     if (this.as_subscription) {
       this.as_subscription.unsubscribe();
     }
+  }
+
+  // ngAfterViewChecked() {
+  //   debug('ngAfterViewChecked');
+  //   // debug('tabIdx:', this.tabIdx);
+  //   // debug('activeSession:', this.activeList[this.tabIdx]);
+  // }
+  ngAfterViewInit() {
+    debug('ngAfterViewInit');
+  }
+
+  ngOnChanges(chg: any) {
+    debug('ngOnChanges chg:', chg);
+  }
+  tabChanged(ev: MatTabChangeEvent) {
+    debug('tabChanged ev:', ev);
   }
 }

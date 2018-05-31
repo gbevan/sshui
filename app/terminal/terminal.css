@@ -4,9 +4,12 @@
 }
 
 .sshterminal {
-/*  height: -webkit-fill-available*/
-/*  height: auto;*/
-/*  width: 100%;*/
+  /* height: -webkit-fill-available */
+  /*  height: auto;*/
+  /*  width: 100%; */
+  border: 2px inset white;
+  /* height: 1500px;
+  width: 1500px; */
 }
 
 .termtools {

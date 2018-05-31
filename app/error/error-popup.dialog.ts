@@ -48,16 +48,25 @@ const debug = require('debug').debug('raffia:error-popup');
   selector: 'error-popup-dialog',
   template: `
 <h3 class="error">Error:</h3>
-<div class="viewErrorOuter">
-  <p class="error">{{ data.error | default:'Unknown Error Occurred!' }}</p>
-</div>
+<mat-dialog-content>
+  <div class="viewErrorOuter">
+    <p class="error">{{ data.error | default:'Unknown Error Occurred!' }}</p>
+  </div>
+<mat-dialog-content>
+
+<mat-dialog-actions class="errAction">
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>
 `,
   styles: [`
 .viewErrorOuter {
-  max-height: 800px;
+  /*max-height: 800px;*/
 }
 .error {
   color: #ff6060;
+}
+.errAction {
+  margin-bottom: 0;
 }
 `]
 })

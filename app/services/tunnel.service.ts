@@ -135,7 +135,7 @@ export class TunnelService {
           } catch (e) {
             debug(e);
           }
-        }, 1000)
+        }, 2000)
       );
 
       // create listener for local port

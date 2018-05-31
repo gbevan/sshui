@@ -15,13 +15,6 @@
     "no-console": false,
     "one-variable-per-declaration": false,
     "comment-format": false,
-    "no-submodule-imports": [
-      true,
-      "@angular/platform-browser/animations",
-      "lowdb/adapters/FileSync",
-      "rxjs/Observable",
-      "rxjs/Observer",
-      "xterm/dist/addons/fit/fit"
-    ]
+    "no-submodule-imports": false
   }
 }
