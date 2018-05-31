@@ -48,7 +48,7 @@ export class SessionsComponent implements OnInit, AfterViewInit {
     'host',
     'port',
     'cred',
-//    'persistent',
+    'persistent',
     'connected',
     'edit',
     'delete'
@@ -133,17 +133,17 @@ export class SessionsComponent implements OnInit, AfterViewInit {
     debug('recoverPersistentSessions sessions:', this.sessions);
     this.sessions.forEach((s: any) => {
       s.active = false;
-//      const st = this.statusService.get(s.id);
-//      if (st) {
-//        debug(`active:${st.active}`);
-//      }
-//
-////      if ((s.persistent && (!st || !st.active || (st.active && !st.connected))) {
-//      if (st && st.active && !st.connected) {
-//        debug('s active recover');
-//        this.activeSessionsService.start(s);
-//        this.statusService.set(s.id, 'active', true);
-//      }
+      const st = this.statusService.get(s.id);
+      if (st) {
+        debug(`active:${st.active}`);
+      }
+
+      if (s.persistent && (!st || !st.active || (st.active && !st.connected))) {
+      // if (st && st.active && !st.connected) {
+        debug('s active recover');
+        this.activeSessionsService.start(s);
+        this.statusService.set(s.id, 'active', true);
+      }
     });
     debug('after forEach');
   }
