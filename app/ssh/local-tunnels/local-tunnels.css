@@ -26,3 +26,8 @@
 .mat-cell {
   font-size: 10pt;
 }
+
+.trafficChartCell {
+  width: 236px;
+  height: 118px;
+}

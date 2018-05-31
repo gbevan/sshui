@@ -118,6 +118,7 @@
                        style="flex: 3;">Traffic (bytes)</mat-header-cell>
 <!--      <mat-cell *matCellDef="let element">{{ counts[element.id] ? counts[element.id].bytesRead : 'n/a' }}</mat-cell>-->
       <mat-cell *matCellDef="let element"
+                class="trafficChartCell"
                 style="flex: 3;">
         <canvas *ngIf="countsHashDataset[element.id]"
                 baseChart
