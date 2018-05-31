@@ -113,6 +113,7 @@ export class SessionsComponent implements OnInit, AfterViewInit {
   }
 
   toggleState(session: any) {
+    debug('toggleState session:', session);
     if (session.active) {
       this.activeSessionsService.stop(session);
       this.statusService.set(session.id, 'active', false);
@@ -129,18 +130,20 @@ export class SessionsComponent implements OnInit, AfterViewInit {
 
   // persistent is currently disabled in template until xterm fix
   recoverPersistentSessions() {
+    debug('recoverPersistentSessions sessions:', this.sessions);
     this.sessions.forEach((s: any) => {
-      const st = this.statusService.get(s.id);
-      if (st) {
-        debug(`active:${st.active}`);
-      }
-
-//      if ((s.persistent && (!st || !st.active || (st.active && !st.connected))) {
-      if (st && st.active && !st.connected) {
-        debug('s active recover');
-        this.activeSessionsService.start(s);
-        this.statusService.set(s.id, 'active', true);
-      }
+      s.active = false;
+//      const st = this.statusService.get(s.id);
+//      if (st) {
+//        debug(`active:${st.active}`);
+//      }
+//
+////      if ((s.persistent && (!st || !st.active || (st.active && !st.connected))) {
+//      if (st && st.active && !st.connected) {
+//        debug('s active recover');
+//        this.activeSessionsService.start(s);
+//        this.statusService.set(s.id, 'active', true);
+//      }
     });
     debug('after forEach');
   }
