@@ -31,6 +31,7 @@ let cp;
 gulp.task('webpack', function () {
   // delay to let gulp start up the app
   setTimeout(function () {
+    config.mode = 'development';
     gulp.src('app/main.ts')
     .pipe(
       webpack(config, require('webpack'))
@@ -46,6 +47,7 @@ gulp.task('webpack', function () {
 // Webpack release, one-shot without watching
 gulp.task('webpackrel', function (done) {
   config.watch = false;
+  config.mode = 'production';
   gulp.src('app/main.ts')
   .pipe(
     webpack(config, require('webpack'))

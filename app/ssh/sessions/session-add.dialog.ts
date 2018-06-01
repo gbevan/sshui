@@ -64,6 +64,7 @@ export class SessionAddDialog implements OnInit {
   }
 
   sanityCheck() {
+    // is this a likely local tunnel?
     if ((this.session.host === 'localhost' || this.session.host.startsWith('127.'))
         && this.session.port > 1024) {
       return false;
