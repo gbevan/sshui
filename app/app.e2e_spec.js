@@ -154,6 +154,9 @@ describe('sshui setup', () => {
       const vaultMenuButton = element(by.id('vaultMenuButton'));
       return vaultMenuButton.click()
       .then(() => {
+        return browser.sleep(250);
+      })
+      .then(() => {
         const changeVaultPasswordButton = element(by.id('changeVaultPasswordButton'));
         expect(changeVaultPasswordButton.isPresent()).toBe(true);
         expect(changeVaultPasswordButton.isDisplayed()).toBe(true);

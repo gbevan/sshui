@@ -66,6 +66,9 @@ describe('Manage View', () => {
     const knownHostsPanelHdr = element(by.id('knownHostsPanelHdr'));
     return knownHostsPanelHdr.click()
     .then(() => {
+      return browser.sleep(250);
+    })
+    .then(() => {
       browser.wait(EC.visibilityOf(knownHosts), 5000);
       browser.wait(EC.invisibilityOf(sessions), 5000);
       browser.wait(EC.invisibilityOf(credentials), 5000);
@@ -86,7 +89,10 @@ describe('Manage View', () => {
     const credentialsPanelHdr = element(by.id('credentialsPanelHdr'));
     return credentialsPanelHdr.click()
     .then(() => {
-      browser.wait(EC.visibilityOf(knownHosts), 5000);
+      return browser.sleep(250);
+    })
+    .then(() => {
+      browser.wait(EC.visibilityOf(credentials), 5000);
       browser.wait(EC.invisibilityOf(knownHosts), 5000);
 
       expect(knownHosts.isDisplayed()).toBe(false);
@@ -104,6 +110,9 @@ describe('Manage View', () => {
 
     const localTunnelsPanelHdr = element(by.id('localTunnelsPanelHdr'));
     return localTunnelsPanelHdr.click()
+    .then(() => {
+      return browser.sleep(250);
+    })
     .then(() => {
       browser.wait(EC.visibilityOf(localTunnels), 5000);
       browser.wait(EC.invisibilityOf(credentials), 5000);
