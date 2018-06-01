@@ -12,9 +12,14 @@
 
 .vaultpw {
   display: block;
+  margin-top: 30px;
 }
 
 .errmsg {
   color: red;
   text-emphasis: bold;
+}
+
+.logo {
+  color: darkgrey;
 }
