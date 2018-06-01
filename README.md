@@ -28,13 +28,18 @@ The goal is to provide secure persistent SSH tunnels into private networks
 like AWS VPCs via a Bastion host.  The tunnels can be set to auto restart
 after suspend/resume of your workstation (once prompted for the vault password).
 
-All credentials/keys are encrypted in a JSON AES256GCM encrypted vault using
+All credentials/keys are encrypted in a JSON AES256GCM vault using
 [lowdb](https://github.com/typicode/lowdb).
 
-This project uses the npm project [ssh2](https://github.com/mscdex/ssh2) which is a
-pure javascript implementation of of SSH2 client and server.  Therefore this
+SSH protocol support is provided by the npm project
+[ssh2](https://github.com/mscdex/ssh2) which is a
+pure javascript implementation of an SSH2 client.  Therefore this
 app does not need to depend upon OpenSSH or Putty etc being installed - it
 is completely self-contained.
+
+Terminal support is provided by [xterm.js](https://github.com/xtermjs/xterm.js).
+The `screen` command is leveraged for terminal persistent (multi-)sessions where
+it is available on endpoints.
 
 Please feel free to contribute.
 
