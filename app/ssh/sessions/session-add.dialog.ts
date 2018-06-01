@@ -63,6 +63,14 @@ export class SessionAddDialog implements OnInit {
     this.creds = this.credentialsService.find();
   }
 
+  sanityCheck() {
+    if ((this.session.host === 'localhost' || this.session.host.startsWith('127.'))
+        && this.session.port > 1024) {
+      return false;
+    }
+    return true;
+  }
+
   submit() {
     if (this.session.id) {
       this.sessionsService.patch(this.session.id, this.session);
