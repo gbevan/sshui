@@ -48,7 +48,7 @@ export class SessionsComponent implements OnInit, AfterViewInit {
     'host',
     'port',
     'cred',
-    'persistent',
+    // 'persistent',
     'connected',
     'edit',
     'delete'
@@ -115,8 +115,8 @@ export class SessionsComponent implements OnInit, AfterViewInit {
   toggleState(session: any) {
     debug('toggleState session:', session);
     if (session.active) {
-      this.activeSessionsService.stop(session);
       this.statusService.set(session.id, 'active', false);
+      this.activeSessionsService.stop(session);
     } else {
       this.activeSessionsService.start(session);
       this.statusService.set(session.id, 'active', true);
