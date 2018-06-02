@@ -1,5 +1,6 @@
+<div #terminalOuter>
 <div class="title">[{{ session.name }}] :: {{ title }}</div>
-<div class="termtools">
+<div #termtools class="termtools">
   Screen:
   <button mat-button
           (click)="detach()">Detach</button>
@@ -13,8 +14,8 @@
           (click)="list()">List</button>
   <button mat-button
           (click)="lock()">Lock</button>
-  <!-- <button mat-button
-          (click)="resize()">Resize</button> -->
+  <button mat-button
+          (click)="resize()">Resize</button>
 <!--
   <button mat-button
           (click)="exit()">Exit Bash</button>
@@ -23,7 +24,7 @@
 <div #sshterminal
      id="terminal"
      class="sshterminal"></div>
-
+</div>
 <!--
 
     This file is part of sshui https://github.com/gbevan/sshui.

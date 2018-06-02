@@ -1,10 +1,14 @@
 .outer {
-  margin-bottom: 5px;
+  top: 0;
+  left: 0;
+  right: 0;
+  position: fixed;
+  /* margin-bottom: 5px; */
 }
 
 .app-top-toolbar {
-  -moz-border-radius: 5px;
-  border-radius: 5px;
+  /* -moz-border-radius: 5px;
+  border-radius: 5px; */
 }
 
 .app-toolbar-filler {

@@ -32,9 +32,11 @@ import { ChangeDetectorRef,
 import { MatDialog,
          MatDialogRef,
          MatDialogConfig }  from '@angular/material';
+import { OverlayContainer} from '@angular/cdk/overlay';
 
 import { CliService }   from './services/cli.service';
 import { LowdbService }   from './services/lowdb.service';
+import { PreferencesService } from './services/preferences.service';
 
 const html = require('./app.template.html');
 const css = require('./app.css');
@@ -51,20 +53,43 @@ process.on('uncaughtException', (e) => {
   styles: [css]
 })
 export class AppComponent implements OnInit {
-  title = 'SSH UI';
+  title = 'sshui';
   config: MatDialogConfig;
   private section: string = 'manage';
+  private theme: string = 'dark-theme';
 
   constructor(
     private cdr: ChangeDetectorRef,
     private cliService: CliService,
-    private lowdbService: LowdbService
-  ) {}
+    private lowdbService: LowdbService,
+    private preferencesService: PreferencesService,
+    public overlayContainer: OverlayContainer
+  ) { }
+
+  setTheme(theme: string) {
+    this.theme = theme;
+    this.overlayContainer.getContainerElement().classList.add(this.theme);
+  }
 
   ngOnInit() {
+    console.log('app component ngOnInit');
     this.lowdbService.subscribeState((state) => {
       debug('lowdb state changed:', state);
       this.cdr.detectChanges();
+
+      if (this.isAuth()) {
+        const res = this.preferencesService.find({name: 'settings'});
+        debug('res:', res);
+        if (res.length !== 0) {
+          this.setTheme(res[0].theme);
+        }
+
+        this.preferencesService.subscribeChanged((p) => {
+          if (p.name === 'settings') {
+            this.setTheme(p.theme);
+          }
+        });
+      }
     });
   }
 

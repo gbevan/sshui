@@ -12,13 +12,32 @@
 }
 
 .toolbar {
-  margin-bottom: 5px;
+  /* margin-bottom: 5px; */
+}
+
+.content {
+  position: fixed;
+  bottom: 16px;
+  top: 65px;
+  left: 0;
+  right: 0;
+  overflow-y: auto;
 }
 
 .footer {
-  bottom: -5px;
+  bottom: 0;
   display: block;
   font-size: 9pt;
+  height: 15px;
   position: fixed;
   width: 100%;
+  margin-bottom: 10px;
+}
+
+.activeSessions {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
 }

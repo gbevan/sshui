@@ -72,6 +72,8 @@ export class TerminalComponent implements AfterViewInit {
   private stream: any;
 
   @ViewChild('sshterminal') private terminalEl: ElementRef;
+  @ViewChild('terminalOuter') private terminalOuter: ElementRef;
+  @ViewChild('termtools') private termtools: ElementRef;
 
   constructor(
     private activeSessionsService: ActiveSessionsService,
@@ -109,11 +111,15 @@ export class TerminalComponent implements AfterViewInit {
   //   argument
   // see https://stackoverflow.com/questions/1462138/js-event-listener-for-when-element-becomes-visible
   respondToVisibility(element: any, callback: any) {
-    const options = {
-      root: document.documentElement
+    const options: any = {
+      // root: document.documentElement
+      // root: this.el.nativeElement
+      root: null
     };
 
     const observer = new IntersectionObserver((entries, o) => {
+      debug('IntersectionObserver entries:', entries);
+      debug('IntersectionObserver o:', o);
       entries.forEach((entry) => {
         callback(entry.intersectionRatio > 0);
       });
@@ -137,11 +143,15 @@ export class TerminalComponent implements AfterViewInit {
     // this.term.resize(NaN, NaN);
     // cant call fit here as the parent element must already be visible
     // otherwise we get an inf loop in fit()
-    this.respondToVisibility(this.el.nativeElement, (v: boolean) => {
+    // this.respondToVisibility(this.el.nativeElement, (v: boolean) => {
+    // debug('terminalOuter:', this.terminalOuter.nativeElement);
+    debug('termtools:', this.termtools.nativeElement);
+    // this.respondToVisibility(this.terminalOuter.nativeElement, (v: boolean) => {
+    this.respondToVisibility(this.termtools.nativeElement, (v: boolean) => {
       debug('respondToVisibility cb v:', v);
-      if (v) {
-        this.resize();
-      }
+      // if (v) {
+      this.resize();
+      // }
     });
 
     this.term.writeln('Connecting...');
@@ -231,7 +241,7 @@ export class TerminalComponent implements AfterViewInit {
         stream
         .write(`
 stty cols ${T_COLS} rows ${T_ROWS}
-clear
+tput reset
 (which screen 2>/dev/null && (screen -S SSHUI -D -RR) || (clear; sh -i)); exit
 `);
 

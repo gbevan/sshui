@@ -44,14 +44,11 @@ export class LowdbService {
   private lowdb: LowdbVault;
 
   constructor(
-//    private vaultPwService: VaultPwService
     private cliService: CliService
   ) {
-//    this.lowdb = new LowdbVault(vaultPwService);
     this.fileName = cliService.getOptions().db;
 
     this.lowdb = new LowdbVault({fileName: this.fileName});
-//    this.db = lowdb.getDb();
   }
 
   getDb() {

@@ -32,6 +32,7 @@ const debug = require('debug').debug('sshui:component:vaultpw');
 
 const html = require('./vaultpw.template.html');
 const css = require('./vaultpw.css');
+const pkg = require('../../package.json');
 
 @Component({
   selector: 'vaultpw',
@@ -43,12 +44,14 @@ export class VaultPwComponent implements AfterViewInit {
   private vaultpw: string = '';
   private errmsg: string = '';
   private lockTimer: NodeJS.Timer;
+  private pkg_version: string = '';
 
   constructor(
     private cdr: ChangeDetectorRef,
     private lowdbService: LowdbService,
     private preferencesService: PreferencesService,
   ) {
+    this.pkg_version = pkg.version;
     const win = (window as any).nw.Window.get();
     win.on('focus', () => {
 //      debug('reset timeout');

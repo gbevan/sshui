@@ -17,28 +17,37 @@
 */
 
 import { Injectable } from '@angular/core';
+import { Observable } from '@reactivex/rxjs';
 
 import { LowdbService } from './lowdb.service';
+
+const EventEmitter = require('events');
 
 const debug = require('debug').debug('sshui:service:preferences');
 
 @Injectable()
 export class PreferencesService {
   private _name: string = 'preferences';
-//  private _db: any;
+  private emitter: any = EventEmitter;
+  private changed: Observable<any>;
+
   constructor(
     private lowdbService: LowdbService
+
   ) {
-//    _db = this.lowdbService.getDb();
+    this.emitter = new EventEmitter();
+    this.changed = Observable.fromEvent(this.emitter, 'changed');
   }
 
   public create(data: any) {
     debug('create data:', data);
     const _db = this.lowdbService.getDb();
-    return _db
+    const res = _db
     .get(this._name)
     .insert(data)
     .write();
+    this.emitter.emit('changed', data);
+    return res;
   }
 
   public get(id: string) {
@@ -61,34 +70,44 @@ export class PreferencesService {
 
   public remove(id: string, params?: any) {
     const _db = this.lowdbService.getDb();
+    let res;
     if (id) {
-      return _db
+      res = _db
       .get(this._name)
       .removeById(id)
       .write();
     } else {
-      return _db
+      res = _db
       .get(this._name)
       .remove(params)
       .write();
     }
+    this.emitter.emit('changed', {id});
+    return res;
   }
 
   public patch(id: string, data: any, params?: any) {
     debug('patch id:', id, 'data:', data);
     const _db = this.lowdbService.getDb();
+    let res;
     if (id) {
-      return _db
+      res = _db
       .get(this._name)
       .getById(id)
       .assign(data)
       .write();
     } else {
-      return _db
+      res = _db
       .get(this._name)
       .filter(params)
       .assign(data)
       .write();
     }
+    this.emitter.emit('changed', data);
+    return res;
+  }
+
+  public subscribeChanged(value: (v: any) => void, error?: any): any {
+    return this.changed.subscribe(value, error);
   }
 }

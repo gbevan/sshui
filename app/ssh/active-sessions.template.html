@@ -1,5 +1,6 @@
 
-<mat-tab-group [(selectedIndex)]="tabIdx"
+<mat-tab-group class="tabGroup"
+               [(selectedIndex)]="tabIdx"
                (selectedTabChange)="tabChanged($event)">
   <mat-tab *ngFor="let a of activeList"
            label="{{ a.name }}">

@@ -1,22 +1,35 @@
-@import "node_modules/@angular/material/prebuilt-themes/purple-green.css";
+/* @import "node_modules/@angular/material/prebuilt-themes/purple-green.css"; */
 @import "node_modules/xterm/dist/xterm.css";
 @import "node_modules/font-awesome/css/font-awesome.css";
+/* @import "themes.scss"; */
 
 html {
   background: linear-gradient(to right, darkgrey, linen);
 }
 
+html, body {
+  top: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 /* override xterm style for positioning */
 .terminal .xterm-rows {
-  position: inherit !important;
+  /* position: inherit !important; */
+  position: absolute;
   left: 0;
+  right: 0;
   top: 0;
+  bottom: 0;
 }
 
 .logoContainer {
   color: white;
   background-color: black;
   padding: 20px;
+  padding-top: 200px;
   text-align: center;
   position: fixed;
   top; 0;

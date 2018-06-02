@@ -26,10 +26,29 @@ module.exports = {
 //        loader: 'istanbul-instrumenter-loader',
 //        enforce: 'post'
 //      },
-     { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' },
+      { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' },
       {
-        test: /\.s?css$/,
-        loaders: ['to-string-loader', 'css-loader', 'sass-loader']
+        test: /\.css$/,
+        loaders: [
+          'to-string-loader',
+          // 'style-loader',
+          'css-loader'
+        ]
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          // 'to-string-loader',
+          'style-loader',
+          'css-loader',
+          'sass-loader'
+          // {
+          //   loader: 'sass-loader',
+          //   // options: {
+          //   //   includePaths: [path.resolve(__dirname, 'node_modules')]
+          //   // }
+          // }
+        ]
       },
       { test: /\.html$/, loader: 'html-loader' }
     ]

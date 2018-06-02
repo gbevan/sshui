@@ -42,6 +42,11 @@ export class SettingsDialog implements OnInit {
   private settings: any;
   private cliOptions: any = {};
 
+  private themes: string[] = [
+    'dark-theme',
+    'light-theme'
+  ];
+
   constructor(
     private cliService: CliService,
     private preferencesService: PreferencesService,
@@ -57,7 +62,8 @@ export class SettingsDialog implements OnInit {
       // set defaults
       this.settings = {
         name: 'settings',
-        timeout: 5
+        timeout: 5,
+        theme: 'dark-theme'
       };
       this.preferencesService.create(this.settings);
     } else {

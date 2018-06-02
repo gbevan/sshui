@@ -13,6 +13,7 @@ const nwFiles = [
   './package.json',
   './index.html',
   './styles.css',
+  '.themes.scss',
   'lib/**',
   'dist/**',
   'node_modules/zone.js/dist/**',
@@ -157,7 +158,8 @@ gulp.task('watch', function () {
     'dist/**',
     'lib/**',
     'index.html',
-    'styles.css'
+    'styles.css',
+    'themes.scss'
   ], {
     ignoreInitial: true,
     verbose: true,
@@ -193,7 +195,8 @@ gulp.task('_watche2e', function () {
     'dist/**',
     'lib/**',
     'index.html',
-    'styles.css'
+    'styles.css',
+    'themes.scss'
   ], {
     ignoreInitial: true,
     verbose: true,

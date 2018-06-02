@@ -21,6 +21,7 @@ import { BrowserModule }            from '@angular/platform-browser';
 import { BrowserAnimationsModule }  from '@angular/platform-browser/animations';
 import { FormsModule }              from '@angular/forms';
 import { FlexLayoutModule }         from '@angular/flex-layout';
+// import { OverlayContainer }         from '@angular/cdk/overlay';
 
 import { NgbModule }                from '@ng-bootstrap/ng-bootstrap';
 
@@ -77,6 +78,8 @@ import { AboutDialog }              from './toolbar/about.dialog';
 import { ErrorPopupDialog }         from './error/error-popup.dialog';
 
 import { DefaultPipe }              from './pipes/default.pipe';
+
+import '../themes.scss';
 
 @NgModule({
   imports: [
@@ -153,6 +156,7 @@ import { DefaultPipe }              from './pipes/default.pipe';
 export class AppModule {
   constructor(
     public matIconRegistry: MatIconRegistry
+    // public overlayContainer: OverlayContainer
   ) {
     matIconRegistry.registerFontClassAlias('fontawesome', 'fa');
   }

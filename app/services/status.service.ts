@@ -17,8 +17,7 @@
 */
 
 import { Injectable } from '@angular/core';
-import { Observable,
-         Observer }   from '@reactivex/rxjs';
+import { Observable } from '@reactivex/rxjs';
 
 import * as _ from 'lodash';
 

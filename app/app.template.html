@@ -1,4 +1,5 @@
 
+<div class="mat-app-background" [ngClass]="theme">
 <div *ngIf="!isDbPresent(); else stateElse">
   <newvaultpw></newvaultpw>
 </div>
@@ -12,9 +13,12 @@
     <div [ngClass]="{'hide': isLocked(), 'show': !isLocked()}">
       <toolbar (section)="show($event)"></toolbar>
 
-      <manage [ngClass]="{'show': section === 'manage', 'hide': section !== 'manage'}"></manage>
+      <div class="content">
+        <manage [ngClass]="{'show': section === 'manage', 'hide': section !== 'manage'}"></manage>
 
-      <active-sessions [ngClass]="{'show': section === 'sessions', 'hide': section !== 'sessions'}"></active-sessions>
+        <active-sessions class="activeSessions"
+                         [ngClass]="{'show': section === 'sessions', 'hide': section !== 'sessions'}"></active-sessions>
+      </div>
 
       <footer class="footer">Copyright 2017-2018 Graham Lee Bevan. Licensed under the
         <open-url [url]="'https://github.com/gbevan/sshui/blob/master/LICENSE'"
@@ -22,7 +26,7 @@
     </div>
   </div>
 </ng-template>
-
+</div>
 <!--
 
     This file is part of sshui https://github.com/gbevan/sshui.
