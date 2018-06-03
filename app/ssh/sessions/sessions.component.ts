@@ -76,7 +76,7 @@ export class SessionsComponent implements OnInit, AfterViewInit {
     debug('refresh');
     this.sessions = this.sessionsService.find();
     this.tableSource = new MatTableDataSource<any>(this.sessions);
-    this.recoverPersistentSessions();
+    // this.recoverPersistentSessions();
   }
 
   addSession() {
