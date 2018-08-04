@@ -92,7 +92,7 @@
 
     <!-- Edit Button Column -->
     <ng-container matColumnDef="edit">
-      <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
       <mat-cell *matCellDef="let element">
         <button mat-raised-button
                 color="accent"
@@ -102,7 +102,7 @@
 
     <!-- Delete Button Column -->
     <ng-container matColumnDef="delete">
-      <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
       <mat-cell *matCellDef="let element">
         <button mat-button
                 color="warn"
@@ -114,7 +114,6 @@
 
     <ng-container matColumnDef="traffic">
       <mat-header-cell *matHeaderCellDef
-                       mat-sort-header
                        style="flex: 3;">Traffic (bytes)</mat-header-cell>
 <!--      <mat-cell *matCellDef="let element">{{ counts[element.id] ? counts[element.id].bytesRead : 'n/a' }}</mat-cell>-->
       <mat-cell *matCellDef="let element"
@@ -134,8 +133,9 @@
   </mat-table>
 
   <mat-paginator #paginator
-                 [pageSize]="10"
-                 [pageSizeOptions]="[5, 10, 20]">
+                 [pageSize]="5"
+                 [pageSizeOptions]="[3, 5, 10, 20]"
+                 showFirstLastButtons>
   </mat-paginator>
 
   <div>

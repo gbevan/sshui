@@ -23,9 +23,11 @@
                     class="field">
       <mat-select placeholder="Theme"
                   [(value)]="settings.theme"
+                  name="theme"
                   id="selectTheme">
         <mat-option *ngFor="let t of themes"
                     [value]="t"
+                    id="{{ t }}"
                     ngClass="selectSshKey_{{ t }}">
           {{ t }}
         </mat-option>

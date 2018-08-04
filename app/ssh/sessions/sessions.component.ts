@@ -19,8 +19,11 @@
 import { Component,
          OnInit,
          AfterViewInit,
-         ChangeDetectorRef }      from '@angular/core';
+         ChangeDetectorRef,
+         ViewChild }              from '@angular/core';
 import { MatTableDataSource,
+         MatPaginator,
+         MatSort,
          MatDialog }              from '@angular/material';
 
 import { SessionsService }        from '../../services/sessions.service';
@@ -41,6 +44,9 @@ const css = require('./sessions.css');
   styles: [css]
 })
 export class SessionsComponent implements OnInit, AfterViewInit {
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
   private tableSource: MatTableDataSource<any>;
   private displayedColumns: string[] = [
 //    'id',
@@ -76,7 +82,13 @@ export class SessionsComponent implements OnInit, AfterViewInit {
     debug('refresh');
     this.sessions = this.sessionsService.find();
     this.tableSource = new MatTableDataSource<any>(this.sessions);
+    this.tableSource.paginator = this.paginator;
+    this.tableSource.sort = this.sort;
     // this.recoverPersistentSessions();
+  }
+
+  applyFilter(filterValue: string) {
+    this.tableSource.filter = filterValue.trim().toLowerCase();
   }
 
   addSession() {
