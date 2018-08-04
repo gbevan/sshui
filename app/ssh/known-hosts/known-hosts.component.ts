@@ -17,8 +17,11 @@
 */
 
 import { Component,
-         OnInit }            from '@angular/core';
+         OnInit,
+         ViewChild }         from '@angular/core';
 import { MatTableDataSource,
+         MatPaginator,
+         MatSort,
          MatDialog }         from '@angular/material';
 
 import { KnownHostsService } from '../../services/known-hosts.service';
@@ -34,6 +37,9 @@ const css = require('./known-hosts.css');
   styles: [css]
 })
 export class KnownHostsComponent implements OnInit {
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
   private tableSource: MatTableDataSource<any>;
   private displayedColumns: string[] = [
 //    'id',
@@ -58,8 +64,14 @@ export class KnownHostsComponent implements OnInit {
       const knownHosts: any = this.knownHostsService.find();
       debug('known-hosts:', knownHosts);
       this.tableSource = new MatTableDataSource<any>(knownHosts);
+      this.tableSource.paginator = this.paginator;
+      this.tableSource.sort = this.sort;
       debug('after subscribe event refresh');
     });
+  }
+
+  applyFilter(filterValue: string) {
+    this.tableSource.filter = filterValue.trim().toLowerCase();
   }
 
   delKnownHost(e: any) {

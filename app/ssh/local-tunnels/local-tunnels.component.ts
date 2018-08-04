@@ -20,8 +20,11 @@ import { Component,
          OnInit,
          OnDestroy,
          AfterViewInit,
-         ChangeDetectorRef }    from '@angular/core';
+         ChangeDetectorRef,
+         ViewChild }            from '@angular/core';
 import { MatTableDataSource,
+         MatPaginator,
+         MatSort,
          MatDialog }            from '@angular/material';
 
 //import * as moment              from 'moment';
@@ -49,6 +52,9 @@ const css = require('./local-tunnels.css');
   styles: [css]
 })
 export class LocalTunnelsComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
   private tableSource: MatTableDataSource<any>;
   private displayedColumns: string[] = [
 //    'id',
@@ -171,8 +177,14 @@ export class LocalTunnelsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.localTunnels = this.localTunnelsService.find();
     debug('after localTunnels');
     this.tableSource = new MatTableDataSource<any>(this.localTunnels);
+    this.tableSource.paginator = this.paginator;
+    this.tableSource.sort = this.sort;
     this.recoverPersistentLocalTunnels();
     debug('after recoverPersistentLocalTunnels');
+  }
+
+  applyFilter(filterValue: string) {
+    this.tableSource.filter = filterValue.trim().toLowerCase();
   }
 
   addLocalTunnel() {

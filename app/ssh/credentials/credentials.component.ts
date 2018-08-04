@@ -17,12 +17,15 @@
 */
 
 import { Component,
-         OnInit }             from '@angular/core';
+         OnInit,
+         ViewChild }            from '@angular/core';
 import { MatTableDataSource,
-         MatDialog }          from '@angular/material';
+         MatPaginator,
+         MatSort,
+         MatDialog }            from '@angular/material';
 
-import { CredentialsService } from '../../services/credentials.service';
-import { CredentialAddDialog }   from './credential-add.dialog';
+import { CredentialsService }   from '../../services/credentials.service';
+import { CredentialAddDialog }  from './credential-add.dialog';
 
 const debug = require('debug').debug('sshui:component:credentials');
 
@@ -35,6 +38,9 @@ const css = require('./credentials.css');
   styles: [css]
 })
 export class CredentialsComponent implements OnInit {
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
   private tableSource: MatTableDataSource<any>;
   private displayedColumns: string[] = [
 //    'id',
@@ -60,7 +66,13 @@ export class CredentialsComponent implements OnInit {
     debug('refresh');
     const credentials: any = this.credentialsService.find();
     this.tableSource = new MatTableDataSource<any>(credentials);
+    this.tableSource.paginator = this.paginator;
+    this.tableSource.sort = this.sort;
     debug('after refresh');
+  }
+
+  applyFilter(filterValue: string) {
+    this.tableSource.filter = filterValue.trim().toLowerCase();
   }
 
   addCredential() {
