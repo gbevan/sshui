@@ -49,12 +49,14 @@ Prebuilt zip packages for linux64, osx64 and win64 are available in
 [Releases](https://github.com/gbevan/sshui/releases).
 
 ## Screenshots
-
-![Vault Password](docs/img/vaultpw.jpeg)
-
+### Login
+![Vault Password](docs/img/login.jpeg)
+### Sessions
 ![Sessions](docs/img/sessions.jpeg)
-
+### Local Tunnels
 ![Local Tunnels](docs/img/local-tunnels.jpeg)
+### Unlock
+![Vault Password](docs/img/vaultpw.jpeg)
 
 ## LICENSE
 
