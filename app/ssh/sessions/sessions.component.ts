@@ -124,14 +124,21 @@ export class SessionsComponent implements OnInit, AfterViewInit {
     this.refresh();
   }
 
-  toggleState(session: any) {
+  // toggleState(session: any) {
+  toggleState(id: string) {
+    debug('toggleState id:', id);
+    const session = this.sessionsService.get(id);
     debug('toggleState session:', session);
-    if (session.active) {
-      this.statusService.set(session.id, 'active', false);
-      this.activeSessionsService.stop(session);
-    } else {
+    debug('active:', session.active);
+
+    const status = this.statusService.get(id);
+    debug('status:', status);
+    if (!session.active || !status || !status.connected) {
       this.activeSessionsService.start(session);
       this.statusService.set(session.id, 'active', true);
+    } else {
+      this.statusService.set(session.id, 'active', false);
+      this.activeSessionsService.stop(session);
     }
 
     // TODO: find a better way to do this, maybe a once() event for status? or Observable from StatusService
