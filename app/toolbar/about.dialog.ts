@@ -33,11 +33,13 @@ const pkg = require('../../package.json');
 })
 export class AboutDialog {
   private pkg_version: string = '';
+  private versions: any = {};
 
   constructor(
     public dialogRef: MatDialogRef<AboutDialog>
   ) {
     this.pkg_version = pkg.version;
+    this.versions = process.versions;
   }
 
 }
