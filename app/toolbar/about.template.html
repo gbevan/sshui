@@ -1,42 +1,73 @@
 
 <h1>sshui <span class="version">v{{ pkg_version }}</span></h1>
 
-<div>
-  A desktop gui front-end to persistent ssh terminal sessions and
-  local ssh tunnels, with an encrypted-vault JSON database.
-  The app is entirely implemented in TypeScript &amp; JavaScript with
-  <open-url [url]="'https://nwjs.io/'" [label]="'nw.js'"></open-url>,
-  <open-url [url]="'https://angular.io/'" [label]="'Angular'"></open-url>,
-  <open-url [url]="'https://material.angular.io/'" [label]="'Angular Material'"></open-url>,
-  <open-url [url]="'https://github.com/xtermjs/xterm.js'" [label]="'xterm.js'"></open-url>,
-  <open-url [url]="'https://www.npmjs.com/package/lowdb'" [label]="'lowdb'"></open-url>
-  and (a fork of)
-  <open-url [url]="'https://github.com/gbevan/ssh2'" [label]="'ssh2'"></open-url>.
-  It does not rely on OpenSSH or PuTTY being installed, it is
-  completely self-contained.
-</div>
-<br>
-<div>
-  Please feel free to raise any issues and/or pull requests on
-  the
-  <open-url [url]="'https://github.com/gbevan/sshui'"
-            [label]="'sshui GitHub project site'"></open-url>.
-</div>
+<mat-accordion>
 
-<h4>sshui is licensed under the GNU General Public License 3.0:</h4>
-<hr>
-<pre>
-    SSHUI is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+  <mat-expansion-panel [expanded]="true" id="aboutPanelHdr">
+    <mat-expansion-panel-header>
+      <mat-panel-title id="aboutTitle">
+        About:
+      </mat-panel-title>
 
-    sshui is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+      <mat-panel-description class="desc-align">
+<!--        Manage your SSH Sessions-->
+      </mat-panel-description>
+    </mat-expansion-panel-header>
 
-    You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
-</pre>
-<hr>
+    <div>
+      A desktop gui front-end to persistent ssh terminal sessions and
+      local ssh tunnels, with an encrypted-vault JSON database.
+      The app is entirely implemented in TypeScript &amp; JavaScript with
+      <open-url [url]="'https://nwjs.io/'" [label]="'nw.js'"></open-url>,
+      <open-url [url]="'https://angular.io/'" [label]="'Angular'"></open-url>,
+      <open-url [url]="'https://material.angular.io/'" [label]="'Angular Material'"></open-url>,
+      <open-url [url]="'https://github.com/xtermjs/xterm.js'" [label]="'xterm.js'"></open-url>,
+      <open-url [url]="'https://www.npmjs.com/package/lowdb'" [label]="'lowdb'"></open-url>
+      and (a fork of)
+      <open-url [url]="'https://github.com/gbevan/ssh2'" [label]="'ssh2'"></open-url>.
+      It does not rely on OpenSSH or PuTTY being installed, it is
+      completely self-contained.
+    </div>
+    <br>
+    <div>
+      Please feel free to raise any issues and/or pull requests on
+      the
+      <open-url [url]="'https://github.com/gbevan/sshui'"
+                [label]="'sshui GitHub project site'"></open-url>.
+    </div>
+
+    <h4>sshui is licensed under the GNU General Public License 3.0:</h4>
+    <!-- <hr> -->
+    <pre>
+        SSHUI is free software: you can redistribute it and/or modify
+        it under the terms of the GNU General Public License as published by
+        the Free Software Foundation, either version 3 of the License, or
+        (at your option) any later version.
+
+        sshui is distributed in the hope that it will be useful,
+        but WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        GNU General Public License for more details.
+
+        You should have received a copy of the GNU General Public License
+        along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+    </pre>
+    <!-- <hr> -->
+  </mat-expansion-panel>
+
+  <mat-expansion-panel id="versionsPanelHdr">
+    <mat-expansion-panel-header>
+      <mat-panel-title id="versionsTitle">
+        Component Versions:
+      </mat-panel-title>
+
+      <mat-panel-description class="desc-align">
+<!--        Manage your Local SSH Tunnels-->
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <pre>
+{{ versions | json }}
+    </pre>
+  </mat-expansion-panel>
+</mat-accordion>
