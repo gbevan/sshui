@@ -1,4 +1,5 @@
 /*
+    Copyright 2017-2018 Graham Lee Bevan <graham.bevan@ntlworld.com>
 
     This file is part of sshui https://github.com/gbevan/sshui.
 
@@ -18,6 +19,7 @@
 
 import { NgModule } from '@angular/core';
 import { MatButtonModule,
+         MatCardModule,
          MatCheckboxModule,
          MatChipsModule,
          MatDialogModule,
@@ -39,6 +41,7 @@ import { MatButtonModule,
 
 const LIST = [
   MatButtonModule,
+  MatCardModule,
   MatCheckboxModule,
   MatChipsModule,
   MatDialogModule,

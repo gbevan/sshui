@@ -1,4 +1,5 @@
 /*
+    Copyright 2017-2018 Graham Lee Bevan <graham.bevan@ntlworld.com>
 
     This file is part of sshui https://github.com/gbevan/sshui.
 
