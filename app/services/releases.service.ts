@@ -17,14 +17,23 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { Pipe, PipeTransform } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
-/*
- * Default to a value if undefined
- */
-@Pipe({name: 'default'})
-export class DefaultPipe implements PipeTransform {
-  transform(value: any, defaultValue: any): string {
-    return value === undefined ? defaultValue : value;
+const debug = require('debug').debug('sshui:service:releases');
+
+@Injectable()
+export class ReleasesService {
+  public github: string = 'https://api.github.com';
+  public path: string = '/repos/gbevan/sshui/releases/latest';
+
+  constructor(
+    private http: HttpClient
+  ) {
+    debug('in constructor');
+  }
+
+  getLatest() {
+    return this.http.get(this.github + this.path);
   }
 }

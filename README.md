@@ -58,6 +58,10 @@ Prebuilt zip packages for linux64, osx64 and win64 are available in
 ### Unlock
 ![Vault Password](docs/img/vaultpw.jpeg)
 
+## COPYRIGHT
+
+Copyright 2017-2018 Graham Lee Bevan <graham.bevan@ntlworld.com>
+
 ## LICENSE
 
 [GPL-3.0](https://github.com/gbevan/sshui/blob/master/LICENSE)
@@ -65,58 +69,59 @@ Prebuilt zip packages for linux64, osx64 and win64 are available in
 ## Developer Notes
 
 ### Start webpack in watch mode for continuous builds while developing
-
-    $ gulp webpack
-
+```bash
+$ gulp webpack
+```
 to run a single webpack without watching for changes:
-
-    $ gulp webpackrel
-
+```bash
+$ gulp webpackrel
+```
 ### Run the app using nw.js direct from source (no build)
-
-    $ node_modules/nw/nwjs/nw --nwapp=.
-
+```bash
+$ node_modules/nw/nwjs/nw --nwapp=.
+```
 with a temp vault and debugging enabled
-
-    $ rm /tmp/v; DEBUG="sshui:*" node_modules/nw/nwjs/nw --nwapp=. --db=/tmp/v
-
+```bash
+$ rm /tmp/v; DEBUG="sshui:*" node_modules/nw/nwjs/nw --nwapp=. --db=/tmp/v
+```
 TODO: migrate this into gulp
 
 v0.5: this is now achieved by simply running:
-
-    $ gulp run
-
+```bash
+$ gulp run
+```
 ### Run the protractor E2E UI test suite
 
 (requires protractor installed globally)
-
-    $ DEBUG="sshui:*" protractor ./protractor-conf.js
-
+```bash
+$ DEBUG="sshui:*" protractor ./protractor-conf.js
+```
 TODO: migrate this into gulp
 
 v0.5: (make sure webpack has been run, or `gulp` (in watch and webpack mode)):
-
-    $ gulp e2e
-
+```bash
+$ gulp e2e
+```
 ### Build package with SDK for debugging
-
-    $ gulp build
-
+```bash
+$ gulp build
+```
 Creates the build in the (yep you guessed it) `build/` folder
 
 ### Run the built development package with debugging and a temp vault
-
-    $ rm /tmp/v; DEBUG="sshui:*" build/sshui/linux64/sshui --db=/tmp/v
-
+```bash
+$ rm /tmp/v; DEBUG="sshui:*" build/sshui/linux64/sshui --db=/tmp/v
+```
 the `--db=/tmp/v` tells sshui to use a different vault db file, for testing.
 
 ### Run the app in continuous source edit/webpack with watch modes
-
-    $ gulp
+```bash
+$ gulp
+```
 
 ### To build the Release zip files
-
-    $ gulp release
-
+```bash
+$ gulp release
+```
 Release packages will be in `'release/sshui - v?.?.?/'`, ready to upload to
 github Releases.

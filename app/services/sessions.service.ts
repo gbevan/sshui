@@ -56,6 +56,7 @@ export class SessionsService {
     .filter(params)
     .cloneDeep()  // protect object from map changes
     .map((v: any) => {
+      // TODO: This is slow during login, better to preload all creds and resolve from memory.
       // Join with cred to get name
       const cred = this.resolveCred(v.cred);
       if (cred && cred.name) {

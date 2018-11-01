@@ -1,5 +1,6 @@
 /*
-
+    Copyright 2017-2018 Graham Lee Bevan <graham.bevan@ntlworld.com>
+    
     This file is part of sshui https://github.com/gbevan/sshui.
 
     sshui is free software: you can redistribute it and/or modify
@@ -19,6 +20,7 @@
 import { NgModule }                 from '@angular/core';
 import { BrowserModule }            from '@angular/platform-browser';
 import { BrowserAnimationsModule }  from '@angular/platform-browser/animations';
+import { HttpClientModule }         from '@angular/common/http';
 import { FormsModule }              from '@angular/forms';
 import { FlexLayoutModule }         from '@angular/flex-layout';
 // import { OverlayContainer }         from '@angular/cdk/overlay';
@@ -46,6 +48,9 @@ import { TunnelService }            from './services/tunnel.service';
 
 import { ToolbarComponent }         from './toolbar/toolbar.component';
 import { ManageComponent }          from './manage/manage.component';
+
+import { ReleasesService }          from './services/releases.service';
+import { NewreleaseComponent }      from './releases/newrelease.component';
 
 import { ActiveSessionsService }    from './services/active-sessions.service';
 import { ActiveSessionsComponent }  from './ssh/active-sessions.component';
@@ -85,6 +90,7 @@ import '../themes.scss';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    HttpClientModule,
     SshuiMaterialModule,
     NgbModule.forRoot(),
     FormsModule,
@@ -95,6 +101,7 @@ import '../themes.scss';
     AppComponent,
     OpenUrlComponent,
 
+    NewreleaseComponent,
     ManageComponent,
     ActiveSessionsComponent,
 
@@ -130,6 +137,7 @@ import '../themes.scss';
   providers: [
 //    ActiveLocalTunnelsService,
     CliService,
+    ReleasesService,
     ActiveSessionsService,
     LowdbService,
     CredentialsService,
