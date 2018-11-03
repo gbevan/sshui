@@ -26,7 +26,7 @@ A desktop application to manage ssh credentials, sessions and persistent tunnels
 Built using nw.js, Angular and Angular Material.
 The goal is to provide secure persistent SSH tunnels into private networks
 like AWS VPCs via a Bastion host.  The tunnels can be set to auto restart
-after suspend/resume of your workstation (once prompted for the vault password).
+after suspend/resume of your workstation.
 
 All credentials/keys are encrypted in a JSON AES256GCM vault using
 [lowdb](https://github.com/typicode/lowdb).
