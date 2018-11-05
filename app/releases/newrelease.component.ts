@@ -19,6 +19,7 @@
 
 import { Component, OnInit }  from '@angular/core';
 import { TimerObservable }    from 'rxjs/observable/TimerObservable';
+import { ISubscription }      from 'rxjs/Subscription';
 import { ReleasesService }    from '../services/releases.service';
 
 const debug = require('debug').debug('sshui:component:newrelease');
@@ -53,6 +54,9 @@ export class NewreleaseComponent implements OnInit {
 
   // interval 1 hour + random 0-1hour splay
   private interval: number = oneHour + (oneHour * Math.random());
+  // private interval: number = 1000 + (1000 * Math.random());
+
+  private sub: ISubscription;
 
   constructor(
     public releasesService: ReleasesService
@@ -62,7 +66,10 @@ export class NewreleaseComponent implements OnInit {
     TimerObservable.create(0, this.interval)
     .takeWhile(() => true)
     .subscribe(() => {
-      this.releasesService.getLatest()
+      if (this.sub) {
+        this.sub.unsubscribe();
+      }
+      this.sub = this.releasesService.getLatest()
       .subscribe((res: any) => {
         debug('res:', res);
         this.tag_name = res.tag_name;
