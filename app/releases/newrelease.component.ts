@@ -17,13 +17,16 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { Component }        from '@angular/core';
-import { ReleasesService }  from '../services/releases.service';
+import { Component, OnInit }  from '@angular/core';
+import { TimerObservable }    from 'rxjs/observable/TimerObservable';
+import { ReleasesService }    from '../services/releases.service';
 
 const debug = require('debug').debug('sshui:component:newrelease');
 
 const pkg = require('../../package.json');
 const semver = require('semver');
+
+const oneHour = (1000 * 60 * 60);
 
 @Component({
   selector: 'newrelease',
@@ -43,22 +46,31 @@ const semver = require('semver');
     }
 `]
 })
-export class NewreleaseComponent {
+export class NewreleaseComponent implements OnInit {
   private tag_name: string = '';
   private html_url: string = '';
   private show_msg: boolean = false;
 
+  // interval 1 hour + random 0-1hour splay
+  private interval: number = oneHour + (oneHour * Math.random());
+
   constructor(
     public releasesService: ReleasesService
-  ) {
-    releasesService.getLatest()
-    .subscribe((res: any) => {
-      debug('res:', res);
-      this.tag_name = res.tag_name;
-      this.html_url = res.html_url;
-      // pkg.version = '1.3.0';
-      this.show_msg = semver.gt(res.tag_name, pkg.version);
-      console.log('show_msg:', this.show_msg);
+  ) { }
+
+  ngOnInit() {
+    TimerObservable.create(0, this.interval)
+    .takeWhile(() => true)
+    .subscribe(() => {
+      this.releasesService.getLatest()
+      .subscribe((res: any) => {
+        debug('res:', res);
+        this.tag_name = res.tag_name;
+        this.html_url = res.html_url;
+        // pkg.version = '1.3.0';
+        this.show_msg = semver.gt(res.tag_name, pkg.version);
+        debug('show_msg:', this.show_msg);
+      });
     });
   }
 }
