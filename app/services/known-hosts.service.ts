@@ -173,7 +173,7 @@ export class KnownHostsService {
       }); // ngZone.run
 
       // this.activeSessionsService.stop(this.session);
-      // cb(false); // reject connection for now (otherwise there is a
+      // cb(false); // reject connection  for now (otherwise there is a
       // timeout on the handshake)
 
     } else if (hk.length > 1) {
@@ -188,7 +188,7 @@ export class KnownHostsService {
       this.ngZone.run(() => {
         this.dialog.open(ErrorPopupDialog, {
           data: {
-            error: `ALERT: Host '${knownHostKey}' keys do not match!!!`
+            error: `ALERT: Known Host keys for '${knownHostKey}' do not match!!!`
           }
         });
       });

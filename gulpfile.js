@@ -89,7 +89,7 @@ gulp.task('build', (done) => {
 });
 
 // Build releases
-gulp.task('buildall', gulp.series('webpackrel'), (done) => {
+gulp.task('buildall', (done) => {
   nw = new NwBuilder({
     files: nwFiles,
     platforms: ['linux64', 'win64', 'osx64'],
@@ -164,41 +164,48 @@ gulp.task('run', (done) => {
 });
 
 //gulp.task('chain', ['build', 'run']);
-
-gulp.task('watch', function () {
-  watch([
-    'dist/**',
-    'lib/**',
-    'index.html',
-    'styles.css',
-    'themes.scss'
-  ], {
-    ignoreInitial: true,
-    verbose: true,
-    readDelay: 5000 // filter duplicate changed events from Brackets
-  }, batch(function (events, done) {
-    console.log('watch triggered');
-//    console.log('events:', events);
-    if (cp) {
-      console.log('killing sshui');
-      cp.kill();
-    }
-//    gulp.start('chain', done);
-    gulp.start('run', done);
-  }));
+gulp.task('killrun', (done) => {
+  if (cp) {
+    console.log('killing sshui');
+    cp.kill();
+  }
+  done();
 });
 
-gulp.task('default', gulp.series('watch', 'webpack'));
+gulp.task('watcher', function () {
+  watch(
+    [
+      'dist/**',
+      'lib/**',
+      'index.html',
+      'styles.css',
+      'themes.scss'
+    ], {
+      ignoreInitial: true,
+      verbose: true,
+      readDelay: 5000 // filter duplicate changed events from Brackets
+    }, gulp.series('killrun', 'run')
+  );
+});
 
-gulp.task('e2e', function () {
-  const p_cp = spawn('DEBUG="sshui:*" protractor ./protractor-conf.js', {
+gulp.task('watch', gulp.parallel('webpack', 'watcher'));
+
+gulp.task('default', gulp.series('watch'));
+
+gulp.task('_e2e', function (done) {
+  const p_cp = spawn('DEBUG="sshui:*" node_modules/protractor/bin/protractor ./protractor-conf.js', {
     shell: true,
     stdio: ['ignore', 'inherit', 'inherit']
   });
   p_cp.on('close', (rc) => {
     console.log('protractor finished rc:', rc);
+    if (rc === 0) {
+      return done();
+    }
+    return done(new Error(`Non-zero return code from sshui: ${rc}`))
   })
 });
+gulp.task('e2e', gulp.series('webpackrel', '_e2e'));
 
 // TODO: fix headless mode to use this...
 gulp.task('_watche2e', function () {
