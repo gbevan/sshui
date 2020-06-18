@@ -1,4 +1,6 @@
 # sshui
+| ![](https://img.shields.io/github/release/gbevan/sshui.svg) | ![](https://img.shields.io/github/license/gbevan/sshui.svg) |
+|-|-|
 <pre>
 ...............................................................................
 ...............................................................................

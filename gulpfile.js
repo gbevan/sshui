@@ -2,6 +2,7 @@ const gulp = require('gulp');
 const NwBuilder = require('nw-builder');
 const spawn = require('child_process').spawn;
 const exec = require('child_process').exec;
+const fs = require('fs');
 const webpack = require('webpack-stream-fixed');
 const config = require('./webpack.config.js');
 const pkg = require('./package.json');
@@ -24,6 +25,8 @@ const nwFiles = [
   'node_modules/font-awesome/**',
   'node_modules/chart.js/src/chart.js'
 ];
+
+const SSHUI_DB='/tmp/.sshui_v';
 
 let nw;
 let cp;
@@ -86,7 +89,7 @@ gulp.task('build', (done) => {
 });
 
 // Build releases
-gulp.task('buildall', ['webpackrel'], (done) => {
+gulp.task('buildall', gulp.series('webpackrel'), (done) => {
   nw = new NwBuilder({
     files: nwFiles,
     platforms: ['linux64', 'win64', 'osx64'],
@@ -136,13 +139,22 @@ gulp.task('buildall', ['webpackrel'], (done) => {
   });
 });
 
-gulp.task('release', ['webpackrel', 'buildall']);
+gulp.task('release', gulp.series('webpackrel', 'buildall'));
 
 //gulp.task('run', ['build'], (done) => {
 gulp.task('run', (done) => {
+  // try {
+  //   // stat = fs.statSync(SSHUI_DB);
+  //   fs.unlinkSync(SSHUI_DB)
+  // } catch (e) {
+  //   console.error('stat error:', e);
+  // }
 //  cp = spawn('build/sshui/linux64/sshui', {
-  cp = spawn('node_modules/nw/nwjs/nw', ['--nwapp=.'], {
-    stdio: 'inherit'
+  const myenv = process.env;
+  myenv.DEBUG = 'sshui:*';
+  cp = spawn('node_modules/nw/nwjs/nw', ['--nwapp=.', `--db=${SSHUI_DB}`], {
+    stdio: 'inherit',
+    env: myenv
   });
 
   cp.on('close', (rc) => {
@@ -176,7 +188,7 @@ gulp.task('watch', function () {
   }));
 });
 
-gulp.task('default', ['watch', 'webpack']);
+gulp.task('default', gulp.series('watch', 'webpack'));
 
 gulp.task('e2e', function () {
   const p_cp = spawn('DEBUG="sshui:*" protractor ./protractor-conf.js', {
@@ -212,4 +224,4 @@ gulp.task('_watche2e', function () {
     gulp.start('e2e', done);
   }));
 });
-gulp.task('watche2e', ['_watche2e', 'webpack']);
+gulp.task('watche2e', gulp.series('_watche2e', 'webpack'));
