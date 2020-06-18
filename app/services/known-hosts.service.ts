@@ -173,10 +173,13 @@ export class KnownHostsService {
       }); // ngZone.run
 
       // this.activeSessionsService.stop(this.session);
-      // cb(false); // reject connection for now (otherwise there is a timeout on the handshake)
+      // cb(false); // reject connection for now (otherwise there is a
+      // timeout on the handshake)
 
     } else if (hk.length > 1) {
-      throw new Error('host lookup returned more that 1 known_hosts entry');
+      throw new Error(
+        `host '${knownHostKey}' lookup returned more that 1 known_hosts entry`
+      );
 
     } else if (hk[0].host_key !== kObj.keyBase64) {
       debug('host keys do not match!!!');
@@ -185,7 +188,7 @@ export class KnownHostsService {
       this.ngZone.run(() => {
         this.dialog.open(ErrorPopupDialog, {
           data: {
-            error: 'ALERT: Host keys do not match!!!'
+            error: `ALERT: Host '${knownHostKey}' keys do not match!!!`
           }
         });
       });
