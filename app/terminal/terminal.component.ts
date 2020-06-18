@@ -104,7 +104,9 @@ export class TerminalComponent implements AfterViewInit {
     debug('resize() terminal style:', this.el.nativeElement.style);
     // this.term.charMeasure.measure(this.term_options);
     // fit(this.term);
-    this.term.resize(T_COLS, T_ROWS);
+    if (this.term) {
+      this.term.resize(T_COLS, T_ROWS);
+    }
   }
 
   // Start observing visbility of element. On change, the
@@ -163,6 +165,13 @@ export class TerminalComponent implements AfterViewInit {
     .on('error', (err: any) => {
       console.error('connection error err:', err);
       this.statusService.set(this.session.id, 'connected', false);
+      this.ngZone.run(() => {
+        this.dialog.open(ErrorPopupDialog, {
+          data: {
+            error: `SSH: ${err} - Host ${this.session.host}:${this.session.port}`
+          }
+        });
+      });
     })
 
     .on('close', (had_err: boolean) => {

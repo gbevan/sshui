@@ -134,12 +134,12 @@ export class SessionsComponent implements OnInit, AfterViewInit {
 
     const status = this.statusService.get(id);
     debug('status:', status);
-    if (!session.active || !status || !status.connected) {
-      this.activeSessionsService.start(session);
-      this.statusService.set(session.id, 'active', true);
-    } else {
+    if (session.active || (status && status.connected)) {
       this.statusService.set(session.id, 'active', false);
       this.activeSessionsService.stop(session);
+    } else {
+      this.activeSessionsService.start(session);
+      this.statusService.set(session.id, 'active', true);
     }
 
     // TODO: find a better way to do this, maybe a once() event for status? or Observable from StatusService

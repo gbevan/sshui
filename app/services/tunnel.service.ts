@@ -17,7 +17,10 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { Injectable }         from '@angular/core';
+import { Injectable,
+         NgZone }             from '@angular/core';
+import { MatDialog }            from '@angular/material';
+
 import { Observable,
          Observer }           from '@reactivex/rxjs';
 import { clearInterval,
@@ -27,6 +30,7 @@ import { CredentialsService } from '../services/credentials.service';
 import { StatusService,
          Status }             from '../services/status.service';
 import { KnownHostsService }  from '../services/known-hosts.service';
+import { ErrorPopupDialog }       from '../error/error-popup.dialog';
 
 const net = require('net');
 const Client = require('ssh2');
@@ -41,6 +45,8 @@ export class TunnelService {
     private credentialsService: CredentialsService,
     private statusService: StatusService,
     private knownHostsService: KnownHostsService,
+    private ngZone: NgZone,
+    public dialog: MatDialog
   ) { }
 
   start(type: string, tunnel: any) {
@@ -60,6 +66,14 @@ export class TunnelService {
     conn
     .on('error', (err: any) => {
       debug('connection error err:', err);
+      this.ngZone.run(() => {
+        this.dialog.open(ErrorPopupDialog, {
+          data: {
+            error: `SSH: ${err} - Host ${tunnel.host}:${tunnel.port}`
+          }
+        });
+      });
+
       this.stop(tunnel);
 
       // leave for close handler

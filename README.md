@@ -62,7 +62,7 @@ Prebuilt zip packages for linux64, osx64 and win64 are available in
 
 ## COPYRIGHT
 
-Copyright 2017-2018 Graham Lee Bevan <graham.bevan@ntlworld.com>
+Copyright 2017-2020 Graham Lee Bevan <graham.bevan@ntlworld.com>
 
 ## LICENSE
 
@@ -93,14 +93,6 @@ v0.5: this is now achieved by simply running:
 $ gulp run
 ```
 ### Run the protractor E2E UI test suite
-
-(requires protractor installed globally)
-```bash
-$ DEBUG="sshui:*" protractor ./protractor-conf.js
-```
-TODO: migrate this into gulp
-
-v0.5: (make sure webpack has been run, or `gulp` (in watch and webpack mode)):
 ```bash
 $ gulp e2e
 ```
@@ -108,7 +100,7 @@ $ gulp e2e
 ```bash
 $ gulp build
 ```
-Creates the build in the (yep you guessed it) `build/` folder
+Creates the build in the `build/` folder
 
 ### Run the built development package with debugging and a temp vault
 ```bash
@@ -120,6 +112,7 @@ the `--db=/tmp/v` tells sshui to use a different vault db file, for testing.
 ```bash
 $ gulp
 ```
+(Uses /tmp/.sshui_v as the lowdb vault db for testing.)
 
 ### To build the Release zip files
 ```bash
