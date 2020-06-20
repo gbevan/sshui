@@ -25,6 +25,7 @@ import { Observable,
 import { Status,
          StatusService }  from './status.service';
 
+const _ = require('lodash');
 const debug = require('debug').debug('sshui:service:active-sessions');
 
 @Injectable()
@@ -45,6 +46,7 @@ export class ActiveSessionsService {
   start(session: any) {
     this.activeSessions[session.name] = session;
     session.active = true;
+    debug('start this.activeSessions:', _.cloneDeep(this.activeSessions));
 
     this.activeSessionsObserver.next(
       this.activeSessions
@@ -59,6 +61,7 @@ export class ActiveSessionsService {
     }
     delete this.activeSessions[session.name];
     session.active = false;
+    debug('stop this.activeSessions:', _.cloneDeep(this.activeSessions));
 
     this.activeSessionsObserver.next(
       this.activeSessions

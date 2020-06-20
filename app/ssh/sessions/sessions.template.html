@@ -76,6 +76,16 @@
       </mat-cell>
     </ng-container>
 
+    <!-- Clone Button Column -->
+    <ng-container matColumnDef="clone">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <button mat-button
+                color="accent"
+                (click)="cloneSession(element)">Clone</button>
+      </mat-cell>
+    </ng-container>
+
     <!-- Delete Button Column -->
     <ng-container matColumnDef="delete">
       <mat-header-cell *matHeaderCellDef></mat-header-cell>

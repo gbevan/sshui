@@ -70,8 +70,9 @@ export class LocalTunnelsComponent implements OnInit, AfterViewInit, OnDestroy {
     'remoteHost',
     'remotePort',
     'edit',
-    'delete',
-    'traffic'
+    'clone',
+    'traffic',
+    'delete'
   ];
   private localTunnels: any = [];
   private status: any = {}; // key by id
@@ -206,6 +207,21 @@ export class LocalTunnelsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dialog.open(LocalTunnelAddDialog, {
       data: {
         localTunnel
+      }
+    })
+    .afterClosed()
+    .subscribe((res) => {
+      this.refresh();
+    });
+  }
+
+  cloneLocalTunnel(localTunnel: any) {
+    const clonedTunnel = _.cloneDeep(localTunnel);
+    delete clonedTunnel.id;
+    clonedTunnel.name = '';
+    this.dialog.open(LocalTunnelAddDialog, {
+      data: {
+        localTunnel: clonedTunnel
       }
     })
     .afterClosed()

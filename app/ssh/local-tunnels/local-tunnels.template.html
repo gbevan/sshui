@@ -100,18 +100,17 @@
       </mat-cell>
     </ng-container>
 
-    <!-- Delete Button Column -->
-    <ng-container matColumnDef="delete">
+    <!-- Clone Button Column -->
+    <ng-container matColumnDef="clone">
       <mat-header-cell *matHeaderCellDef></mat-header-cell>
       <mat-cell *matCellDef="let element">
         <button mat-button
-                color="warn"
-                (click)="delLocalTunnel(element)">Delete</button>
+                color="accent"
+                (click)="cloneLocalTunnel(element)">Clone</button>
       </mat-cell>
     </ng-container>
 
-    <!-- TODO: Chart traffic -->
-
+    <!-- Chart traffic -->
     <ng-container matColumnDef="traffic">
       <mat-header-cell *matHeaderCellDef
                        style="flex: 3;">Traffic (bytes)</mat-header-cell>
@@ -125,6 +124,16 @@
                 [labels]="countsLabels"
                 [datasets]="countsHashDataset[element.id]"
                 chartType="bar"></canvas>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Delete Button Column -->
+    <ng-container matColumnDef="delete">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <button mat-button
+                color="warn"
+                (click)="delLocalTunnel(element)">Delete</button>
       </mat-cell>
     </ng-container>
 

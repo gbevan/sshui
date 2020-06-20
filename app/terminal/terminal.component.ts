@@ -252,7 +252,7 @@ export class TerminalComponent implements AfterViewInit {
         .write(`
 stty cols ${T_COLS} rows ${T_ROWS}
 tput reset
-(which screen 2>/dev/null && (screen -S SSHUI -D -RR) || (clear; sh -i)); exit
+(which screen 2>/dev/null && (screen -S SSHUI_${this.session.name} -D -RR) || (clear; sh -i)); exit
 `);
 
         this.term
