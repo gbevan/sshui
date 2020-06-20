@@ -117,6 +117,7 @@ export class LocalTunnelsComponent implements OnInit, AfterViewInit, OnDestroy {
       } catch (e) {
         console.error('detectChanges failed err:', e);
       }
+      debug('finishing ngOnInit()');
     });
 
     this.countsSubscription = this.statusService.subscribeCounts((v: CountsEvent) => {

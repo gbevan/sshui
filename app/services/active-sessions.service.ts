@@ -44,6 +44,7 @@ export class ActiveSessionsService {
   }
 
   start(session: any) {
+    debug('start() session:', session);
     this.activeSessions[session.name] = session;
     session.active = true;
     debug('start this.activeSessions:', _.cloneDeep(this.activeSessions));
@@ -54,6 +55,7 @@ export class ActiveSessionsService {
   }
 
   stop(session: any) {
+    debug('stop() session:', session);
     const st: Status = this.statusService.get(session.id);
     const conn = st.conn;
     if (st.conn) {

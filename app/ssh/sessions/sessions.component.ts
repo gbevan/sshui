@@ -146,12 +146,13 @@ export class SessionsComponent implements OnInit, AfterViewInit {
   toggleState(id: string) {
     debug('toggleState id:', id);
     const session = this.sessionsService.get(id);
-    debug('toggleState session:', session);
+    debug('toggleState session:', _.cloneDeep(session));
     debug('active:', session.active);
 
     const status = this.statusService.get(id);
     debug('status:', status);
-    if (session.active || (status && status.connected)) {
+    // if (session.active || (status && status.connected)) {
+    if (status && status.connected) {
       this.statusService.set(session.id, 'active', false);
       this.activeSessionsService.stop(session);
     } else {
