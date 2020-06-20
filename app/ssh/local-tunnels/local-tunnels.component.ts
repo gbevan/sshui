@@ -75,7 +75,7 @@ export class LocalTunnelsComponent implements OnInit, AfterViewInit, OnDestroy {
     'delete'
   ];
   private localTunnels: any = [];
-  private status: any = {}; // key by id
+  // private status: Status = {}; // key by id
   private statusSubscription: Subscription;
 
   private counts: any = {};  // {"id": {bytesRead: n, bytesWritten: n, ...}}
@@ -102,7 +102,16 @@ export class LocalTunnelsComponent implements OnInit, AfterViewInit, OnDestroy {
     debug('in ngOnInit');
     // listen for status events
     this.statusSubscription = this.statusService.subscribeChanged((v) => {
-//      debug('status subscribe fired:', v);
+      debug('status subscribe fired:', v);
+      for (let lt of this.localTunnels) {
+        if (lt.id === v.id) {
+          if (v.errmsg) {
+            lt.errmsg = v.errmsg;
+          } else {
+            lt.errmsg = '';
+          }
+        }
+      }
       try {
         this.cdr.detectChanges();
       } catch (e) {

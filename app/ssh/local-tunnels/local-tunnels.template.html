@@ -124,6 +124,10 @@
                 [labels]="countsLabels"
                 [datasets]="countsHashDataset[element.id]"
                 chartType="bar"></canvas>
+        <div
+          *ngIf="element.errmsg"
+          class="errmsg"
+        >{{ element.errmsg }}</div>
       </mat-cell>
     </ng-container>
 

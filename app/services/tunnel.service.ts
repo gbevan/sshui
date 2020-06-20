@@ -66,13 +66,15 @@ export class TunnelService {
     conn
     .on('error', (err: any) => {
       debug('connection error err:', err);
-      this.ngZone.run(() => {
-        this.dialog.open(ErrorPopupDialog, {
-          data: {
-            error: `SSH: ${err} - Host ${tunnel.host}:${tunnel.port}`
-          }
-        });
-      });
+      console.error('connection error err:', err);
+      // this.ngZone.run(() => {
+      //   this.dialog.open(ErrorPopupDialog, {
+      //     data: {
+      //       error: `SSH: ${err} - Host ${tunnel.host}:${tunnel.port}`
+      //     }
+      //   });
+      // });
+      this.statusService.set(tunnel.id, 'errmsg', err.message);
 
       this.stop(tunnel);
 
@@ -127,6 +129,7 @@ export class TunnelService {
       const st: Status = this.statusService.get(tunnel.id); // readonly
       this.statusService.set(tunnel.id, 'connected', true);
       this.statusService.set(tunnel.id, 'conn', conn);
+      this.statusService.set(tunnel.id, 'errmsg', '');
 
 //      debug('conn:', conn);
 

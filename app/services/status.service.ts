@@ -27,10 +27,12 @@ const EventEmitter = require('events');
 const debug = require('debug').debug('sshui:service:status');
 
 export class Status {
+  public id: string;
   public connected: boolean;
   public active: boolean;
   public conn: any;
   public server: any;
+  public errmsg: string;
 
   public monitorInterval: NodeJS.Timer;
   public lastBytesRead: number;
@@ -38,9 +40,10 @@ export class Status {
   public intvlBytesRead: number;
   public intvlBytesWritten: number;
 
-  constructor (connected: boolean = false, active: boolean = false) {
+  constructor (id: string, connected: boolean = false, active: boolean = false) {
     this.connected = connected;
     this.active = active;
+    this.id = id;
 
     this.lastBytesRead = 0;
     this.lastBytesWritten = 0;
@@ -95,7 +98,7 @@ export class StatusService {
   set(id: string, key: string, value: any) {
     debug(`status set ${id} ${key} to ${value}`);
     if (!this.statuses[id]) {
-      this.statuses[id] = new Status();
+      this.statuses[id] = new Status(id);
     }
     if (key !== undefined && value !== undefined) {
       this.statuses[id].set(key, value);
