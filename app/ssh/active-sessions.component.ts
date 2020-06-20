@@ -58,6 +58,7 @@ export class ActiveSessionsComponent implements OnInit, OnDestroy, OnChanges, Af
   ngOnInit() {
     debug('ngOnInit');
     this.as_subscription = this.activeSessionsService.subscribe((value: any) => {
+      debug('ngOnInit sub value:', _.cloneDeep(value));
       this.activeSessions = value;
       this.activeList = _.filter(this.activeSessions, (s: any) => s.name);
       // try {

@@ -33,6 +33,7 @@ import { SessionAddDialog }       from './session-add.dialog';
 import { ActiveSessionsService }  from '../../services/active-sessions.service';
 import { Status,
          StatusService }          from '../../services/status.service';
+import * as _                     from 'lodash';
 
 const debug = require('debug').debug('sshui:component:sessions');
 
@@ -58,6 +59,7 @@ export class SessionsComponent implements OnInit, AfterViewInit {
     // 'persistent',
     'connected',
     'edit',
+    'clone',
     'delete'
   ];
   private sessions: any = [];
@@ -109,6 +111,21 @@ export class SessionsComponent implements OnInit, AfterViewInit {
     this.dialog.open(SessionAddDialog, {
       data: {
         session
+      }
+    })
+    .afterClosed()
+    .subscribe((res) => {
+      this.refresh();
+    });
+  }
+
+  cloneSession(session: any) {
+    const clonedSession = _.cloneDeep(session);
+    delete clonedSession.id;
+    clonedSession.name = '';
+    this.dialog.open(SessionAddDialog, {
+      data: {
+        session: clonedSession
       }
     })
     .afterClosed()

@@ -59,9 +59,11 @@ export class LocalTunnelAddDialog implements OnInit {
     public dialogRef: MatDialogRef<LocalTunnelAddDialog>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
+    debug('data.localTunnel:', data.localTunnel);
     if (data && data.localTunnel) {
       this.localTunnel = data.localTunnel;
     }
+    debug('this.localTunnel:', this.localTunnel);
   }
 
   ngOnInit() {
